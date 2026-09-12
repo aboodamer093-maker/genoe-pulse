@@ -1,0 +1,84 @@
+'use strict';
+/*
+ * GENOE — CROSSCHECK (harvest vs public corpus) + SPEC SELF-TEST
+ * -----------------------------------------------------------------
+ * Modes:
+ *   --self-test        verify the JA4 core against FoxIO's canonical example
+ *   <hello.hex file>   parse a captured ClientHello hex blob, compute JA4,
+ *                      then exact-match against the published Safari corpus.
+ * Verdict vocabulary: EXACT-MATCH / NO-MATCH / NOT-IN-CORPUS.
+ */
+const fs = require('fs');
+const path = require('path');
+const ja4 = require('./ja4.js');
+const corpus = require('./safari-corpus.js');
+
+// Canonical FoxIO reference (JA4.md): Chrome -> t13d1516h2_8daaf6152771_e5627efa2ab1
+const VECTOR = {
+  transport: 't',
+  version: 0x0304,
+  sni: true,
+  ciphers: [
+    0x002f, 0x0035, 0x009c, 0x009d, 0x1301, 0x1302, 0x1303,
+    0xc013, 0xc014, 0xc02b, 0xc02c, 0xc02f, 0xc030, 0xcca8, 0xcca9,
+  ],
+  extensions: [
+    0x0005, 0x000a, 0x000b, 0x000d, 0x0010, 0x0012, 0x0015,
+    0x0017, 0x001b, 0x0023, 0x002b, 0x002d, 0x0033, 0x4469, 0xff01, 0x0000,
+  ],
+  sigAlgs: [0x0403, 0x0804, 0x0401, 0x0503, 0x0805, 0x0501, 0x0806, 0x0601],
+  alpnFirst: Buffer.from('h2'),
+};
+const EXPECTED = 't13d1516h2_8daaf6152771_e5627efa2ab1';
+
+function selfTest() {
+  const got = ja4.computeFromLists(VECTOR);
+  const pass = got.ja4 === EXPECTED;
+  return {
+    pass,
+    got: got.ja4,
+    expected: EXPECTED,
+    detail: pass
+      ? 'JA4 core conforms to the FoxIO canonical example (bypasses spec drift).'
+      : 'JA4 core MISMATCH against the FoxIO canonical example — fix before any gene use.',
+  };
+}
+
+function crosscheckHello(hexFile) {
+  const hex = fs.readFileSync(hexFile, 'utf8').trim();
+  const buf = Buffer.from(hex.replace(/[^0-9a-fA-F]/g, ''), 'hex');
+  const r = ja4.fromBuffer(buf);
+  const hit = corpus.find((e) => e.ja4 === r.ja4);
+  return {
+    ja4: r.ja4,
+    a: r.a,
+    verdict: hit ? 'EXACT-MATCH' : 'NOT-IN-CORPUS',
+    match: hit ? hit.product : null,
+    corpusSize: corpus.length,
+  };
+}
+
+function main() {
+  const arg = process.argv[2];
+  if (arg === '--self-test') {
+    const r = selfTest();
+    console.log('SELF-TEST ' + (r.pass ? 'PASS' : 'FAIL'));
+    console.log('  got      ' + r.got);
+    console.log('  expected ' + r.expected);
+    console.log('  ' + r.detail);
+    process.exit(r.pass ? 0 : 1);
+  }
+  if (arg) {
+    const r = crosscheckHello(arg);
+    const hit = corpus.find((e) => e.ja4 === r.ja4);
+    console.log('VERDICT ' + r.verdict + '  ja4=' + r.ja4);
+    console.log('  a=' + r.a + '  corpus=' + r.corpusSize + ' entry' + (hit ? ' -> ' + hit.product + ' [' + hit.platform + ']' : ''));
+    process.exit(hit ? 0 : 2);
+  }
+  console.error('usage: node crosscheck.js --self-test  |  node crosscheck.js <hello.hex>');
+  process.exit(2);
+}
+
+module.exports = { selfTest, crosscheckHello };
+
+if (require.main === module) main();

@@ -1,0 +1,29 @@
+{
+  "name": "ghostburp-genoe",
+  "productName": "GhostBurp GENOE",
+  "version": "0.1.0",
+  "description": "GENOE tree — iOS + full-macOS line on the WebKit engine (MiniBrowser shell) with gene-verified wire. Personas: Safari / CriOS / FxiOS / EdgiOS (iOS all share WKWebView truth) + mac Safari/Chrome/FF. Fully isolated from the sealed GhostBurp Pro 3 tree.",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "shell/main.js",
+  "scripts": {
+    "chain:genesis": "node receipts/chain.js --genesis",
+    "beat:full": "node ../free-truth-probe/genes/beat.js --full",
+    "pulse:vein-a": "node ../free-truth-probe/genes/vein-a-safari.js",
+    "pulse:vein-b": "node ../free-truth-probe/genes/vein-b-iosim.js",
+    "pulse:seal": "node ../free-truth-probe/genes/seal.js"
+  },
+  "build": {
+    "appId": "dev.ghostburp.genoe",
+    "productName": "GhostBurp GENOE",
+    "files": [
+      "shell/**/*",
+      "surface/**/*",
+      "wire/**/*",
+      "receipts/**/*"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^31.7.7"
+  }
+}

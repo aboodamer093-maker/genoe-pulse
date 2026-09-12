@@ -1,0 +1,19 @@
+{
+  "kind": "genoe/chain/genesis",
+  "tree": "genoe",
+  "seal": 0,
+  "status": "scaffold-seed",
+  "doctrine": "no number without a sealed measurement; declared-prior != measured-population; never a silent claim",
+  "isolation": "genoe/ is structurally excluded from tree-1 date-lock (mint walks desktop\\engines + desktop\\scripts only). Zero edits to any file of the sealed GhostBurp Pro 3 tree. free-truth-probe extended by new files only.",
+  "engine": "WebKit (WinCairo build of engines\\vendor\\webkit, out-of-tree build dir, read-only source)",
+  "wire": "gene-verified ClientHello (JA4 == published corpus, zero tolerance) + h2 mspa + UA-CH",
+  "gates": {
+    "ja4": "100% exact vs published corpus",
+    "ja4h": "100% mspa order",
+    "surface": ">=99% vs oracle beat",
+    "behavior": ">=99% webkit oracle parity",
+    "determinism": "100% (50/50)",
+    "realism": "100/100/100"
+  },
+  "note": "seed for the independent GENOE seal chain. chain.js mints the real signed beat blocks from free-truth-probe/genes on the first oracle pulse."
+}

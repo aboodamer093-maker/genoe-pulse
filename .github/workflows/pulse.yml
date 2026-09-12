@@ -1,0 +1,59 @@
+name: genoe-pulse
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '14 3 * * 1'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: genoe-pulse
+  cancel-in-progress: false
+
+jobs:
+  pulse:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: pre-check core on host
+        run: node free-truth-probe/genes/crosscheck.js --self-test
+
+      - name: vein-a — real macOS Safari
+        run: node free-truth-probe/genes/vein-a-safari.js
+
+      - name: vein-b — real Mobile Safari (iOS simulator)
+        run: node free-truth-probe/genes/vein-b-iosim.js
+
+      - name: seal — GENOE chain #1
+        run: node free-truth-probe/genes/seal.js
+
+      - name: persist sealed chain back to repo
+        if: always()
+        run: |
+          git config user.name "GENOE Oracle"
+          git config user.email "genoe@ghostburp.local"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "no new beats to persist"
+          else
+            git commit -m "genoe: pulse beats ($(date -u +%Y-%m-%dT%H:%MZ))"
+            git push origin HEAD:main
+          fi
+
+      - name: upload receipts + sealed beats
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genoe-receipts
+          path: |
+            free-truth-probe/genes/receipts
+            genoe/receipts
+          if-no-files-found: warn
