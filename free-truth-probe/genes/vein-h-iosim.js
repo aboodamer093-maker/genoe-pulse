@@ -21,7 +21,7 @@ const run = (cmd, args, opts = {}) => spawnSync(cmd, args, { encoding: 'utf8', .
 
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
-  setTimeout(() => { console.error('VEIN-H-IOSIM WATCHDOG exit'); process.exit(3); }, 240000).unref();
+  setTimeout(() => { console.error('VEIN-H-IOSIM WATCHDOG exit'); process.exit(3); }, 320000).unref();
   const log = (s) => console.log('VEIN-H-IOSIM ' + s);
 
   run('xcrun', ['simctl', 'list']);
@@ -81,7 +81,13 @@ async function main() {
     await delay(8000);
   }
   log('nav attempts done, done=' + done);
-  if (!done) { const cap2 = await blade.wait(); done = !!cap2; }
+  if (!done) {
+    log('settle retry round (Safari cold-start)');
+    await delay(6000);
+    run('xcrun', ['simctl', 'openurl', udid, target], { stdio: 'ignore' });
+    const extra = await blade.wait();
+    done = !!extra;
+  }
   run('xcrun', ['simctl', 'shutdown', udid], { stdio: 'ignore' });
   blade.close();
   if (!done) { console.error('VEIN-H-IOSIM FAIL no request captured'); process.exit(14); }

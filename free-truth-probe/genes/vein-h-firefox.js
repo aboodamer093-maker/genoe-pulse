@@ -33,8 +33,20 @@ async function main() {
   const blade = startBlade({ port: PORT, timeoutMs: 60000 });
   await blade.listenP;
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'genoe-ff-'));
-  const child = spawn(BIN, ['--headless', '--profile', profile, 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore' });
-  const cap = await blade.wait();
+  // Firefox ignores the OS keychain unless it reads enterprise roots — without
+  // this the blade's system-trusted root is unknown to Gecko and the h2 request
+  // NEVER happens (flaky timeout). Explicitly enable it for this profile.
+  fs.writeFileSync(path.join(profile, 'user.js'),
+    'pref("security.enterprise_roots.enabled", true);\npref("app.update.disabledForTesting", true);\n');
+  const navigate = () => spawn(BIN, ['--headless', '--profile', profile, 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore' });
+  let child = navigate();
+  let cap = await blade.wait();
+  if (!cap) { // bounded cold-start retry: kill and relaunch once
+    try { child.kill('SIGTERM'); } catch (_) {}
+    await new Promise((r) => setTimeout(r, 5000));
+    child = navigate();
+    cap = await blade.wait();
+  }
   try { child.kill('SIGTERM'); } catch (_) {}
   blade.close();
   if (!cap) { console.error('VEIN-H-FIREFOX FAIL no request captured'); process.exit(14); }
