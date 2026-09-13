@@ -30,6 +30,15 @@ const gates = [
   { name: 'wire parity', run: () => parityCached },
 ];
 
+const extCached = { pass: false, results: [{ name: 'external-verify', pass: false, detail: 'no cached external verify' }] };
+try {
+  const ev = JSON.parse(fs.readFileSync(path.join(__dirname, 'receipts', 'wire-verify', 'summary.json'), 'utf8'));
+  const exact = (ev.rows || []).filter((r) => r.verdict && r.verdict.startsWith('EXACT')).length;
+  extCached.pass = exact > 0;
+  extCached.results = [{ name: 'external-verify', pass: extCached.pass, detail: exact + '/' + ((ev.rows || []).length) + ' EXACT vs independent service (' + (ev.at || '').slice(0, 10) + ')' }];
+} catch (_) {}
+gates.push({ name: 'external wire verify', run: () => extCached });
+
 let allPass = true;
 console.log('GENOE GENE GATE');
 for (const g of gates) {

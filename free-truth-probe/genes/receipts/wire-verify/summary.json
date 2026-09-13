@@ -1,0 +1,42 @@
+{
+  "at": "2026-09-13T02:42:22.557Z",
+  "service": "https://tls.peet.ws/api/all",
+  "rows": [
+    {
+      "profile": "safari260",
+      "product": "Safari 26.0",
+      "cassetteJa4": "t13d2014h2_a09f3c656075_d0a99439f9b1",
+      "outsideJa4": "t13d2014h2_a09f3c656075_d0a99439f9b1",
+      "outsideJa3": "6618231821d2d40f8d1859f5a43a0307",
+      "verdict": "EXACT-MATCH Safari 26.0",
+      "error": null,
+      "h2PseudoOrder": "msap",
+      "parityWithCassette": true,
+      "outsideUa": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15"
+    },
+    {
+      "profile": "safari2601",
+      "product": "Safari 26.0.1",
+      "cassetteJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
+      "outsideJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
+      "outsideJa3": "ecdf4f49dd59effc439639da29186671",
+      "verdict": "EXACT-MATCH Safari 26.0.1",
+      "error": null,
+      "h2PseudoOrder": "msap",
+      "parityWithCassette": true,
+      "outsideUa": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0.1 Safari/605.1.15"
+    },
+    {
+      "profile": "safari260_ios",
+      "product": "Safari iOS 26 (mobile)",
+      "cassetteJa4": null,
+      "outsideJa4": "t13d2015h2_a09f3c656075_c258b721e490",
+      "outsideJa3": "fb3660676bafc9799c86bd51a1ea12f5",
+      "verdict": "NOT-IN-CORPUS",
+      "error": null,
+      "h2PseudoOrder": "msap",
+      "parityWithCassette": null,
+      "outsideUa": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1"
+    }
+  ]
+}

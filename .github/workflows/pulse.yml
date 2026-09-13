@@ -35,8 +35,10 @@ jobs:
                 free-truth-probe/genes/receipts/vein-h-safari.json \
                 free-truth-probe/genes/receipts/vein-h-chrome.json \
                 free-truth-probe/genes/receipts/vein-h-firefox.json \
+                free-truth-probe/genes/receipts/vein-h-iosim.json \
                 free-truth-probe/genes/receipts/hello-vein-a-safari.txt \
                 free-truth-probe/genes/receipts/hello-vein-b-iosim.txt
+          rm -rf free-truth-probe/genes/receipts/wire-verify
           echo "run-owned receipts cleared"
 
       - name: vein-a — real macOS Safari
@@ -100,6 +102,29 @@ jobs:
           ec=$?
           if [ $ec -eq 0 ]; then echo "vein-h-firefox green (h2 headers captured)"; exit 0; fi
           echo "vein-h-firefox FAILED (exit $ec)"
+          exit $ec
+
+      - name: vein-h — real Mobile Safari (iOS simulator) h2 HEADERS blade
+        if: always()
+        timeout-minutes: 4
+        run: |
+          set +e
+          node free-truth-probe/genes/vein-h-iosim.js
+          ec=$?
+          if [ $ec -eq 0 ]; then echo "vein-h-iosim green (mobile h2 headers captured)"; exit 0; fi
+          echo "vein-h-iosim FAILED (exit $ec)"
+          exit $ec
+
+      - name: vein-x — INDEPENDENT external wire verification
+        if: always()
+        timeout-minutes: 3
+        run: |
+          set +e
+          python3 -m pip install --quiet --disable-pip-version-check curl_cffi
+          node free-truth-probe/genes/wire-verify.js
+          ec=$?
+          if [ $ec -eq 0 ] || [ $ec -eq 5 ]; then echo "vein-x green (external measurement recorded)"; exit 0; fi
+          echo "vein-x FAILED (exit $ec)"
           exit $ec
 
       - name: seal — GENOE chain #1
