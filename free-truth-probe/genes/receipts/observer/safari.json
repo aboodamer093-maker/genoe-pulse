@@ -1,0 +1,16 @@
+{
+  "label": "witness-safari",
+  "engine": "safari",
+  "token": null,
+  "at": "2026-09-13T23:23:32.891Z",
+  "verdict": "ENGINE-TIMEOUT",
+  "witnessed": false,
+  "error": "engine-timeout-after-240s",
+  "peet": null,
+  "recorderB": null,
+  "local": {
+    "refJa4": null,
+    "refH2": null,
+    "declaredH2": "msap"
+  }
+}

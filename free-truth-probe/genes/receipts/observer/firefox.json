@@ -1,0 +1,19 @@
+{
+  "label": "witness-firefox",
+  "engine": "firefox",
+  "token": "obs=firefox.202609132319175.e594nx",
+  "at": "2026-09-13T23:23:33.643Z",
+  "readback": "readback-failed",
+  "error": "no webdriver session — *** You are running in headless mode.",
+  "pngEvidence": null,
+  "readbackPreview": null,
+  "peet": null,
+  "recorderB": null,
+  "local": {
+    "refJa4": "t13d1517h2_8daaf6152771_3cbfd9057e0d",
+    "refH2": null,
+    "declaredH2": "mpas"
+  },
+  "verdict": "CHANNEL-UNAVAILABLE",
+  "witnessed": false
+}

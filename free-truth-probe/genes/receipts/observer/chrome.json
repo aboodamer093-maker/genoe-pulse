@@ -1,0 +1,19 @@
+{
+  "label": "witness-chrome",
+  "engine": "chrome",
+  "token": "obs=chrome.202609132319175.esa2bs",
+  "at": "2026-09-13T23:21:47.011Z",
+  "readback": "readback-failed",
+  "error": "spawnSync /Applications/Google Chrome.app/Contents/MacOS/Google Chrome ETIMEDOUT",
+  "pngEvidence": null,
+  "readbackPreview": null,
+  "peet": null,
+  "recorderB": null,
+  "local": {
+    "refJa4": "t13d1517h2_8daaf6152771_a323666e1952",
+    "refH2": null,
+    "declaredH2": "masp"
+  },
+  "verdict": "CHANNEL-UNAVAILABLE",
+  "witnessed": false
+}
