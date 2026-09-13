@@ -1,0 +1,70 @@
+{
+  "label": "vein-s-macos",
+  "at": "2026-09-13T01:00:42.884Z",
+  "platform": "macOS",
+  "source": "measured",
+  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
+  "uaMatchesDeclaration": false,
+  "uaChAbsent": true,
+  "surface": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
+    "platform": "MacIntel",
+    "vendor": "Apple Computer, Inc.",
+    "language": "en-US",
+    "languages": [
+      "en-US"
+    ],
+    "hardwareConcurrency": 4,
+    "maxTouchPoints": 0,
+    "webdriver": true,
+    "plugins": [
+      "PDF Viewer",
+      "Chrome PDF Viewer",
+      "Chromium PDF Viewer",
+      "Microsoft Edge PDF Viewer",
+      "WebKit built-in PDF"
+    ],
+    "mimeTypes": 2,
+    "userAgentData": null,
+    "screen": {
+      "width": 1024,
+      "height": 768,
+      "availWidth": 1024,
+      "availHeight": 681,
+      "colorDepth": 24,
+      "orientation": "landscape-primary"
+    },
+    "window": {
+      "innerWidth": 800,
+      "innerHeight": 628,
+      "outerWidth": 800,
+      "outerHeight": 680,
+      "dpr": 1
+    },
+    "webgl": {
+      "supported": true,
+      "vendor": "Apple Inc.",
+      "renderer": "Apple GPU",
+      "maxTextureSize": 16384,
+      "webglVersion": "1",
+      "webgl2": false
+    },
+    "fonts": {
+      "-apple-system": true,
+      "Helvetica Neue": true,
+      "Arial": true,
+      "Courier New": true,
+      "Times New Roman": true,
+      "Menlo": true,
+      "Monaco": true,
+      "Verdana": true,
+      "Tahoma": true,
+      "Georgia": true,
+      "Palatino": true,
+      "Comic Sans MS": true,
+      "Impact": true,
+      "Zapfino": true
+    },
+    "canvasFp": 6094
+  }
+}

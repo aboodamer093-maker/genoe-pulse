@@ -2,7 +2,8 @@
   "chain": "genoe",
   "rootSeed": "chain-0-genesis.json",
   "beats": [
-    "beat-000.json"
+    "beat-000.json",
+    "beat-001.json"
   ],
-  "lastHash": "a3705d540071c421712ac2bb1b2b23857c158508f239181e48602a7e887382c1"
+  "lastHash": "68be2ae66ac019ba858fa8dd323d17c305931a0add959e7537f0c04fda6e58c5"
 }
