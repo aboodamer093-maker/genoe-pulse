@@ -95,11 +95,11 @@ jobs:
           echo "vein-h-chrome FAILED (exit $ec)"
           exit $ec
 
-      - name: vein-h — real macOS Firefox h2 HEADERS blade
-        if: always()
-        timeout-minutes: 3
-        run: |
-          set +e
+- name: vein-h — real macOS Firefox h2 HEADERS blade
+          if: always()
+          timeout-minutes: 7
+          run: |
+            set +e
           node free-truth-probe/genes/vein-h-firefox.js
           ec=$?
           if [ $ec -eq 0 ]; then echo "vein-h-firefox green (h2 headers captured)"; exit 0; fi
@@ -157,12 +157,18 @@ jobs:
           # (crown external-verify, engine hello, etc.) survives every pulse
           DEL=$(git diff --cached --name-only --diff-filter=D)
           if [ -n "$DEL" ]; then git restore --staged $DEL; fi
-          if git diff --cached --quiet; then
-            echo "no new beats to persist"
-          else
-            git commit -m "genoe: pulse beats ($(date -u +%Y-%m-%dT%H:%MZ))"
-            git push origin HEAD:main
-          fi
+if git diff --cached --quiet; then
+              echo "no new beats to persist"
+            else
+              git commit -m "genoe: pulse beats ($(date -u +%Y-%m-%dT%H:%MZ))"
+              # self-heal races: a stale/finished run may push first; rebase and
+              # retry instead of failing the persist lane
+              for i in 1 2 3 4 5; do
+                if git push origin HEAD:main 2>/dev/null; then echo "persist pushed (attempt $i)"; break; fi
+                echo "persist push failed (attempt $i) — rebase and retry"
+                git pull --rebase origin main >/dev/null 2>&1 || true
+              done
+            fi
 
       - name: upload receipts + sealed beats
         if: always()
