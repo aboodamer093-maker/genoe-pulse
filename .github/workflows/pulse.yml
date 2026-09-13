@@ -31,7 +31,9 @@ jobs:
           rm -f free-truth-probe/genes/receipts/vein-a-safari.json \
                 free-truth-probe/genes/receipts/vein-b-iosim.json \
                 free-truth-probe/genes/receipts/vein-s-macos.json \
-                free-truth-probe/genes/receipts/vein-h-macos.json \
+                free-truth-probe/genes/receipts/vein-h-safari.json \
+                free-truth-probe/genes/receipts/vein-h-chrome.json \
+                free-truth-probe/genes/receipts/vein-h-firefox.json \
                 free-truth-probe/genes/receipts/hello-vein-a-safari.txt \
                 free-truth-probe/genes/receipts/hello-vein-b-iosim.txt
           echo "run-owned receipts cleared"
@@ -69,10 +71,30 @@ jobs:
         if: always()
         run: |
           set +e
-          node free-truth-probe/genes/vein-h-macos.js
+          node free-truth-probe/genes/vein-h-safari.js
           ec=$?
-          if [ $ec -eq 0 ]; then echo "vein-h green (h2 headers captured)"; exit 0; fi
-          echo "vein-h FAILED (exit $ec)"
+          if [ $ec -eq 0 ]; then echo "vein-h-safari green (h2 headers captured)"; exit 0; fi
+          echo "vein-h-safari FAILED (exit $ec)"
+          exit $ec
+
+      - name: vein-h — real macOS Chrome h2 HEADERS blade
+        if: always()
+        run: |
+          set +e
+          node free-truth-probe/genes/vein-h-chrome.js
+          ec=$?
+          if [ $ec -eq 0 ]; then echo "vein-h-chrome green (h2 headers captured)"; exit 0; fi
+          echo "vein-h-chrome FAILED (exit $ec)"
+          exit $ec
+
+      - name: vein-h — real macOS Firefox h2 HEADERS blade
+        if: always()
+        run: |
+          set +e
+          node free-truth-probe/genes/vein-h-firefox.js
+          ec=$?
+          if [ $ec -eq 0 ]; then echo "vein-h-firefox green (h2 headers captured)"; exit 0; fi
+          echo "vein-h-firefox FAILED (exit $ec)"
           exit $ec
 
       - name: seal — GENOE chain #1

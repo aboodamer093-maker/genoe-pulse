@@ -45,11 +45,15 @@ function loadSurface() {
 }
 
 function loadH2() {
-  const p = path.join(RECEIPTS, 'vein-h-macos.json');
-  if (!fs.existsSync(p)) return null;
-  const v = JSON.parse(fs.readFileSync(p, 'utf8'));
-  if (!fresh(v.at)) return null;
-  return { label: v.label, at: v.at, platform: v.platform, h2Code: v.h2Code, matchesDeclared: v.matchesDeclared, order: v.order };
+  const out = [];
+  if (!fs.existsSync(RECEIPTS)) return out;
+  for (const f of fs.readdirSync(RECEIPTS)) {
+    if (!/^vein-h-.*\.json$/.test(f)) continue;
+    let v;
+    try { v = JSON.parse(fs.readFileSync(path.join(RECEIPTS, f), 'utf8')); } catch (_) { continue; }
+    if (v.h2Code && fresh(v.at)) out.push({ label: v.label, engine: v.engine, at: v.at, h2Code: v.h2Code, matchesDeclared: v.matchesDeclared });
+  }
+  return out;
 }
 
 function main() {
@@ -79,7 +83,7 @@ function main() {
       exactMatches: veins.filter((v) => v.verdict === 'EXACT-MATCH').length,
       references: veins.filter((v) => v.verdict === 'NOT-IN-CORPUS').length,
       surface: loadSurface() ? 1 : 0,
-      h2Blade: loadH2() ? 1 : 0,
+      h2Blades: loadH2().length,
     },
   };
   block.hash = sha256(block);
