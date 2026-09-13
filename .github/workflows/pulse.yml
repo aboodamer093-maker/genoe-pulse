@@ -26,8 +26,19 @@ jobs:
         with:
           node-version: 22
 
-      - name: self-check — core genes + chain (read-only, offline)
+      - name: anti-regression seal-door — the medicine is NON-NEGOTIABLE in structure
+        if: always()
         run: |
+          # FORTRESS zero-silent-cell doctrine: a persist that silently resur-
+          # rects run-owned deletions would whisper legacy cells back to life.
+          # This door BANGS LOUD the instant anyone (genoe or a future editor)
+          # reintroduces the wart (restore-everything). A regression may not
+          # sneak in quietly; if it is ever written, the pulse itself goes RED.
+          if grep -nF 'git restore --staged $DEL' .github/workflows/pulse.yml; then
+            echo "SEAL-DOOR RED: restore-everything wart present in pulse.yml — refusing to run with medicine compromised."
+            exit 1
+          fi
+          echo "SEAL-DOOR HOLDS: no restore-everything wart in pulse.yml (medicine structurally enforced)"
           node free-truth-probe/genes/crosscheck.js --self-test
           node free-truth-probe/genes/cassette.js --self-test
           node free-truth-probe/genes/mspa.js
