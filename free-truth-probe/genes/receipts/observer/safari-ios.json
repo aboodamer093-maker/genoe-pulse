@@ -1,15 +1,15 @@
 {
   "label": "witness-safari-ios",
   "engine": "safari-ios",
-  "token": "obs=safari-ios.202609130538326.r9dqnk",
-  "at": "2026-09-13T05:38:32.703Z",
-  "readback": "channel-unavailable",
-  "error": "no iPhone device type",
-  "pngEvidence": null,
+  "token": "obs=safari-ios.202609130600403.c73atz",
+  "at": "2026-09-13T06:06:07.497Z",
+  "readback": "readback-failed",
+  "error": "no swiftc (Xcode absent)",
+  "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202609130600403.c73atz.png",
   "peet": null,
   "recorderB": null,
   "local": {
-    "refJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
+    "refJa4": null,
     "refH2": null,
     "declaredH2": "msap"
   },

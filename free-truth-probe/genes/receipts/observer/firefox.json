@@ -1,8 +1,8 @@
 {
   "label": "witness-firefox",
   "engine": "firefox",
-  "token": "obs=firefox.202609130538326.jk4lgz",
-  "at": "2026-09-13T05:38:32.733Z",
+  "token": "obs=firefox.202609130600403.oe6f5h",
+  "at": "2026-09-13T06:07:18.150Z",
   "readback": "channel-unavailable",
   "error": "/usr/local/bin/geckodriver absent",
   "pngEvidence": null,

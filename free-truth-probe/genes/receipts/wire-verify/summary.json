@@ -1,5 +1,5 @@
 {
-  "at": "2026-09-13T04:20:06.815Z",
+  "at": "2026-09-13T06:00:39.643Z",
   "service": "https://tls.peet.ws/api/all",
   "rows": [
     {
@@ -9,7 +9,7 @@
       "outsideJa4": null,
       "outsideJa3": null,
       "verdict": "fetch-failed",
-      "error": "/Library/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/tools/wire-verify-py.py': [Errno 2] No such file or directory\n "
+      "error": "Traceback (most recent call last):\n  File \"/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/tools/wire-verify-py.py\", line 10, in <module>\n    from curl_cffi import requests\nModuleNotFoundError: No module named 'curl_cffi'\n "
     },
     {
       "profile": "safari2601",
@@ -18,7 +18,7 @@
       "outsideJa4": null,
       "outsideJa3": null,
       "verdict": "fetch-failed",
-      "error": "/Library/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/tools/wire-verify-py.py': [Errno 2] No such file or directory\n "
+      "error": "Traceback (most recent call last):\n  File \"/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/tools/wire-verify-py.py\", line 10, in <module>\n    from curl_cffi import requests\nModuleNotFoundError: No module named 'curl_cffi'\n "
     },
     {
       "profile": "safari260_ios",
@@ -27,7 +27,7 @@
       "outsideJa4": null,
       "outsideJa3": null,
       "verdict": "fetch-failed",
-      "error": "/Library/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/tools/wire-verify-py.py': [Errno 2] No such file or directory\n "
+      "error": "Traceback (most recent call last):\n  File \"/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/tools/wire-verify-py.py\", line 10, in <module>\n    from curl_cffi import requests\nModuleNotFoundError: No module named 'curl_cffi'\n "
     }
   ]
 }

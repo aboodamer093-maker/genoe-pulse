@@ -1,18 +1,39 @@
 {
   "label": "witness-chrome",
   "engine": "chrome",
-  "token": "obs=chrome.202609130538326.flcqa7",
-  "at": "2026-09-13T05:38:32.721Z",
-  "readback": "channel-unavailable",
-  "error": "chrome binary absent",
+  "token": "obs=chrome.202609130600403.ihvuvc",
+  "at": "2026-09-13T06:07:18.081Z",
+  "readback": "chrome-dump-dom",
+  "error": null,
   "pngEvidence": null,
-  "peet": null,
-  "recorderB": null,
+  "peet": {
+    "ok": true,
+    "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
+    "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
+    "ja3_hash": "c6a6993541857413f70ec9a80987cf38",
+    "h2": true,
+    "h2PseudoOrder": "masp",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+    "tokenEcho": false
+  },
+  "recorderB": {
+    "ok": true,
+    "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
+    "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
+    "tokenEcho": false
+  },
   "local": {
     "refJa4": null,
     "refH2": "masp",
     "declaredH2": "masp"
   },
-  "verdict": "CHANNEL-UNAVAILABLE",
-  "witnessed": false
+  "cross": {
+    "ja4AgreeLocal": null,
+    "ja4AgreeRecorderB": true,
+    "corpusHit": null,
+    "h2AgreeLocal": true,
+    "h2AgreeDeclared": true
+  },
+  "verdict": "WITNESSED-EXTERNAL",
+  "witnessed": true
 }
