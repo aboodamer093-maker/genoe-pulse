@@ -14,14 +14,15 @@ const http2 = require('http2');
 
 let _certCache = null;
 
-function trustCert() {
+function trustCert({ extraSans = [] } = {}) {
   // one cert per process (workflow runs each vein as its own node process)
   if (_certCache && fs.existsSync(_certCache.crt)) return _certCache;
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'genoe-h2-'));
   const key = path.join(dir, 'key.pem');
   const crt = path.join(dir, 'crt.pem');
   const ext = path.join(dir, 'san.cnf');
-  fs.writeFileSync(ext, `[req]\ndistinguished_name=dn\nx509_extensions=v3\nprompt=no\n[dn]\nCN=localhost\n[v3]\nsubjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1\nbasicConstraints=critical,CA:TRUE\nkeyUsage=critical,keyCertSign,digitalSignature,keyEncipherment\nextendedKeyUsage=serverAuth\n`);
+  const alt = ['DNS:localhost', 'IP:127.0.0.1', 'IP:::1'].concat(extraSans);
+  fs.writeFileSync(ext, `[req]\ndistinguished_name=dn\nx509_extensions=v3\nprompt=no\n[dn]\nCN=localhost\n[v3]\nsubjectAltName=${alt.join(',')}\nbasicConstraints=critical,CA:TRUE\nkeyUsage=critical,keyCertSign,digitalSignature,keyEncipherment\nextendedKeyUsage=serverAuth\n`);
   const r = spawnSync('openssl', ['req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-days', '1', '-keyout', key, '-out', crt, '-config', ext], { timeout: 25000, maxBuffer: 1 << 20, encoding: 'utf8' });
   if (r.status !== 0) throw new Error('openssl cert gen: ' + ((r.stderr || '') + ' ' + (r.error ? r.error.message : '')).slice(0, 300));
   // headless runners can hang on the keychain UI prompt — bound it hard
@@ -36,8 +37,8 @@ function measuredOrderCode(keys) {
   return keys.filter((k) => map[k]).map((k) => map[k]).join('').slice(0, 4) || '';
 }
 
-function startBlade({ port, timeoutMs = 60000 } = {}) {
-  const { key, crt } = trustCert();
+function startBlade({ port, timeoutMs = 60000, extraSans = [] } = {}) {
+  const { key, crt } = trustCert({ extraSans });
   const server = http2.createSecureServer({ key: fs.readFileSync(key), cert: fs.readFileSync(crt), allowHTTP1: false });
   let captured = null;
   let resolveCap;

@@ -19,7 +19,7 @@ const OUTDIR = path.join(__dirname, 'receipts');
 
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
-  setTimeout(() => { console.error('VEIN-H-FIREFOX WATCHDOG exit'); process.exit(3); }, 70000).unref();
+  setTimeout(() => { console.error('VEIN-H-FIREFOX WATCHDOG exit'); process.exit(3); }, 130000).unref();
 
   if (!fs.existsSync(BIN)) {
     fs.writeFileSync(path.join(OUTDIR, LABEL + '.json'), JSON.stringify({

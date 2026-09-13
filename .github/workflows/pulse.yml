@@ -137,6 +137,10 @@ jobs:
           git config user.name "GENOE Oracle"
           git config user.email "genoe@ghostburp.local"
           git add -A
+          # never erase tracked history: unstage deletions so receipts lineage
+          # (crown external-verify, engine hello, etc.) survives every pulse
+          DEL=$(git diff --cached --name-only --diff-filter=D)
+          if [ -n "$DEL" ]; then git restore --staged $DEL; fi
           if git diff --cached --quiet; then
             echo "no new beats to persist"
           else
