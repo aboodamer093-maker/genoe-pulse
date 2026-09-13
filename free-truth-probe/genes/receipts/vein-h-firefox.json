@@ -1,58 +1,9 @@
 {
   "label": "vein-h-firefox",
   "engine": "firefox",
-  "at": "2026-09-13T06:31:40.703Z",
+  "at": "2026-09-13T07:45:38.846Z",
   "available": true,
   "captured": false,
   "note": "engine present but no h2 request captured on runner this pulse (cold-start/trust flake)",
-  "diagnostics": [
-    {
-      "kind": "tls",
-      "at": "2026-09-13T06:28:31.981Z",
-      "remote": "::ffff:127.0.0.1",
-      "error": "C0A259F501000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
-    },
-    {
-      "kind": "tls",
-      "at": "2026-09-13T06:28:32.026Z",
-      "remote": "::ffff:127.0.0.1",
-      "error": "C0A259F501000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
-    },
-    {
-      "kind": "tls",
-      "at": "2026-09-13T06:29:40.134Z",
-      "remote": "::ffff:127.0.0.1",
-      "error": "C0A259F501000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
-    },
-    {
-      "kind": "tls",
-      "at": "2026-09-13T06:29:40.147Z",
-      "remote": "::ffff:127.0.0.1",
-      "error": "C0A259F501000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
-    },
-    {
-      "kind": "tls",
-      "at": "2026-09-13T06:29:40.314Z",
-      "remote": "::ffff:127.0.0.1",
-      "error": "C0A259F501000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
-    },
-    {
-      "kind": "tls",
-      "at": "2026-09-13T06:30:42.677Z",
-      "remote": "::ffff:127.0.0.1",
-      "error": "C0A259F501000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
-    },
-    {
-      "kind": "tls",
-      "at": "2026-09-13T06:30:42.689Z",
-      "remote": "::ffff:127.0.0.1",
-      "error": "C0A259F501000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
-    },
-    {
-      "kind": "tls",
-      "at": "2026-09-13T06:30:42.748Z",
-      "remote": "::ffff:127.0.0.1",
-      "error": "C0A259F501000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
-    }
-  ]
+  "diagnostics": []
 }

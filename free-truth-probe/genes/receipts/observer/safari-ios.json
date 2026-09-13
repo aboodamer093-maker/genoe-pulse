@@ -1,18 +1,20 @@
 {
   "label": "witness-safari-ios",
   "engine": "safari-ios",
-  "token": "obs=safari-ios.202609130633364.lugqoe",
-  "at": "2026-09-13T06:36:16.713Z",
-  "readback": "readback-failed",
-  "error": "swiftc build: <unknown>:0: error: unable to load standard library for target 'arm64-apple-macosx15.0'\n",
-  "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202609130633364.lugqoe.png",
-  "peet": null,
+  "token": "obs=safari-ios.202609130747376.yvx9zp",
+  "at": "2026-09-13T07:51:37.592Z",
+  "readback": "ios-screenshot-ocr",
+  "error": null,
+  "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202609130747376.yvx9zp.png",
+  "peet": {
+    "ok": false
+  },
   "recorderB": null,
   "local": {
     "refJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
     "refH2": null,
     "declaredH2": "msap"
   },
-  "verdict": "CHANNEL-UNAVAILABLE",
+  "verdict": "READBACK-FAILED",
   "witnessed": false
 }

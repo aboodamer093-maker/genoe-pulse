@@ -1,13 +1,13 @@
 {
-  "at": "2026-09-13T06:38:02.221Z",
-  "run": "202609130633364",
+  "at": "2026-09-13T07:53:23.127Z",
+  "run": "202609130747376",
   "service": "https://tls.peet.ws/api/all",
   "engines": [
     {
       "label": "witness-safari",
       "engine": "safari",
-      "token": "obs=safari.202609130633364.kbow9i",
-      "at": "2026-09-13T06:34:04.567Z",
+      "token": "obs=safari.202609130747376.wmc4u0",
+      "at": "2026-09-13T07:48:07.260Z",
       "readback": "webdriver-source",
       "error": null,
       "pngEvidence": null,
@@ -45,26 +45,28 @@
     {
       "label": "witness-safari-ios",
       "engine": "safari-ios",
-      "token": "obs=safari-ios.202609130633364.lugqoe",
-      "at": "2026-09-13T06:36:16.713Z",
-      "readback": "readback-failed",
-      "error": "swiftc build: <unknown>:0: error: unable to load standard library for target 'arm64-apple-macosx15.0'\n",
-      "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202609130633364.lugqoe.png",
-      "peet": null,
+      "token": "obs=safari-ios.202609130747376.yvx9zp",
+      "at": "2026-09-13T07:51:37.592Z",
+      "readback": "ios-screenshot-ocr",
+      "error": null,
+      "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202609130747376.yvx9zp.png",
+      "peet": {
+        "ok": false
+      },
       "recorderB": null,
       "local": {
         "refJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
         "refH2": null,
         "declaredH2": "msap"
       },
-      "verdict": "CHANNEL-UNAVAILABLE",
+      "verdict": "READBACK-FAILED",
       "witnessed": false
     },
     {
       "label": "witness-chrome",
       "engine": "chrome",
-      "token": "obs=chrome.202609130633364.coma47",
-      "at": "2026-09-13T06:37:26.785Z",
+      "token": "obs=chrome.202609130747376.dlmdsk",
+      "at": "2026-09-13T07:52:47.737Z",
       "readback": "chrome-dump-dom",
       "error": null,
       "pngEvidence": null,
@@ -72,7 +74,7 @@
         "ok": true,
         "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
         "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
-        "ja3_hash": "cb053c4c8e63be38c3da2ba42a7c269a",
+        "ja3_hash": "fe1d76cd2c1fc5359b3f430ef3ad0a3c",
         "h2": true,
         "h2PseudoOrder": "masp",
         "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
@@ -102,10 +104,10 @@
     {
       "label": "witness-firefox",
       "engine": "firefox",
-      "token": "obs=firefox.202609130633364.1i46gn",
-      "at": "2026-09-13T06:38:02.216Z",
+      "token": "obs=firefox.202609130747376.tgmum7",
+      "at": "2026-09-13T07:53:23.122Z",
       "readback": "readback-failed",
-      "error": "no webdriver session",
+      "error": "no webdriver session — no driver output",
       "pngEvidence": null,
       "peet": null,
       "recorderB": null,
