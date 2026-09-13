@@ -59,6 +59,7 @@ jobs:
 
       - name: vein-s — real macOS Safari surface genes
         if: always()
+        timeout-minutes: 3
         run: |
           set +e
           node free-truth-probe/genes/vein-s-macos.js
@@ -69,6 +70,7 @@ jobs:
 
       - name: vein-h — real macOS Safari h2 HEADERS blade
         if: always()
+        timeout-minutes: 3
         run: |
           set +e
           node free-truth-probe/genes/vein-h-safari.js
@@ -79,6 +81,7 @@ jobs:
 
       - name: vein-h — real macOS Chrome h2 HEADERS blade
         if: always()
+        timeout-minutes: 3
         run: |
           set +e
           node free-truth-probe/genes/vein-h-chrome.js
@@ -89,6 +92,7 @@ jobs:
 
       - name: vein-h — real macOS Firefox h2 HEADERS blade
         if: always()
+        timeout-minutes: 3
         run: |
           set +e
           node free-truth-probe/genes/vein-h-firefox.js

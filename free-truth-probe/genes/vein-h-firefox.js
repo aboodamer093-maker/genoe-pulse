@@ -17,9 +17,11 @@ const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
+  setTimeout(() => { console.error('VEIN-H-FIREFOX WATCHDOG exit'); process.exit(3); }, 70000).unref();
   const blade = startBlade({ port: PORT, timeoutMs: 60000 });
   await blade.listenP;
-  spawnSync('open', ['-a', 'Firefox', 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore' });
+  const f = spawnSync('open', ['-a', 'Firefox', 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore', timeout: 20000 });
+  if (f.error) console.error('open: ' + f.error.message);
   const cap = await blade.wait();
   spawnSync('killall', ['Firefox'], { stdio: 'ignore' });
   blade.close();

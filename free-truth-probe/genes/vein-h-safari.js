@@ -16,14 +16,18 @@ const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
+  // hard watchdog: never let the step hang the workflow past ~70s
+  setTimeout(() => { console.error('VEIN-H-SAFARI WATCHDOG exit'); process.exit(3); }, 70000).unref();
   const blade = startBlade({ port: PORT, timeoutMs: 60000 });
   await blade.listenP;
-  spawnSync('sudo', ['safaridriver', '--enable'], { stdio: 'ignore' });
+  spawnSync('sudo', ['safaridriver', '--enable'], { stdio: 'ignore', timeout: 20000 });
   const drv = spawn('safaridriver', ['-p', '4444'], { stdio: 'ignore' });
   await delay(3500);
+  const sig = () => AbortSignal.timeout(15000);
   try {
     const ses = await fetch('http://127.0.0.1:4444/session', {
       method: 'POST',
+      signal: sig(),
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ capabilities: { alwaysMatch: { browserName: 'safari' } } }),
     }).then((r) => r.json());
@@ -31,11 +35,12 @@ async function main() {
     if (!sid) throw new Error('no session');
     await fetch('http://127.0.0.1:4444/session/' + sid + '/url', {
       method: 'POST',
+      signal: sig(),
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ url: 'https://localhost:' + PORT + '/blade' }),
     });
     await delay(6000);
-    await fetch('http://127.0.0.1:4444/session/' + sid, { method: 'DELETE' }).catch(() => {});
+    await fetch('http://127.0.0.1:4444/session/' + sid + '', { method: 'DELETE', signal: sig() }).catch(() => {});
   } catch (e) {
     console.error('VEIN-H-SAFARI FAIL drive ' + e.message);
     try { drv.kill('SIGTERM'); } catch (_) {}
