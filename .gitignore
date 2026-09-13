@@ -2,6 +2,7 @@
 # Tree-1 (desktop/, engines/, app/, engine/, backups/, snapshots/, tests/) is
 # excluded by construction and can never be committed here.
 *
+!.gitattributes
 !/.github/
 !/.github/workflows/
 !/.github/workflows/pulse.yml

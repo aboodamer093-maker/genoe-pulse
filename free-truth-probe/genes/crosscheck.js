@@ -52,7 +52,7 @@ const VECTOR_SAFARI_260 = {
 const EXPECTED_SAFARI_260 = 't13d2014h2_a09f3c656075_d0a99439f9b1';
 
 // Vector as measured by the GENOE oracle on the live macos-15 runner (Safari 26.6):
-// ext 0x0023 (session_ticket) dropped, 0x0015 (heartbeat) added. IP-literal target -> no SNI.
+// ext 0x0023 (session_ticket) dropped, 0x0015 (padding, RFC 7685) added. IP-literal target -> no SNI.
 // -> t1302013h2_a09f3c656075_e42f34c56612
 const VECTOR_SAFARI_266 = {
   transport: 't',

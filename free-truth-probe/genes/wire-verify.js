@@ -77,9 +77,14 @@ const hf = frames.find((f) => f.frame_type === 'HEADERS');
     console.log('  ' + p.profile.padEnd(14) + ' outsideJa4=' + (rec.outsideJa4 || '-') + '  ' + rec.verdict + (rec.outsideJa4 === p.cassetteJa4 ? '  [== our cassette]' : '') + (rec.h2PseudoOrder ? '  h2=' + rec.h2PseudoOrder : '') + (rec.error ? '  err=' + String(rec.error).slice(0, 120) : ''));
   }
   fs.writeFileSync(path.join(OUTDIR, 'summary.json'), JSON.stringify({ at: new Date().toISOString(), service: SERVICE, rows }, null, 2) + '\n');
+  const measured = rows.filter((r) => r.outsideJa4).length;
   const matched = rows.filter((r) => r.outsideJa4 && r.parityWithCassette !== false && r.verdict.startsWith('EXACT')).length;
-  console.log('EXTERNAL VERIFY ' + matched + '/' + rows.length + ' exact against outside world  ->  receipts/wire-verify/summary.json');
-  process.exit(matched ? 0 : 5);
+  console.log('EXTERNAL VERIFY ' + matched + '/' + rows.length + ' exact  (' + measured + '/' + rows.length + ' measured by the outside world)  ->  receipts/wire-verify/summary.json');
+  // HONEST EXIT CONTRACT (no green-with-zero-proof):
+  //   0 = >=1 profile EXACT (crown confirmed against a neutral third party)
+  //   5 = measured by outside world, zero exact (valid NOT-IN-CORPUS beat)
+  //   4 = NOTHING measured at all — the crown could not even be reached
+  process.exit(matched ? 0 : (measured ? 5 : 4));
 }
 
 function sha(s) {

@@ -130,6 +130,20 @@ function chromeDumpDom(url, { timeoutMs = 35000 } = {}) {
   return { ok: false, reason: 'readback-failed', error: errText(r) };
 }
 
+// Resolve the WebDriver port the driver was started with: safaridriver uses
+// '-p 4444', geckodriver uses '--port 4446' — a naive indexOf('-p') never
+// matches the latter and produced 'http://127.0.0.1:--port', the root cause
+// of the entire Firefox external-witness lane being silently dead.
+function portFrom(driverArgs, fallback) {
+  const args = driverArgs || [];
+  const i = args.indexOf('-p');
+  if (i >= 0 && args[i + 1]) return args[i + 1];
+  const j = args.indexOf('--port');
+  if (j >= 0 && args[j + 1]) return args[j + 1];
+  for (const a of args) { const m = /^--port=(\d+)$/.exec(a); if (m) return m[1]; }
+  return String(fallback);
+}
+
 // Generic W3C WebDriver readback: spawn driver, open a session (with bounded
 // retry for cold driver startup), navigate, then GET /session/:id/source.
 // navigate() may perform multiple URLs to give a single physical browser shot.
@@ -142,7 +156,7 @@ async function webdriverSource({ driverBin, driverArgs, browserName, navigate, r
   try {
     await delay(readyMs);
     const sig = () => AbortSignal.timeout(20000);
-    const base = 'http://127.0.0.1:' + driverArgs[driverArgs.indexOf('-p') + 1];
+    const base = 'http://127.0.0.1:' + portFrom(driverArgs, 4444);
     let ssid = null;
     let statusProbe = '';
     const caps = { browserName };
@@ -291,8 +305,19 @@ async function iosReadback({ udid, url, outDir, token }) {
   return { ok: ocr.ok, text: ocr.ok ? ocr.text : null, error: ocr.ok ? null : ocr.error, png, preview: ocr.ok ? String(ocr.text).slice(0, 500) : null };
 }
 
-// fresh iPhone simulator (independent of the vein-b/vein-h device lifecycle)
+// boot an iPhone simulator, REUSING an already-booted device when one exists
+// (persisted udid under receipts/.sim-udid) — one cold boot per pulse
 async function bootIos() {
+  const UDID_FILE = path.join(__dirname, 'receipts', '.sim-udid');
+  if (fs.existsSync(UDID_FILE)) {
+    const prior = fs.readFileSync(UDID_FILE, 'utf8').trim();
+    if (prior) {
+      const booted = run('xcrun', ['simctl', 'list', 'devices', 'booted', '-j']);
+      let bootedIds = [];
+      try { bootedIds = (JSON.parse(booted.stdout).devices || []).flatMap((v) => v); } catch (_) { bootedIds = []; }
+      if (bootedIds.includes(prior)) { console.log('bootIos reused booted sim ' + prior); return { ok: true, udid: prior, reused: true }; }
+    }
+  }
   run('xcrun', ['simctl', 'list']);
   let deviceType = 'com.apple.CoreSimulator.SimDeviceType.iPhone-16';
   const dev = run('xcrun', ['simctl', 'list', 'devicetypes', '-j']);
@@ -314,7 +339,8 @@ async function bootIos() {
   run('xcrun', ['simctl', 'boot', udid], { stdio: 'ignore' });
   const boot = run('xcrun', ['simctl', 'bootstatus', udid, '-b'], { stdio: 'ignore', timeout: 150000 });
   if (boot.status !== 0) { run('xcrun', ['simctl', 'shutdown', udid], { stdio: 'ignore' }); return { ok: false, error: 'boot failed: ' + ((boot.stderr || '').slice(0, 120) || 'rc ' + boot.status) }; }
-  return { ok: true, udid };
+  try { fs.mkdirSync(path.join(__dirname, 'receipts'), { recursive: true }); fs.writeFileSync(UDID_FILE, udid + '\n'); } catch (_) {}
+  return { ok: true, udid, reused: false };
 }
 
 /* ------------------------------- self test ------------------------------ */
@@ -331,6 +357,10 @@ const BL_FIXTURE = { user_agent: 'Mozilla/5.0', ja4: 't13d2014h2_a09f3c656075_d0
 
 function selfTest() {
   const checks = [];
+  checks.push({ name: 'port-extract -p 4444', pass: portFrom(['-p', '4444'], 4444) === '4444', got: portFrom(['-p', '4444'], 4444) });
+  checks.push({ name: 'port-extract --port', pass: portFrom(['--port', '4446', '--log', 'info'], 4444) === '4446', got: portFrom(['--port', '4446', '--log', 'info'], 4444) });
+  checks.push({ name: 'port-extract --port=', pass: portFrom(['--port=5555'], 4444) === '5555', got: portFrom(['--port=5555'], 4444) });
+  checks.push({ name: 'port-extract fallback', pass: portFrom([], 4444) === '4444', got: portFrom([], 4444) });
   const p = parsePeet(PEET_FIXTURE);
   checks.push({ name: 'peet.ja4', pass: p.ok && p.ja4 === PEET_FIXTURE.tls.ja4 });
   checks.push({ name: 'peet.h2-order', pass: p.h2PseudoOrder === 'msap', got: p.h2PseudoOrder });

@@ -76,8 +76,9 @@ const PAGE = '<!doctype html><html><body><script>' + COLLECTOR_JS + '<\/script><
 
 function startSurfaceServer({ port = 10904, timeoutMs = 45000, onRequest } = {}) {
   return new Promise((resolve, reject) => {
-    const hit = new Promise((res) => setTimeout(() => { server.close(); reject(new Error('surface server timeout')); }, timeoutMs));
-    const server = http.createServer((req, res) => {
+    let server;
+    const hit = new Promise((res) => setTimeout(() => { try { server.close(); } catch (_) {} reject(new Error('surface server timeout')); }, timeoutMs));
+    server = http.createServer((req, res) => {
       if (req.url === '/surface' || req.url === '/') {
         res.writeHead(200, { 'content-type': 'text/html' });
         res.end(PAGE);
@@ -86,7 +87,7 @@ function startSurfaceServer({ port = 10904, timeoutMs = 45000, onRequest } = {})
       }
     });
     server.on('error', (e) => reject(e));
-    server.listen(port, '::', () => { onRequest && onRequest(); hit; resolve(server); });
+    server.listen(port, '::', () => { onRequest && onRequest(); hit.catch(() => {}); resolve(server); });
   });
 }
 

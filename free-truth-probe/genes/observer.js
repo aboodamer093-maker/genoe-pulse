@@ -39,10 +39,12 @@ const readReceipt = (f) => {
 const corpusHit = (ja4) => (ja4 ? effectiveCorpus().find((e) => e.ja4 === ja4) || null : null);
 
 // local same-genome cross-references (frame our claim, never the answer)
+// chrome/firefox local refs come from VEIN-V (raw-TLS local capture with the
+// real public SNI) — this is what upgrades their verdicts to WITNESSED-DOUBLE.
 const LOCAL = {
   safari: { ja4: () => (readReceipt('vein-a-safari.json') || {}).ja4 || null, h2: () => (readReceipt('vein-h-safari.json') || {}).h2Code || null },
-  chrome: { ja4: () => null, h2: () => (readReceipt('vein-h-chrome.json') || {}).h2Code || null },
-  firefox: { ja4: () => null, h2: () => (readReceipt('vein-h-firefox.json') || {}).h2Code || null },
+  chrome: { ja4: () => (readReceipt('vein-v-chrome.json') || {}).ja4 || null, h2: () => (readReceipt('vein-h-chrome.json') || {}).h2Code || null },
+  firefox: { ja4: () => (readReceipt('vein-v-firefox.json') || {}).ja4 || null, h2: () => (readReceipt('vein-h-firefox.json') || {}).h2Code || null },
   'safari-ios': { ja4: () => (readReceipt('vein-b-iosim.json') || {}).ja4 || null, h2: () => (readReceipt('vein-h-iosim.json') || {}).h2Code || null },
 };
 
@@ -141,16 +143,18 @@ async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
   setTimeout(() => { console.error('VEIN-O WATCHDOG exit'); process.exit(3); }, 600000).unref();
   console.log('VEIN-O observer matrix (independent public h2/JA4 observers)');
+  console.log('VEIN-O watching ' + JSON.stringify(['safari', 'safari-ios', 'chrome', 'firefox']));
 
-  const engines = [];
-  for (const e of ['safari', 'safari-ios', 'chrome', 'firefox']) {
+  // PARALLEL engines: the outside world's verdicts are independent of each
+  // other, so the matrix runs as one concurrent burst (fewer cold starts).
+  const engines = await Promise.all((['safari', 'safari-ios', 'chrome', 'firefox']).map(async (e) => {
     try {
       const rec = await runEngine(e);
-      engines.push({ engine: e, rec });
+      return { engine: e, rec };
     } catch (err) {
-      engines.push({ engine: e, rec: { label: 'witness-' + e, engine: e, token: null, at: new Date().toISOString(), verdict: 'ENGINE-ERROR', witnessed: false, error: String(err.message).slice(0, 160) } });
+      return { engine: e, rec: { label: 'witness-' + e, engine: e, token: null, at: new Date().toISOString(), verdict: 'ENGINE-ERROR', witnessed: false, error: String(err.message).slice(0, 160) } };
     }
-  }
+  }));
 
   for (const { engine, rec } of engines) {
     const f = path.join(OUTDIR, engine + '.json');

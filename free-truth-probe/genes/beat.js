@@ -10,6 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 const crosscheck = require('./crosscheck.js');
+const { verifyChain } = require('./chain-verify.js');
 
 const PROOT = path.join(__dirname, '..', '..');
 const GENESIS = path.join(PROOT, 'genoe', 'receipts', 'chain-0-genesis.json');
@@ -34,10 +35,11 @@ function main() {
   t.push(['sealed beats', beats.length]);
 
   if (beats.length) {
+    const v = verifyChain();
     const last = JSON.parse(fs.readFileSync(path.join(BEATS_DIR, beats[beats.length - 1]), 'utf8'));
     t.push(['last seal #', last.seal]);
     t.push(['last hash', String(last.hash || '').slice(0, 16) + '…']);
-    t.push(['prev-links', 'intact (from genesis)']);
+    t.push(['prev-links', v.ok ? 'verified genesis->tip (' + v.beats.length + ' links)' : 'BROKEN — ' + (v.firstError || '?')]);
     t.push(['oracle pulse', 'LIVE']);
     for (const v of last.veins) {
       t.push(['  ' + v.label, v.verdict + (v.match ? '  ->  ' + v.match : ''), v.ja4]);

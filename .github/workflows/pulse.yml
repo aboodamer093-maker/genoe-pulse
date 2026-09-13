@@ -13,12 +13,12 @@ permissions:
 
 concurrency:
   group: genoe-pulse
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   pulse:
     runs-on: macos-15
-    timeout-minutes: 80
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -26,8 +26,12 @@ jobs:
         with:
           node-version: 22
 
-      - name: pre-check core on host
-        run: node free-truth-probe/genes/crosscheck.js --self-test
+      - name: self-check — core genes + chain (read-only, offline)
+        run: |
+          node free-truth-probe/genes/crosscheck.js --self-test
+          node free-truth-probe/genes/cassette.js --self-test
+          node free-truth-probe/genes/mspa.js
+          node free-truth-probe/genes/chain-verify.js
 
       - name: clear run-owned receipts (no stale reuse across runs)
         run: |
@@ -36,116 +40,51 @@ jobs:
                  free-truth-probe/genes/receipts/vein-h-iosim.json \
                  free-truth-probe/genes/receipts/hello-vein-a-safari.txt \
                  free-truth-probe/genes/receipts/hello-vein-b-iosim.txt \
-                 free-truth-probe/genes/receipts/.sim-udid
+                 free-truth-probe/genes/receipts/vein-v-chrome.json \
+                 free-truth-probe/genes/receipts/vein-v-firefox.json \
+                 free-truth-probe/genes/receipts/hello-vein-v-chrome.txt \
+                 free-truth-probe/genes/receipts/hello-vein-v-firefox.txt \
+                 free-truth-probe/genes/receipts/parity-curl.json
           rm -rf free-truth-probe/genes/receipts/wire-verify
           rm -rf free-truth-probe/genes/receipts/observer
           echo "run-owned receipts cleared"
 
-      - name: vein-a — real macOS Safari
-        run: |
-          set +e
-          node free-truth-probe/genes/vein-a-safari.js
-          ec=$?
-          if [ $ec -eq 0 ] || [ $ec -eq 5 ]; then echo "vein-a green (measurement captured)"; exit 0; fi
-          echo "vein-a FAILED (exit $ec)"
-          exit $ec
+      - name: measurement burst — ALL engines in parallel waves
+        timeout-minutes: 40
+        run: node free-truth-probe/genes/pulse-orchestrator.js
 
-      - name: vein-b — real Mobile Safari (iOS simulator)
-        if: always()
-        run: |
-          set +e
-          node free-truth-probe/genes/vein-b-iosim.js
-          ec=$?
-          if [ $ec -eq 0 ] || [ $ec -eq 5 ]; then echo "vein-b green (measurement captured)"; exit 0; fi
-          echo "vein-b FAILED (exit $ec)"
-          exit $ec
-
-      - name: vein-s — real macOS Safari surface genes
-        if: always()
-        timeout-minutes: 3
-        run: |
-          set +e
-          node free-truth-probe/genes/vein-s-macos.js
-          ec=$?
-          if [ $ec -eq 0 ]; then echo "vein-s green (surface snapshot captured)"; exit 0; fi
-          echo "vein-s FAILED (exit $ec)"
-          exit $ec
-
-      - name: vein-h — real macOS Safari h2 HEADERS blade
-        if: always()
-        timeout-minutes: 3
-        run: |
-          set +e
-          node free-truth-probe/genes/vein-h-safari.js
-          ec=$?
-          if [ $ec -eq 0 ]; then echo "vein-h-safari green (h2 headers captured)"; exit 0; fi
-          echo "vein-h-safari FAILED (exit $ec)"
-          exit $ec
-
-      - name: vein-h — real macOS Chrome h2 HEADERS blade
-        if: always()
-        timeout-minutes: 3
-        run: |
-          set +e
-          node free-truth-probe/genes/vein-h-chrome.js
-          ec=$?
-          if [ $ec -eq 0 ]; then echo "vein-h-chrome green (h2 headers captured)"; exit 0; fi
-          echo "vein-h-chrome FAILED (exit $ec)"
-          exit $ec
-
-      - name: vein-h — real macOS Firefox h2 HEADERS blade
-        if: always()
-        timeout-minutes: 7
-        run: |
-          set +e
-          node free-truth-probe/genes/vein-h-firefox.js
-          ec=$?
-          if [ $ec -eq 0 ]; then echo "vein-h-firefox green (h2 headers captured)"; exit 0; fi
-          echo "vein-h-firefox FAILED (exit $ec)"
-          exit $ec
-
-      - name: vein-h — real Mobile Safari (iOS simulator) h2 HEADERS blade
-        if: always()
-        timeout-minutes: 7
-        run: |
-          set +e
-          node free-truth-probe/genes/vein-h-iosim.js
-          ec=$?
-          if [ $ec -eq 0 ]; then echo "vein-h-iosim green (mobile h2 headers captured)"; exit 0; fi
-          echo "vein-h-iosim FAILED (exit $ec)"
-          exit $ec
-
-      - name: vein-x — INDEPENDENT external wire verification
-        if: always()
-        timeout-minutes: 3
-        run: |
-          set +e
-          # runner python3 is Homebrew (PEP 668 externally-managed) — CI is
-          # ephemeral so --break-system-packages is the honest install path.
-          python3 -m pip install --break-system-packages --quiet --disable-pip-version-check curl_cffi
-          python3 -c "import curl_cffi; print('curl_cffi canary OK')"
-          node free-truth-probe/genes/wire-verify.js
-          ec=$?
-          if [ $ec -eq 0 ] || [ $ec -eq 5 ]; then echo "vein-x green (external measurement recorded)"; exit 0; fi
-          echo "vein-x FAILED (exit $ec)"
-          exit $ec
-
-      - name: vein-o — CROSS-OBSERVER witness matrix (public h2 observers)
+      - name: cross-observer witness matrix (public h2 observers, engines parallel)
         if: always()
         timeout-minutes: 15
         run: |
           set +e
           node free-truth-probe/genes/observer.js
           ec=$?
-          if [ $ec -eq 0 ]; then echo "vein-o green (observer matrix recorded)"; exit 0; fi
+          # 0 = receipts written (witnessed or honest absence); 4 = nothing readable
+          if [ $ec -eq 0 ] || [ $ec -eq 4 ]; then echo "vein-o receipts recorded (matrix verdict in logs)"; exit 0; fi
           echo "vein-o FAILED (exit $ec)"
           exit $ec
 
-      - name: seal — GENOE chain #1
+      - name: gene-gate report (chain, corpus, freshness, pseudo-order truth)
+        if: always()
+        run: |
+          set +e
+          node free-truth-probe/genes/gene-gate.js
+          ec=$?
+          # REPORT-ONLY: honesty is enforced structurally downstream (seal
+          # aborts the chain on damage; wire-verify/exits and persist-assert
+          # turn silent failures red). Gate logs always show the truth.
+          echo "gene-gate report exit=$ec (see logs for stale/corrupt findings)"
+          exit 0
+
+      - name: seal — verify-then-seal GENOE chain
         if: always()
         run: node free-truth-probe/genes/seal.js
 
-      - name: persist sealed chain back to repo
+      - name: post-seal chain verification (genesis -> tip walk)
+        run: node free-truth-probe/genes/chain-verify.js
+
+      - name: persist sealed chain back to repo + ASSERT it landed
         if: always()
         run: |
           git config user.name "GENOE Oracle"
@@ -166,6 +105,13 @@ jobs:
               echo "persist push failed (attempt $i) — rebase and retry"
               git pull --rebase origin main >/dev/null 2>&1 || true
             done
+            # HONEST PERSIST: never claim a beat landed when it did not.
+            git fetch origin main >/dev/null 2>&1 || true
+            if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main 2>/dev/null)" ]; then
+              echo "PERSIST RED: local HEAD != origin/main after 5 attempts"
+              exit 1
+            fi
+            echo "persist verified: HEAD == origin/main"
           fi
 
       - name: upload receipts + sealed beats

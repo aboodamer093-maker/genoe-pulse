@@ -89,6 +89,7 @@ function startBlade({ port, timeoutMs = 60000, extraSans = [] } = {}) {
 
   let settled = false;
   const wait = () => new Promise((res) => {
+    if (captured) { settled = true; return res(captured); }
     const t = setTimeout(() => { settled = true; res(null); }, timeoutMs);
     capturedPromise.then((v) => { if (!settled) { settled = true; clearTimeout(t); res(v); } }).catch(() => {});
   });

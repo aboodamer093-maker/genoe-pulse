@@ -86,9 +86,13 @@ function parseHello(buf) {
     const data = buf.slice(o, o + elen); o += elen;
     extensions.push(type);
     if (type === 0x0000) {                                               // SNI
-      const nt = data[0];
-      const hlen = data.readUInt16BE(1);
-      const host = data.slice(3, 3 + Math.min(hlen, data.length - 3)).toString('utf8');
+      // RFC 6066 server_name_list: u16 list_length, then per name:
+      // name_type(1), name_length(2), host bytes. Reading data[0]/data[1]/
+      // data[3] treated the 2 list-length bytes as the name header, corrupting
+      // the host read and dead-locking the 'i' (IP-literal) classification.
+      const nt = data[2];
+      const hlen = data.readUInt16BE(3);
+      const host = data.slice(5, 5 + Math.min(hlen, data.length - 5)).toString('utf8');
       if (nt === 0) sni = isIpLiteral(host) ? 'i' : 'd';                 // host_name
       else sni = 'i';
     } else if (type === 0x0010) {                                        // ALPN

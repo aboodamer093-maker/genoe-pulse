@@ -12,6 +12,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const { verifyChain, selfHashOf } = require('./chain-verify.js');
 
 const PROOT = path.join(__dirname, '..', '..');
 const GENESIS = path.join(PROOT, 'genoe', 'receipts', 'chain-0-genesis.json');
@@ -88,11 +89,15 @@ function main() {
   const veins = loadVeins();
   if (!veins.length) { console.error('SEAL FAIL no fresh captured vein — nothing to seal (no invented numbers).'); process.exit(21); }
 
-  const existing = fs.existsSync(BEATS_DIR)
-    ? fs.readdirSync(BEATS_DIR).filter((f) => /^beat-\d+\.json$/.test(f)).sort()
-    : [];
-  const seal = existing.length;
-  const prevFile = seal === 0 ? GENESIS : path.join(BEATS_DIR, existing[existing.length - 1]);
+  // VERIFY-THEN-SEAL: never mint on top of a broken chain. The walk also
+  // recomputes every prior self-hash, so a forged/corrupt beat cannot ride
+  // a valid prevHash link through.
+  const chain = verifyChain();
+  if (!chain.ok) { console.error('SEAL ABORT chain integrity violated: ' + chain.firstError); process.exit(22); }
+
+  const existing = chain.beats;
+  const prevFile = existing.length ? path.join(BEATS_DIR, existing[existing.length - 1]) : GENESIS;
+  const seal = existing.length ? chain.maxSeal + 1 : 0;
   const prevHash = sha256(fs.readFileSync(prevFile, 'utf8'));
   const witnesses = loadWitnesses();
 
@@ -117,7 +122,11 @@ function main() {
   block.hash = sha256(block);
 
   const outName = 'beat-' + String(seal).padStart(3, '0') + '.json';
-  fs.writeFileSync(path.join(BEATS_DIR, outName), JSON.stringify(block, null, 2) + '\n');
+  const outPath = path.join(BEATS_DIR, outName);
+  const body = JSON.stringify(block, null, 2) + '\n';
+  const tmp = outPath + '.tmp-' + process.pid;
+  fs.writeFileSync(tmp, body);
+  fs.renameSync(tmp, outPath); // atomic: readers never see a half-written beat
   fs.writeFileSync(path.join(BEATS_DIR, 'index.json'), JSON.stringify({
     chain: 'genoe',
     rootSeed: 'chain-0-genesis.json',

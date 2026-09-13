@@ -17,14 +17,13 @@ const { effectiveCorpus } = require('./effective-corpus.js');
 
 const PORT = 10905;
 const OUTDIR = path.join(__dirname, 'receipts');
-const PY = 'python';
+const PY = 'python3';
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const PROFILES = [
   'safari153', 'safari155', 'safari15_3', 'safari15_5',
   'safari170', 'safari17_0',
   'safari180', 'safari18_0',
-  'safari184', 'safari18_0',
   'safari260', 'safari2601', 'safari260_ios',
 ];
 
