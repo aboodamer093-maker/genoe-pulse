@@ -36,18 +36,25 @@ jobs:
       - name: clear run-owned receipts (no stale reuse across runs)
         run: |
           rm -rf free-truth-probe/genes/receipts/captured
-          rm -f free-truth-probe/genes/receipts/vein-h-firefox.json \
+          rm -f  free-truth-probe/genes/receipts/vein-a-safari.json \
+                 free-truth-probe/genes/receipts/vein-b-iosim.json \
+                 free-truth-probe/genes/receipts/vein-s-macos.json \
+                 free-truth-probe/genes/receipts/vein-h-safari.json \
+                 free-truth-probe/genes/receipts/vein-h-chrome.json \
+                 free-truth-probe/genes/receipts/vein-h-firefox.json \
                  free-truth-probe/genes/receipts/vein-h-iosim.json \
-                 free-truth-probe/genes/receipts/hello-vein-a-safari.txt \
-                 free-truth-probe/genes/receipts/hello-vein-b-iosim.txt \
                  free-truth-probe/genes/receipts/vein-v-chrome.json \
                  free-truth-probe/genes/receipts/vein-v-firefox.json \
+                 free-truth-probe/genes/receipts/parity-curl.json \
+                 free-truth-probe/genes/receipts/engine-wincairo.json \
+                 free-truth-probe/genes/receipts/hello-vein-a-safari.txt \
+                 free-truth-probe/genes/receipts/hello-vein-b-iosim.txt \
                  free-truth-probe/genes/receipts/hello-vein-v-chrome.txt \
                  free-truth-probe/genes/receipts/hello-vein-v-firefox.txt \
-                 free-truth-probe/genes/receipts/parity-curl.json
+                 free-truth-probe/genes/receipts/hello-engine-wincairo.txt
           rm -rf free-truth-probe/genes/receipts/wire-verify
           rm -rf free-truth-probe/genes/receipts/observer
-          rm -f free-truth-probe/genes/receipts/chain-verify.json
+          rm -f  free-truth-probe/genes/receipts/chain-verify.json
           echo "run-owned receipts cleared"
 
       - name: measurement burst — ALL engines in parallel waves
@@ -91,10 +98,15 @@ jobs:
           git config user.name "GENOE Oracle"
           git config user.email "genoe@ghostburp.local"
           git add -A
-          # never erase tracked history: unstage deletions so receipts lineage
-          # (crown external-verify, engine hello, etc.) survives every pulse
-          DEL=$(git diff --cached --name-only --diff-filter=D)
-          if [ -n "$DEL" ]; then git restore --staged $DEL; fi
+          # HONEST PERSIST: protect from deletion ONLY the sealed chain lineage
+          # (beats + genesis + index + chain-verify). Everything else is
+          # run-owned: a receipt this run failed to regenerate must be REMOVED
+          # from the repo, never resurrected as stale evidence of a prior round
+          # (zero-silent-cell doctrine — no dead file is ever re-presented as a
+          # fresh witness).
+          DEL=$(git diff --cached --name-only --diff-filter=D || true)
+          PROTECT=$(printf '%s\n' $DEL 2>/dev/null | grep -E 'free-truth-probe/genes/receipts/beats/|free-truth-probe/genes/receipts/genesis\.json$|free-truth-probe/genes/receipts/index\.json$|free-truth-probe/genes/receipts/chain-verify\.json$|genoe/receipts/beats/|genoe/receipts/genesis\.json$|genoe/receipts/index\.json$|genoe/receipts/chain-verify\.json$' || true)
+          if [ -n "$PROTECT" ]; then git restore --staged $PROTECT; fi
           if git diff --cached --quiet; then
             echo "no new beats to persist"
           else
