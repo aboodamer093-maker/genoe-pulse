@@ -59,7 +59,9 @@ function startCaptureServer({ port = 10901, timeoutMs = 60000, label = 'vein' } 
       });
     });
     server.on('error', (e) => { clearTimeout(timer); reject(e); });
-    server.listen(port, '0.0.0.0');
+    // Dual-stack bind: macOS/iOS simulators tend to resolve localhost to ::1,
+    // while host Safari may hit 127.0.0.1. '::' accepts both (IPv4-mapped).
+    server.listen(port, '::');
   });
 }
 
