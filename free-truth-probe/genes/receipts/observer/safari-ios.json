@@ -1,21 +1,19 @@
 {
   "label": "witness-safari-ios",
   "engine": "safari-ios",
-  "token": "obs=safari-ios.202609131556196.nesgjn",
-  "at": "2026-09-13T16:00:12.502Z",
-  "readback": "ios-screenshot-ocr",
-  "error": null,
-  "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202609131556196.nesgjn.png",
-  "readbackPreview": "3:58\n\"donate\": \"Please consider donating to keep\nthis API running. Visit https://tls.peet.ws\",\n\"ip\": \"13.105.117.220:38690\"\n\"http_version\": \"h2\",\n\"method\" : \"GET\"\n\"user_agent\":\n\"Mozilla/5.0 (iPhone; CPU iPhone\nOS 18\n_7 like Mac OS X) AppleWebKit/605.1.15\n(KHTML, like\nGecko) Version/26.2 Mobile/15E148\nSafari/604.1\"\n\"tls\": {\n\"ciphers\": 1\n\"TLS GREASE (OX0AOA)\"\n\"TLS_AES 256 GCM SHA384\",\n\"TLS_CHACHA20_POLY1305_SHA256\",\n\"TLS AES\n_128_GCM_SHA256\"\n\"IIS_ECDHE_ECDSA_WITH_ AES_256_GCM_SHA384\"\n\"TLS_ECDHE\n_E",
-  "peet": {
-    "ok": false
-  },
+  "token": "obs=safari-ios.202609132009149.m1t1ea",
+  "at": "2026-09-13T20:15:09.860Z",
+  "readback": "readback-failed",
+  "error": "screenshot failed",
+  "pngEvidence": null,
+  "readbackPreview": null,
+  "peet": null,
   "recorderB": null,
   "local": {
     "refJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
     "refH2": null,
     "declaredH2": "msap"
   },
-  "verdict": "READBACK-FAILED",
+  "verdict": "CHANNEL-UNAVAILABLE",
   "witnessed": false
 }

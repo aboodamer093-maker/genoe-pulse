@@ -1,40 +1,16 @@
 {
   "label": "witness-safari",
   "engine": "safari",
-  "token": "obs=safari.202609131556196.uq6fkr",
-  "at": "2026-09-13T15:56:47.732Z",
-  "readback": "webdriver-source",
-  "error": null,
-  "pngEvidence": null,
-  "readbackPreview": null,
-  "peet": {
-    "ok": true,
-    "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
-    "ja4_r": "t13d2014h2_000a,002f,0035,009c,009d,1301,1302,1303,c008,c009,c00a,c012,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0015,0017,001b,002b,002d,0033,ff01_0403,0804,0401,0503,0805,0805,0501,0806,0601,0201",
-    "ja3_hash": "773906b0efdefa24a7f2b8eb6985bf37",
-    "h2": true,
-    "h2PseudoOrder": "msap",
-    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
-    "tokenEcho": true
-  },
-  "recorderB": {
-    "ok": true,
-    "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
-    "ja4_r": "t13d2014h2_000a,002f,0035,009c,009d,1301,1302,1303,c008,c009,c00a,c012,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0015,0017,001b,002b,002d,0033,ff01_0403,0804,0401,0503,0805,0805,0501,0806,0601,0201",
-    "tokenEcho": false
-  },
+  "token": null,
+  "at": "2026-09-13T20:13:49.762Z",
+  "verdict": "ENGINE-TIMEOUT",
+  "witnessed": false,
+  "error": "engine-timeout-after-240s",
+  "peet": null,
+  "recorderB": null,
   "local": {
-    "refJa4": "t13d2014h2_a09f3c656075_e42f34c56612",
-    "refH2": "msap",
+    "refJa4": null,
+    "refH2": null,
     "declaredH2": "msap"
-  },
-  "cross": {
-    "ja4AgreeLocal": true,
-    "ja4AgreeRecorderB": true,
-    "corpusHit": "Sealed measured beat-000.json",
-    "h2AgreeLocal": true,
-    "h2AgreeDeclared": true
-  },
-  "verdict": "WITNESSED-DOUBLE",
-  "witnessed": true
+  }
 }

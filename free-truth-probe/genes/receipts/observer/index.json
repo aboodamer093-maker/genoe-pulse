@@ -1,122 +1,75 @@
 {
-  "at": "2026-09-13T16:01:58.167Z",
-  "run": "202609131556196",
+  "at": "2026-09-13T20:15:09.997Z",
+  "run": "202609132009149",
   "service": "https://tls.peet.ws/api/all",
   "engines": [
     {
       "label": "witness-safari",
       "engine": "safari",
-      "token": "obs=safari.202609131556196.uq6fkr",
-      "at": "2026-09-13T15:56:47.732Z",
-      "readback": "webdriver-source",
-      "error": null,
-      "pngEvidence": null,
-      "readbackPreview": null,
-      "peet": {
-        "ok": true,
-        "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
-        "ja4_r": "t13d2014h2_000a,002f,0035,009c,009d,1301,1302,1303,c008,c009,c00a,c012,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0015,0017,001b,002b,002d,0033,ff01_0403,0804,0401,0503,0805,0805,0501,0806,0601,0201",
-        "ja3_hash": "773906b0efdefa24a7f2b8eb6985bf37",
-        "h2": true,
-        "h2PseudoOrder": "msap",
-        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
-        "tokenEcho": true
-      },
-      "recorderB": {
-        "ok": true,
-        "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
-        "ja4_r": "t13d2014h2_000a,002f,0035,009c,009d,1301,1302,1303,c008,c009,c00a,c012,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0015,0017,001b,002b,002d,0033,ff01_0403,0804,0401,0503,0805,0805,0501,0806,0601,0201",
-        "tokenEcho": false
-      },
+      "token": null,
+      "at": "2026-09-13T20:13:49.762Z",
+      "verdict": "ENGINE-TIMEOUT",
+      "witnessed": false,
+      "error": "engine-timeout-after-240s",
+      "peet": null,
+      "recorderB": null,
       "local": {
-        "refJa4": "t13d2014h2_a09f3c656075_e42f34c56612",
-        "refH2": "msap",
+        "refJa4": null,
+        "refH2": null,
         "declaredH2": "msap"
-      },
-      "cross": {
-        "ja4AgreeLocal": true,
-        "ja4AgreeRecorderB": true,
-        "corpusHit": "Sealed measured beat-000.json",
-        "h2AgreeLocal": true,
-        "h2AgreeDeclared": true
-      },
-      "verdict": "WITNESSED-DOUBLE",
-      "witnessed": true
+      }
     },
     {
       "label": "witness-safari-ios",
       "engine": "safari-ios",
-      "token": "obs=safari-ios.202609131556196.nesgjn",
-      "at": "2026-09-13T16:00:12.502Z",
-      "readback": "ios-screenshot-ocr",
-      "error": null,
-      "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202609131556196.nesgjn.png",
-      "readbackPreview": "3:58\n\"donate\": \"Please consider donating to keep\nthis API running. Visit https://tls.peet.ws\",\n\"ip\": \"13.105.117.220:38690\"\n\"http_version\": \"h2\",\n\"method\" : \"GET\"\n\"user_agent\":\n\"Mozilla/5.0 (iPhone; CPU iPhone\nOS 18\n_7 like Mac OS X) AppleWebKit/605.1.15\n(KHTML, like\nGecko) Version/26.2 Mobile/15E148\nSafari/604.1\"\n\"tls\": {\n\"ciphers\": 1\n\"TLS GREASE (OX0AOA)\"\n\"TLS_AES 256 GCM SHA384\",\n\"TLS_CHACHA20_POLY1305_SHA256\",\n\"TLS AES\n_128_GCM_SHA256\"\n\"IIS_ECDHE_ECDSA_WITH_ AES_256_GCM_SHA384\"\n\"TLS_ECDHE\n_E",
-      "peet": {
-        "ok": false
-      },
+      "token": "obs=safari-ios.202609132009149.m1t1ea",
+      "at": "2026-09-13T20:15:09.860Z",
+      "readback": "readback-failed",
+      "error": "screenshot failed",
+      "pngEvidence": null,
+      "readbackPreview": null,
+      "peet": null,
       "recorderB": null,
       "local": {
         "refJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
         "refH2": null,
         "declaredH2": "msap"
       },
-      "verdict": "READBACK-FAILED",
+      "verdict": "CHANNEL-UNAVAILABLE",
       "witnessed": false
     },
     {
       "label": "witness-chrome",
       "engine": "chrome",
-      "token": "obs=chrome.202609131556196.72c6u2",
-      "at": "2026-09-13T16:01:22.697Z",
-      "readback": "chrome-dump-dom",
-      "error": null,
-      "pngEvidence": null,
-      "readbackPreview": null,
-      "peet": {
-        "ok": true,
-        "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
-        "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
-        "ja3_hash": "72a5580c1e31c6032c2b8d052934f25b",
-        "h2": true,
-        "h2PseudoOrder": "masp",
-        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
-        "tokenEcho": true
-      },
-      "recorderB": {
-        "ok": true,
-        "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
-        "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
-        "tokenEcho": false
-      },
-      "local": {
-        "refJa4": null,
-        "refH2": "masp",
-        "declaredH2": "masp"
-      },
-      "cross": {
-        "ja4AgreeLocal": null,
-        "ja4AgreeRecorderB": true,
-        "corpusHit": null,
-        "h2AgreeLocal": true,
-        "h2AgreeDeclared": true
-      },
-      "verdict": "WITNESSED-EXTERNAL",
-      "witnessed": true
-    },
-    {
-      "label": "witness-firefox",
-      "engine": "firefox",
-      "token": "obs=firefox.202609131556196.g4rhar",
-      "at": "2026-09-13T16:01:58.152Z",
+      "token": "obs=chrome.202609132009149.dachlh",
+      "at": "2026-09-13T20:12:11.114Z",
       "readback": "readback-failed",
-      "error": "no webdriver session — status-probe: Failed to parse URL from http://127.0.0.1:--port/status",
+      "error": "spawnSync /Applications/Google Chrome.app/Contents/MacOS/Google Chrome ETIMEDOUT",
       "pngEvidence": null,
       "readbackPreview": null,
       "peet": null,
       "recorderB": null,
       "local": {
-        "refJa4": null,
+        "refJa4": "t13d1517h2_8daaf6152771_43736b97bd57",
+        "refH2": "masp",
+        "declaredH2": "masp"
+      },
+      "verdict": "CHANNEL-UNAVAILABLE",
+      "witnessed": false
+    },
+    {
+      "label": "witness-firefox",
+      "engine": "firefox",
+      "token": "obs=firefox.202609132009149.ygmdam",
+      "at": "2026-09-13T20:14:21.679Z",
+      "readback": "readback-failed",
+      "error": "no webdriver session — *** You are running in headless mode.",
+      "pngEvidence": null,
+      "readbackPreview": null,
+      "peet": null,
+      "recorderB": null,
+      "local": {
+        "refJa4": "t13d1517h2_8daaf6152771_3cbfd9057e0d",
         "refH2": null,
         "declaredH2": "mpas"
       },

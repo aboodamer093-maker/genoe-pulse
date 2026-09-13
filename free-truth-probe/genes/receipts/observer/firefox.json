@@ -1,16 +1,16 @@
 {
   "label": "witness-firefox",
   "engine": "firefox",
-  "token": "obs=firefox.202609131556196.g4rhar",
-  "at": "2026-09-13T16:01:58.152Z",
+  "token": "obs=firefox.202609132009149.ygmdam",
+  "at": "2026-09-13T20:14:21.679Z",
   "readback": "readback-failed",
-  "error": "no webdriver session — status-probe: Failed to parse URL from http://127.0.0.1:--port/status",
+  "error": "no webdriver session — *** You are running in headless mode.",
   "pngEvidence": null,
   "readbackPreview": null,
   "peet": null,
   "recorderB": null,
   "local": {
-    "refJa4": null,
+    "refJa4": "t13d1517h2_8daaf6152771_3cbfd9057e0d",
     "refH2": null,
     "declaredH2": "mpas"
   },
