@@ -1,5 +1,5 @@
 {
-  "at": "2026-09-13T01:16:17.512Z",
+  "at": "2026-09-13T19:31:12.344Z",
   "engine": "curl_cffi 0.16.3",
   "rows": [
     {
@@ -51,18 +51,6 @@
       "match": "Sealed measured beat-000.json [sealed-beat #0 (2026-09-13)]"
     },
     {
-      "profile": "safari184",
-      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
-      "status": "PARITY",
-      "match": "Sealed measured beat-000.json [sealed-beat #0 (2026-09-13)]"
-    },
-    {
-      "profile": "safari18_0",
-      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
-      "status": "PARITY",
-      "match": "Sealed measured beat-000.json [sealed-beat #0 (2026-09-13)]"
-    },
-    {
       "profile": "safari260",
       "ja4": "t13d2014h2_a09f3c656075_d0a99439f9b1",
       "status": "PARITY",
@@ -81,6 +69,6 @@
       "match": null
     }
   ],
-  "parity": 6,
-  "total": 13
+  "parity": 4,
+  "total": 11
 }
