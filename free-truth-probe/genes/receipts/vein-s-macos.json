@@ -1,6 +1,6 @@
 {
   "label": "vein-s-macos",
-  "at": "2026-09-13T01:24:28.471Z",
+  "at": "2026-09-13T01:32:39.071Z",
   "platform": "macOS",
   "source": "measured",
   "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
@@ -53,18 +53,19 @@
       "-apple-system": true,
       "Helvetica Neue": true,
       "Arial": true,
-      "Courier New": true,
+      "Courier New": false,
       "Times New Roman": true,
       "Menlo": true,
-      "Monaco": true,
+      "Monaco": false,
       "Verdana": true,
       "Tahoma": true,
       "Georgia": true,
       "Palatino": true,
       "Comic Sans MS": true,
       "Impact": true,
-      "Zapfino": true
+      "Zapfino": true,
+      "_base_": 1498
     },
-    "canvasFp": 6134
+    "canvasFp": 6298
   }
 }

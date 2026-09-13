@@ -1,6 +1,6 @@
 {
   "label": "vein-h-macos",
-  "at": "2026-09-13T01:24:37.909Z",
+  "at": "2026-09-13T01:32:49.163Z",
   "platform": "macOS",
   "source": "measured",
   "alpn": "h2 (http2 ALPN) h2",
@@ -19,7 +19,7 @@
     "accept-encoding"
   ],
   "h2Code": "msap",
-  "matchesDeclared": false,
+  "matchesDeclared": true,
   "headers": {
     ":method": "GET",
     ":scheme": "https",
