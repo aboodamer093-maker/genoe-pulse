@@ -1,0 +1,8 @@
+{
+  "label": "vein-h-iosim",
+  "engine": "safari-ios",
+  "at": "2026-09-13T04:20:04.762Z",
+  "available": true,
+  "captured": false,
+  "note": "mobile surface present but no h2 HEADERS request completed on sim (trust/loopback quirk)"
+}
