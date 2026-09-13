@@ -108,7 +108,14 @@ async function main() {
   run('xcrun', ['simctl', 'shutdown', udid], { stdio: 'ignore' });
   try { fs.unlinkSync(path.join(OUTDIR, '.sim-udid')); } catch (_) {}
   blade.close();
-  if (!done) { console.error('VEIN-H-IOSIM FAIL no request captured'); process.exit(14); }
+  if (!done) {
+    fs.writeFileSync(path.join(OUTDIR, LABEL + '.json'), JSON.stringify({
+      label: LABEL, engine: 'safari-ios', at: new Date().toISOString(), available: true, captured: false,
+      note: 'mobile surface present but no h2 HEADERS request completed on sim (trust/loopback quirk)',
+    }, null, 2) + '\n');
+    console.error('VEIN-H-IOSIM FAIL no request captured (receipt recorded)');
+    process.exit(14);
+  }
   const cap = await blade.wait();
 
   const h2Code = measuredOrderCode(cap.order);

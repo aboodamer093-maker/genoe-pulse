@@ -59,7 +59,14 @@ async function main() {
   }
   try { child.kill('SIGTERM'); } catch (_) {}
   blade.close();
-  if (!cap) { console.error('VEIN-H-FIREFOX FAIL no request captured'); process.exit(14); }
+  if (!cap) {
+    fs.writeFileSync(path.join(OUTDIR, LABEL + '.json'), JSON.stringify({
+      label: LABEL, engine: 'firefox', at: new Date().toISOString(), available: true, captured: false,
+      note: 'engine present but no h2 request captured on runner this pulse (cold-start/trust flake)',
+    }, null, 2) + '\n');
+    console.error('VEIN-H-FIREFOX FAIL no request captured (receipt recorded)');
+    process.exit(14);
+  }
 
   const h2Code = measuredOrderCode(cap.order);
   const declared = mspa.H2_ORDER.firefox;
