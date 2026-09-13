@@ -36,6 +36,13 @@ function versionLabel(v) {
   return { 0x0304: '13', 0x0303: '12', 0x0302: '11', 0x0301: '10', 0x0300: 's3' }[v] || '00';
 }
 
+function isIpLiteral(host) {
+  const h = (host || '').replace(/^\[|\]$/g, '');
+  if (/^(\d{1,3}\.){3}\d{1,3}$/.test(h)) return true;                  // IPv4
+  if (h.includes(':')) return true;                                    // IPv6 (best effort)
+  return false;
+}
+
 function alpnLabel(protocols) {
   const p = protocols[0];
   if (!p || p.length === 0) return '00';
@@ -72,14 +79,19 @@ function parseHello(buf) {
   const extLen = buf.readUInt16BE(o); o += 2;
   const extEnd = Math.min(o + extLen, end);
   const extensions = [];
-  let sni = false, alpn = [], pas = null, sv = [];
+  let sni = '0', alpn = [], pas = null, sv = [];
   while (o + 4 <= extEnd) {
     const type = buf.readUInt16BE(o); o += 2;
     const elen = buf.readUInt16BE(o); o += 2;
     const data = buf.slice(o, o + elen); o += elen;
     extensions.push(type);
-    if (type === 0x0000) sni = true;                                     // SNI
-    else if (type === 0x0010) {                                          // ALPN
+    if (type === 0x0000) {                                               // SNI
+      const nt = data[0];
+      const hlen = data.readUInt16BE(1);
+      const host = data.slice(3, 3 + Math.min(hlen, data.length - 3)).toString('utf8');
+      if (nt === 0) sni = isIpLiteral(host) ? 'i' : 'd';                 // host_name
+      else sni = 'i';
+    } else if (type === 0x0010) {                                        // ALPN
       const n = data.readUInt16BE(0);
       let k = 2, list = [];
       while (k + 1 < n + 2) {
@@ -106,7 +118,7 @@ function computeFromLists({ transport = 't', version, sni, ciphers, extensions, 
   const ec = Math.min(99, extensions.filter((e) => !isGrease(e)).length);
   const n1 = transport[0];                     // t | q | d
   const vv = versionLabel(version);
-  const nn = sni ? 'd' : 'i';
+  const nn = (sni === 'i' || sni === 'd') ? sni : (sni === true ? 'd' : '0');
   const a = (n1 === 't' || n1 === 'd' || n1 === 'q' ? n1 : 't') + vv + nn +
             String(cc).padStart(2, '0') + String(ec).padStart(2, '0') +
             alpnLabel(alpnFirst != null ? [alpnFirst] : []);
@@ -124,9 +136,8 @@ function computeFromLists({ transport = 't', version, sni, ciphers, extensions, 
 
 function fromBuffer(helloBuffer) {
   const p = parseHello(helloBuffer);
-  const version = p.supportedVersions && p.supportedVersions.length
-    ? Math.max(...p.supportedVersions)
-    : p.version;
+  const sv = (p.supportedVersions || []).filter((v) => !isGrease(v));   // GREASE is never a real version
+  const version = sv.length ? Math.max(...sv) : p.version;
   return computeFromLists({
     transport: 't',
     version,

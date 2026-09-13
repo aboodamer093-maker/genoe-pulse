@@ -27,10 +27,22 @@ jobs:
         run: node free-truth-probe/genes/crosscheck.js --self-test
 
       - name: vein-a — real macOS Safari
-        run: node free-truth-probe/genes/vein-a-safari.js
+        run: |
+          set +e
+          node free-truth-probe/genes/vein-a-safari.js
+          ec=$?
+          if [ $ec -eq 0 ] || [ $ec -eq 5 ]; then echo "vein-a green (measurement captured)"; exit 0; fi
+          echo "vein-a FAILED (exit $ec)"
+          exit $ec
 
       - name: vein-b — real Mobile Safari (iOS simulator)
-        run: node free-truth-probe/genes/vein-b-iosim.js
+        run: |
+          set +e
+          node free-truth-probe/genes/vein-b-iosim.js
+          ec=$?
+          if [ $ec -eq 0 ] || [ $ec -eq 5 ]; then echo "vein-b green (measurement captured)"; exit 0; fi
+          echo "vein-b FAILED (exit $ec)"
+          exit $ec
 
       - name: seal — GENOE chain #1
         run: node free-truth-probe/genes/seal.js

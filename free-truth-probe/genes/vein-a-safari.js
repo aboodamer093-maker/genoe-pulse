@@ -31,7 +31,7 @@ async function main() {
   const drv = spawn('safaridriver', ['-p', '4444'], { stdio: 'ignore' });
   await delay(3500);
 
-  const target = 'https://127.0.0.1:' + PORT + '/probe';
+  const target = 'https://localhost:' + PORT + '/probe';
   let nav = 'safaridriver';
   try {
     const ses = await fetch('http://127.0.0.1:4444/session', {

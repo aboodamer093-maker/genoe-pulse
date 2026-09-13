@@ -63,7 +63,7 @@ async function main() {
 
   const capture = startCaptureServer({ port: PORT, timeoutMs: 90000, label: LABEL });
   await delay(3000);
-  run('xcrun', ['simctl', 'openurl', udid, 'https://127.0.0.1:' + PORT + '/probe']);
+  run('xcrun', ['simctl', 'openurl', udid, 'https://localhost:' + PORT + '/probe']);
   await delay(9000);
 
   let result;
