@@ -23,6 +23,17 @@ const OUTDIR = path.join(__dirname, 'receipts');
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 const run = (cmd, args, opts = {}) => spawnSync(cmd, args, { encoding: 'utf8', ...opts });
 
+let captureDone = false;
+// resolves as soon as the capture promise settles; otherwise fires the retry
+async function bounceCapture(cap, retryFn) {
+  try {
+    await Promise.race([cap, new Promise((_, rej) => setTimeout(() => rej(new Error('pending')), 800))]);
+    captureDone = true;
+  } catch (_) {
+    retryFn();
+  }
+}
+
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
 
@@ -61,14 +72,20 @@ async function main() {
   run('xcrun', ['simctl', 'boot', udid], { stdio: 'ignore' });
   run('xcrun', ['simctl', 'bootstatus', udid, '-b'], { stdio: 'ignore', timeout: 120000 });
 
-  const capture = startCaptureServer({ port: PORT, timeoutMs: 90000, label: LABEL });
-  await delay(3000);
-  run('xcrun', ['simctl', 'openurl', udid, 'https://localhost:' + PORT + '/probe']);
-  await delay(9000);
+  const target = 'https://localhost:' + PORT + '/probe';
+  const capture = startCaptureServer({ port: PORT, timeoutMs: 150000, label: LABEL });
+  run('xcrun', ['simctl', 'openurl', udid, target]);
+  // cold-boot resilience: keep re-asserting the navigation while the capture
+  // is still pending (first launch can be slow on shared macos runners)
+  for (let attempt = 1; attempt <= 4 && !captureDone; attempt++) {
+    await bounceCapture(capture, () => run('xcrun', ['simctl', 'openurl', udid, target], { stdio: 'ignore' }));
+    await delay(12000);
+  }
 
   let result;
   try {
     result = await capture;
+    captureDone = true;
   } catch (e) {
     run('xcrun', ['simctl', 'shutdown', udid], { stdio: 'ignore' });
     console.error('VEIN-B FAIL ' + e.message);

@@ -26,6 +26,15 @@ jobs:
       - name: pre-check core on host
         run: node free-truth-probe/genes/crosscheck.js --self-test
 
+      - name: clear run-owned receipts (no stale reuse across runs)
+        run: |
+          rm -f free-truth-probe/genes/receipts/vein-a-safari.json \
+                free-truth-probe/genes/receipts/vein-b-iosim.json \
+                free-truth-probe/genes/receipts/vein-s-macos.json \
+                free-truth-probe/genes/receipts/hello-vein-a-safari.txt \
+                free-truth-probe/genes/receipts/hello-vein-b-iosim.txt
+          echo "run-owned receipts cleared"
+
       - name: vein-a — real macOS Safari
         run: |
           set +e
@@ -36,6 +45,7 @@ jobs:
           exit $ec
 
       - name: vein-b — real Mobile Safari (iOS simulator)
+        if: always()
         run: |
           set +e
           node free-truth-probe/genes/vein-b-iosim.js
@@ -45,6 +55,7 @@ jobs:
           exit $ec
 
       - name: vein-s — real macOS Safari surface genes
+        if: always()
         run: |
           set +e
           node free-truth-probe/genes/vein-s-macos.js

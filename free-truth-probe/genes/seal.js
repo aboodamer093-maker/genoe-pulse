@@ -20,13 +20,18 @@ const RECEIPTS = path.join(__dirname, 'receipts');
 
 const sha256 = (o) => crypto.createHash('sha256').update(typeof o === 'string' ? o : JSON.stringify(o), 'utf8').digest('hex');
 
+// a vein/surface is only sealable if measured inside this rolling window —
+// stale receipts from a previous run are NEVER reused (chain hygiene).
+const FRESH_MS = 2 * 60 * 60 * 1000;
+const fresh = (at) => { const t = Date.parse(at); return !Number.isNaN(t) && (Date.now() - t) <= FRESH_MS; };
+
 function loadVeins() {
   const out = [];
   for (const f of ['vein-a-safari.json', 'vein-b-iosim.json']) {
     const p = path.join(RECEIPTS, f);
     if (!fs.existsSync(p)) continue;
     const v = JSON.parse(fs.readFileSync(p, 'utf8'));
-    if (v.ja4) out.push({ label: v.label, at: v.at, ja4: v.ja4, verdict: v.verdict, match: v.match || null });
+    if (v.ja4 && fresh(v.at)) out.push({ label: v.label, at: v.at, ja4: v.ja4, verdict: v.verdict, match: v.match || null });
   }
   return out;
 }
@@ -35,6 +40,7 @@ function loadSurface() {
   const p = path.join(RECEIPTS, 'vein-s-macos.json');
   if (!fs.existsSync(p)) return null;
   const v = JSON.parse(fs.readFileSync(p, 'utf8'));
+  if (!fresh(v.at)) return null;
   return { label: v.label, at: v.at, platform: v.platform, ua: v.ua, uaChAbsent: v.uaChAbsent };
 }
 
@@ -43,7 +49,7 @@ function main() {
   fs.mkdirSync(BEATS_DIR, { recursive: true });
 
   const veins = loadVeins();
-  if (!veins.length) { console.error('SEAL FAIL no captured vein — nothing to seal (no invented numbers).'); process.exit(21); }
+  if (!veins.length) { console.error('SEAL FAIL no fresh captured vein — nothing to seal (no invented numbers).'); process.exit(21); }
 
   const existing = fs.existsSync(BEATS_DIR)
     ? fs.readdirSync(BEATS_DIR).filter((f) => /^beat-\d+\.json$/.test(f)).sort()
