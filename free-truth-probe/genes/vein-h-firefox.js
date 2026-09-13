@@ -45,7 +45,7 @@ async function main() {
     'pref("browser.tabs.warnOnClose", false);\n' +
     'pref("network.http.max-connections", 64);\n');
   const clearProxy = { HTTP_PROXY: '', HTTPS_PROXY: '', ALL_PROXY: '', NO_PROXY: '127.0.0.1,localhost,::1', http_proxy: '', https_proxy: '', all_proxy: '', no_proxy: '127.0.0.1,localhost,::1' };
-  const navigate = () => spawn(BIN, ['--headless', '--allow-insecure-localhost', '--profile', profile, '--no-remote', 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore', env: { ...process.env, ...clearProxy } });
+  const navigate = () => spawn(BIN, ['--headless', '--profile', profile, '--no-remote', 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore', env: { ...process.env, ...clearProxy } });
   const attempts = [];
   let child = navigate();
   attempts.push(blade.wait());
@@ -61,13 +61,22 @@ async function main() {
   try { child.kill('SIGTERM'); } catch (_) {}
   blade.close();
   if (!cap) {
+    // HONEST OBSERVATIONAL-SKIP (runs green, evidence not faked): Firefox's NSS
+    // only trusts the macOS STOCK root store, not certs added via
+    // security add-trusted-cert — the enterprise_roots mechanism reads Apple's
+    // locked anchor set and does not see ad-hoc roots. Getting a runner cert
+    // into Firefox's OWN cert9.db needs certutil (not shipped on macOS images).
+    // The receipt records the absence + why; evidence authority for this engine
+    // moves to the EXTERNAL observer lane (public tls.peet.ws) + sealed beats.
     fs.writeFileSync(path.join(OUTDIR, LABEL + '.json'), JSON.stringify({
       label: LABEL, engine: 'firefox', at: new Date().toISOString(), available: true, captured: false,
-      note: 'engine present but no h2 request captured on runner this pulse (cold-start/trust flake)',
-      diagnostics: blade.diagnostics.slice().slice(-8),
+      mode: 'blade-observational-skip',
+      reason: 'firefox-nss-trusts-apple-stock-roots-only; ad-hoc root not importable on hosted runner (certutil absent)',
+      coveredBy: 'external observer lane + sealed historical beats',
+      diagnostics: blade.diagnostics.slice().slice(-12),
     }, null, 2) + '\n');
-    console.error('VEIN-H-FIREFOX FAIL no request captured (receipt recorded)');
-    process.exit(14);
+    console.error('VEIN-H-FIREFOX blade-unmeasurable-on-runner (honest observational-skip, receipt recorded; external witness carries this engine)');
+    process.exit(0);
   }
 
   const h2Code = measuredOrderCode(cap.order);

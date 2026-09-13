@@ -63,13 +63,24 @@ function h2PseudoOrder(frames) {
   return codes.length ? codes.join('') : null;
 }
 
-// parse a tls.peet.ws /api/all response body (JSON object or JSON-viewer text)
+// tolerant JA4 token shape — survives OCR noise: t13d2014h2_<12hex>_<12hex>
+const JA4_LAX = /\bt[0-9]{2}[a-z][0-9a-f]{4,8}h[0-9]_[0-9a-f]{12}_[0-9a-f]{12}\b/i;
+
+// parse a tls.peet.ws /api/all response body (JSON object or JSON-viewer text);
+// low-fidelity readbacks (OCR) fall back to a lax JA4 scan instead of lying.
 function parsePeet(body) {
   const j = typeof body === 'object' && body !== null ? body : null;
   if (!j) {
     const raw = extractJson(body);
-    if (!raw) return { ok: false, error: 'no JSON in readback' };
-    try { return parsePeet(JSON.parse(raw)); } catch (e) { return { ok: false, error: 'json parse: ' + String(e).slice(0, 120) }; }
+    if (raw) {
+      try {
+        const parsed = parsePeet(JSON.parse(raw));
+        if (parsed.ok) return parsed;
+      } catch (e) { /* fall through to lax */ }
+    }
+    const m = String(body || '').match(JA4_LAX);
+    if (m) return { ok: true, ja4: m[0], ja4_r: null, ja3_hash: null, httpVersion: null, h2: null, h2PseudoOrder: null, userAgent: null, tokenEcho: null, lax: true };
+    return { ok: false, error: 'no JSON in readback' };
   }
   const tls = j.tls || {};
   const frames = (j.http2 || {}).sent_frames;
@@ -199,7 +210,7 @@ async function firefoxSource(urls, opts) {
   // profile on GUI-less CI images.
   const env = { HTTP_PROXY: '', HTTPS_PROXY: '', ALL_PROXY: '', NO_PROXY: '127.0.0.1,localhost,::1', http_proxy: '', https_proxy: '', all_proxy: '', no_proxy: '127.0.0.1,localhost,::1' };
   return webdriverSource({
-    driverBin: gecko, driverArgs: ['--port', '4446'], firefoxArgs: ['-headless'],
+    driverBin: gecko, driverArgs: ['--port', '4446', '--log', 'info'], firefoxArgs: ['-headless'],
     browserName: 'firefox', navigate: Array.isArray(urls) ? urls : [urls], env, ...opts,
   });
 }
@@ -267,7 +278,7 @@ async function iosReadback({ udid, url, outDir, token }) {
   const shot = run('xcrun', ['simctl', 'io', udid, 'screenshot', png], { timeout: 20000 });
   if (shot.status !== 0) return { ok: false, error: 'screenshot failed', png: null };
   const ocr = ocrSwift(png);
-  return { ok: ocr.ok, text: ocr.ok ? ocr.text : null, error: ocr.ok ? null : ocr.error, png };
+  return { ok: ocr.ok, text: ocr.ok ? ocr.text : null, error: ocr.ok ? null : ocr.error, png, preview: ocr.ok ? String(ocr.text).slice(0, 500) : null };
 }
 
 // fresh iPhone simulator (independent of the vein-b/vein-h device lifecycle)
@@ -321,6 +332,8 @@ function selfTest() {
   checks.push({ name: 'json-viewer-wrap', pass: !extractJson('nope {a:1') || true === true });
   const frag = extractJson('noise{"tls":{"ja4":"t13d"}}trail');
   checks.push({ name: 'extractJson-in-noise', pass: !!frag && frag.includes('"ja4":"t13d"') });
+  const lax = parsePeet('OCRnoise! {"http_version":"h2"} t13d2014h2_a09f3c656075_e42f34c56612 more noise <<');
+  checks.push({ name: 'ja4-lax-ocr-fallback', pass: !!(lax.ok && lax.ja4 === 't13d2014h2_a09f3c656075_e42f34c56612' && lax.lax) });
   const pass = checks.every((c) => c.pass);
   return { pass, results: checks };
 }

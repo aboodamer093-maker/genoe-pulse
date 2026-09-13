@@ -55,6 +55,7 @@ function buildReceipt(engine, token, read, peet, recorderB, localRef) {
     readback: read.ok ? (read.channel || 'unknown') : (read.reason || 'readback-failed'),
     error: read.ok ? null : read.error || null,
     pngEvidence: read.png || null,
+    readbackPreview: read.preview || null,
   };
   rec.peet = peet ? {
     ok: peet.ok, ja4: peet.ja4, ja4_r: peet.ja4_r, ja3_hash: peet.ja3_hash,

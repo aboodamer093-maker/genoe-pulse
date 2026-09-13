@@ -64,17 +64,21 @@ function startBlade({ port, timeoutMs = 60000, extraSans = [] } = {}) {
 
   // honest per-observer diagnostics: engines that reach the blade but fail TLS
   // (cert untrusted, ALPN mismatch, reset) are RECORDED, not silently swallowed.
+  // connection/secure logs disambiguate "never reached TCP" from "TLS refused".
+  const logDiag = (d) => { if (diagnostics.length < 60) diagnostics.push(d); };
+  server.on('connection', (s) => logDiag({ kind: 'conn', at: new Date().toISOString(), remote: s && s.remoteAddress }));
+  server.on('secureConnection', (s) => logDiag({ kind: 'secure', at: new Date().toISOString(), remote: s && s.remoteAddress, alpn: (s && s.alpnProtocol) || null }));
   server.on('tlsClientError', (err, socket) => {
-    diagnostics.push({ kind: 'tls', at: new Date().toISOString(), remote: socket && socket.remoteAddress, error: String(err && err.message || err).slice(0, 160) });
+    logDiag({ kind: 'tls', at: new Date().toISOString(), remote: socket && socket.remoteAddress, error: String(err && err.message || err).slice(0, 160) });
   });
   server.on('sessionError', (err, socket) => {
-    diagnostics.push({ kind: 'session', at: new Date().toISOString(), error: String(err && err.message || err).slice(0, 160) });
+    logDiag({ kind: 'session', at: new Date().toISOString(), error: String(err && err.message || err).slice(0, 160) });
   });
   server.on('streamError', (err, socket) => {
-    diagnostics.push({ kind: 'stream', at: new Date().toISOString(), error: String(err && err.message || err).slice(0, 160) });
+    logDiag({ kind: 'stream', at: new Date().toISOString(), error: String(err && err.message || err).slice(0, 160) });
   });
   server.on('error', (e) => {
-    diagnostics.push({ kind: 'server', at: new Date().toISOString(), error: String(e && e.message || e).slice(0, 160) });
+    logDiag({ kind: 'server', at: new Date().toISOString(), error: String(e && e.message || e).slice(0, 160) });
     // Only LISTEN-level failures abort the wait. Transient socket resets must
     // not kill a capture that a genuine engine request may still complete.
     const fatal = e && /EADDRINUSE|EACCES|EADDRNOTAVAIL|ERR_SERVER_ALREADY_LISTEN/.test(String(e.code || e.message || ''));
