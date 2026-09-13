@@ -47,6 +47,7 @@ jobs:
                  free-truth-probe/genes/receipts/parity-curl.json
           rm -rf free-truth-probe/genes/receipts/wire-verify
           rm -rf free-truth-probe/genes/receipts/observer
+          rm -f free-truth-probe/genes/receipts/chain-verify.json
           echo "run-owned receipts cleared"
 
       - name: measurement burst — ALL engines in parallel waves
@@ -82,7 +83,7 @@ jobs:
         run: node free-truth-probe/genes/seal.js
 
       - name: post-seal chain verification (genesis -> tip walk)
-        run: node free-truth-probe/genes/chain-verify.js
+        run: node free-truth-probe/genes/chain-verify.js --json
 
       - name: persist sealed chain back to repo + ASSERT it landed
         if: always()

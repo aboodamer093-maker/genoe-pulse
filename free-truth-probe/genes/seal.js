@@ -134,6 +134,17 @@ function main() {
     lastHash: block.hash,
   }, null, 2) + '\n');
 
+  // POST-MINT SELF-VERIFY: immediately re-walk genesis->tip INCLUDING the new
+  // beat. If the mint somehow broke the chain, abort LOUDLY instead of letting
+  // a broken tip get persisted as if green.
+  const after = verifyChain();
+  if (!after.ok) {
+    console.error('SEAL POST-MINT VERIFY FAILED: ' + after.firstError);
+    console.error('  ' + (after.errors || []).slice(0, 8).join('\n  '));
+    process.exit(22);
+  }
+  console.log('SEAL post-mint verify GREEN (' + after.beats.length + ' beats, tip=' + outName + ')');
+
   console.log('SEAL #' + seal + ' beat=' + outName);
   console.log('  veins=' + block.summary.veins + ' exact=' + block.summary.exactMatches + ' refs=' + block.summary.references + '  witnesses=' + block.summary.witnesses);
   for (const v of veins) console.log('  ' + v.label.padEnd(14) + v.verdict.padEnd(12) + v.ja4 + (v.match ? '  -> ' + v.match : ''));

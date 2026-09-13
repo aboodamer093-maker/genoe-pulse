@@ -79,6 +79,14 @@ if (require.main === module) {
   console.log('CHAIN VERIFY ' + (v.ok ? 'GREEN' : 'RED'));
   console.log('  beats=' + v.beats.length + '  last=' + (v.maxSeal >= 0 ? 'beat-' + String(v.maxSeal).padStart(3, '0') : 'genesis only'));
   for (const e of (v.errors || []).slice(0, 25)) console.log('  ERR ' + e);
+  if (process.argv.includes('--json')) {
+    const out = path.join(__dirname, 'receipts', 'chain-verify.json');
+    try {
+      fs.mkdirSync(path.dirname(out), { recursive: true });
+      fs.writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), ok: v.ok, beats: v.beats.length, last: v.maxSeal, errors: (v.errors || []).slice(0, 40) }, null, 2) + '\n');
+      console.log('  verdict written to receipts/chain-verify.json');
+    } catch (e) { console.error('  could not write verdict: ' + e.message); }
+  }
   process.exit(v.ok ? 0 : 22);
 }
 

@@ -53,7 +53,7 @@ async function chromeCapture(token) {
   const capture = startCaptureServer({ port: CHROME_PORT, timeoutMs: 60000, label: 'vein-v-chrome' });
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'vveni-chrome-'));
   const child = spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', [
-    '--headless=new', '--no-first-run', '--disable-background-networking', '--no-default-browser-check',
+    '--headless=new', '--no-first-run', '--disable-background-networking', '--no-default-browser-check', '--disable-component-update',
     '--user-data-dir=' + profile,
     '--host-resolver-rules=MAP ' + HOST + ' 127.0.0.1',
     'https://' + HOST + ':' + CHROME_PORT + '/api/all?tok=iv.chrome.' + token,
@@ -71,18 +71,19 @@ async function chromeCapture(token) {
 function startConnectProxy() {
   return new Promise((resolve) => {
     const proxy = net.createServer((cs) => {
-      const upAfter = (up) => {
-        cs.write('HTTP/1.1 200 Connection established\r\n\r\n');
-        up.pipe(cs);
-        cs.pipe(up);
-      };
       cs.once('data', (chunk) => {
+        // The first data event is the CONNECT request head ONLY. We must NOT
+        // forward that byte stream into the raw TLS capture server (a dumped
+        // 'CONNECT tls.peet.ws…' would corrupt the first ClientHello record).
+        // Answer the CONNECT, then bridge ONLY the post-handshake stream so the
+        // raw server sees a clean TLS ClientHello with SNI=tls.peet.ws.
         const m = /^CONNECT\s+([^:\s]+)(?::(\d+))?\s+HTTP\/[01]\.\d/.exec(chunk.toString('latin1'));
-        if (!m || m[1] !== HOST) { cs.end('HTTP/1.1 403 Forbidden\r\n\r\n'); return; }
+        if (!m || m[1] !== HOST) { try { cs.end('HTTP/1.1 403 Forbidden\r\n\r\n'); } catch (_) {} return; }
         const up = net.connect(FIREFOX_PORT, '127.0.0.1', () => {
           if (!cs.destroyed) {
-            up.write(chunk); // CONNECT head + already-pipelined ClientHello bytes
-            upAfter(up);
+            cs.write('HTTP/1.1 200 Connection established\r\n\r\n');
+            cs.pipe(up);
+            up.pipe(cs);
           }
         });
         up.on('error', () => { try { cs.end('HTTP/1.1 502 Bad Gateway\r\n\r\n'); } catch (_) {} });

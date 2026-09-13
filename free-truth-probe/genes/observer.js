@@ -146,15 +146,24 @@ async function main() {
   console.log('VEIN-O watching ' + JSON.stringify(['safari', 'safari-ios', 'chrome', 'firefox']));
 
   // PARALLEL engines: the outside world's verdicts are independent of each
-  // other, so the matrix runs as one concurrent burst (fewer cold starts).
-  const engines = await Promise.all((['safari', 'safari-ios', 'chrome', 'firefox']).map(async (e) => {
-    try {
-      const rec = await runEngine(e);
-      return { engine: e, rec };
-    } catch (err) {
-      return { engine: e, rec: { label: 'witness-' + e, engine: e, token: null, at: new Date().toISOString(), verdict: 'ENGINE-ERROR', witnessed: false, error: String(err.message).slice(0, 160) } };
+  // other, so the matrix runs as one concurrent burst. No single engine may
+  // hang the rest (240s/engine cap) and no rejection may kill the matrix.
+  const withTimeout = (p, ms, tag) => Promise.race([
+    p,
+    new Promise((res) => setTimeout(() => res({ timeout: true, tag, reason: 'engine-timeout-after-' + (ms / 1000) + 's' }), ms)),
+  ]);
+  const settledEngines = await Promise.allSettled((['safari', 'safari-ios', 'chrome', 'firefox']).map(async (e) => {
+    const guard = await withTimeout(runEngine(e), 240000, e);
+    let rec;
+    if (guard && guard.timeout) {
+      console.error('VEIN-O engine ' + e + ' timed out (240s) — recording honest absence');
+      rec = { label: 'witness-' + e, engine: e, token: null, at: new Date().toISOString(), verdict: 'ENGINE-TIMEOUT', witnessed: false, error: guard.reason, peet: null, recorderB: null, local: { refJa4: null, refH2: null, declaredH2: mspa.orderingFor(e) ? mspa.orderingFor(e).code : null } };
+    } else {
+      rec = guard;
     }
+    return { engine: e, rec };
   }));
+  const engines = settledEngines.map((s) => (s.status === 'fulfilled' ? s.value : { engine: 'unknown', rec: { label: 'witness-unknown', engine: 'unknown', token: null, at: new Date().toISOString(), verdict: 'ENGINE-ERROR', witnessed: false, error: String(s.reason && s.reason.message) } }));
 
   for (const { engine, rec } of engines) {
     const f = path.join(OUTDIR, engine + '.json');

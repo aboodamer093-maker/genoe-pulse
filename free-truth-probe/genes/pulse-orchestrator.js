@@ -37,22 +37,30 @@ const LANES = {
 function runLane(name) {
   const L = LANES[name];
   return new Promise((resolve) => {
-    const started = Date.now();
-    console.log('[burst] lane ' + name + ' (' + L.hd + ') started');
-    let child;
-    if (L.venv) {
-      child = spawn('/bin/bash', ['-lc', 'cd ' + JSON.stringify(path.join(__dirname, '..', '..')) + ' && python3 -m pip install --break-system-packages --quiet --disable-pip-version-check curl_cffi >/dev/null 2>&1; node free-truth-probe/genes/wire-verify.js'], { stdio: 'inherit' });
-    } else {
-      child = spawn('node', [G(L.script)], { stdio: 'inherit' });
+    let child = null;
+    try {
+      const started = Date.now();
+      console.log('[burst] lane ' + name + ' (' + L.hd + ') started');
+      if (L.venv) {
+        child = spawn('/bin/bash', ['-lc', 'cd ' + JSON.stringify(path.join(__dirname, '..', '..')) + ' && python3 -m pip install --break-system-packages --quiet --disable-pip-version-check curl_cffi >/dev/null 2>&1; node free-truth-probe/genes/' + L.script], { stdio: 'inherit' });
+      } else {
+        child = spawn('node', [G(L.script)], { stdio: 'inherit' });
+      }
+      const killTimer = setTimeout(() => { try { child.kill('SIGKILL'); } catch (_) {} console.error('[burst] lane ' + name + ' watchdog killed'); }, 420000);
+      killTimer.unref();
+      child.on('exit', (code) => {
+        clearTimeout(killTimer);
+        const ok = L.ok.includes(code);
+        console.log('[burst] lane ' + name + ' exit=' + code + (ok ? ' OK' : ' HARD-FAIL') + ' ' + ((Date.now() - started) / 1000).toFixed(1) + 's');
+        resolve({ name, code, ok, hard: !ok });
+      });
+      child.on('error', (e) => { clearTimeout(killTimer); console.error('[burst] lane ' + name + ' spawn error ' + e.message); resolve({ name, code: null, ok: false, hard: true }); });
+    } catch (e) {
+      // a synchronous spawn throw (EMFILE/resource pressure) must NEVER kill
+      // the whole burst: record the lane and let the wave continue
+      console.error('[burst] lane ' + name + ' sync-spawn error ' + e.message);
+      resolve({ name, code: null, ok: false, hard: true });
     }
-    const killTimer = setTimeout(() => { try { child.kill('SIGKILL'); } catch (_) {} console.error('[burst] lane ' + name + ' watchdog killed'); }, 420000);
-    child.on('exit', (code) => {
-      clearTimeout(killTimer);
-      const ok = L.ok.includes(code);
-      console.log('[burst] lane ' + name + ' exit=' + code + (ok ? ' OK' : ' HARD-FAIL') + ' ' + ((Date.now() - started) / 1000).toFixed(1) + 's');
-      resolve({ name, code, ok, hard: !ok });
-    });
-    child.on('error', (e) => { clearTimeout(killTimer); console.error('[burst] lane ' + name + ' spawn error ' + e.message); resolve({ name, code: null, ok: false, hard: true }); });
   });
 }
 
@@ -66,6 +74,31 @@ async function runItem(item) {
   return [];
 }
 
+// run a wave and ALWAYS resolve: settle every lane/item independently so a
+// single rejection can never abort the measurement burst early
+async function settleWave(wave) {
+  const lanes = [];
+  const results = [];
+  const started = Date.now();
+  if (wave.parallel) {
+    for (const item of wave.parallel) {
+      if (typeof item === 'string') lanes.push(item);
+      else if (item && Array.isArray(item.serial)) lanes.push.apply(lanes, item.serial);
+    }
+    const settled = await Promise.allSettled((wave.parallel).map((item) => runItem(item)));
+    for (const s of settled) {
+      if (s.status === 'fulfilled') s.value.forEach((x) => { results.push(x); });
+      else console.error('[burst] wave item rejected: ' + (s.reason && s.reason.message));
+    }
+  } else if (wave.serial) {
+    const settled = await Promise.allSettled([runItem({ serial: wave.serial })]);
+    for (const s of settled) {
+      if (s.status === 'fulfilled') s.value.forEach((x) => results.push(x));
+    }
+  }
+  return { results, labels: lanes };
+}
+
 async function main() {
   console.log('GENOE BURST (parallel measurement) — ' + new Date().toISOString());
   const results = [];
@@ -76,13 +109,10 @@ async function main() {
   ];
   for (const wave of WAVES) {
     console.log('[burst] === WAVE ' + (WAVES.indexOf(wave) + 1) + ' ===');
-    if (wave.parallel) {
-      const chunks = await Promise.all(wave.parallel.map((item) => runItem(item)));
-      chunks.forEach((c) => c.forEach((x) => results.push(x)));
-    } else if (wave.serial) {
-      const out = await runItem({ serial: wave.serial });
-      out.forEach((x) => results.push(x));
-    }
+    const { results: waveResults, labels } = await settleWave(wave);
+    results.push.apply(results, waveResults);
+    const stuck = labels.filter((l) => !waveResults.some((r) => r.name === l));
+    if (stuck.length) console.error('[burst] wave ' + (WAVES.indexOf(wave) + 1) + ' lanes never reported: ' + stuck.join(', '));
   }
   const hard = results.filter((r) => r.hard);
   const okNames = results.filter((r) => r.ok).map((r) => r.name);
