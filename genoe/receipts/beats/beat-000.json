@@ -1,0 +1,28 @@
+{
+  "kind": "genoe/chain/beat",
+  "seal": 0,
+  "at": "2026-09-13T00:35:28.071Z",
+  "prevHash": "0083af278c51f8168c0343af024ed9646a43fc22e6a5f3524e8317ce2f449732",
+  "veins": [
+    {
+      "label": "vein-a-safari",
+      "at": "2026-09-13T00:31:39.287Z",
+      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+      "verdict": "NOT-IN-CORPUS",
+      "match": null
+    },
+    {
+      "label": "vein-b-iosim",
+      "at": "2026-09-13T00:35:27.360Z",
+      "ja4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
+      "verdict": "EXACT-MATCH",
+      "match": "Safari 26.0.1"
+    }
+  ],
+  "summary": {
+    "veins": 2,
+    "exactMatches": 1,
+    "references": 1
+  },
+  "hash": "a3705d540071c421712ac2bb1b2b23857c158508f239181e48602a7e887382c1"
+}
