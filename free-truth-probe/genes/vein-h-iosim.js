@@ -21,7 +21,8 @@ const run = (cmd, args, opts = {}) => spawnSync(cmd, args, { encoding: 'utf8', .
 
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
-  setTimeout(() => { console.error('VEIN-H-IOSIM WATCHDOG exit'); process.exit(3); }, 150000).unref();
+  setTimeout(() => { console.error('VEIN-H-IOSIM WATCHDOG exit'); process.exit(3); }, 240000).unref();
+  const log = (s) => console.log('VEIN-H-IOSIM ' + s);
 
   run('xcrun', ['simctl', 'list']);
   let deviceType = 'com.apple.CoreSimulator.SimDeviceType.iPhone-16';
@@ -54,24 +55,37 @@ async function main() {
   const created = run('xcrun', ['simctl', 'create', 'genoe-blade', deviceType, runtime]);
   const udid = (created.stdout || '').trim();
   if (!udid) { console.error('VEIN-H-IOSIM FAIL no udid'); process.exit(11); }
+  log('device ' + udid + ' created');
   run('xcrun', ['simctl', 'boot', udid], { stdio: 'ignore' });
-  run('xcrun', ['simctl', 'bootstatus', udid, '-b'], { stdio: 'ignore', timeout: 180000 });
+  run('xcrun', ['simctl', 'bootstatus', udid, '-b'], { stdio: 'ignore', timeout: 120000 });
+  log('booted');
 
-  const blade = startBlade({ port: PORT, timeoutMs: 60000 });
+  const blade = startBlade({ port: PORT, timeoutMs: 45000 });
   await blade.listenP;
+  log('blade on :' + PORT);
 
   // install the SAME blade root into the simulator's OWN trust store (DER)
   const der = path.join(os.tmpdir(), 'genoe-blade-crt.der');
   const { crt: pem } = trustCert();
   const derConv = run('openssl', ['x509', '-in', pem, '-outform', 'der', '-out', der]);
   const added = run('xcrun', ['simctl', 'keychain', udid, 'add-root-cert', der]);
-  if (derConv.status !== 0 || added.status !== 0) console.log('  (sim trust note: openssl rc=' + (derConv.status ?? '?') + ' simctl rc=' + (added.status ?? '?') + ')' );
+  log('sim trust openssl rc=' + (derConv.status ?? '?') + ' simctl rc=' + (added.status ?? '?'));
+  if (derConv.status !== 0 || added.status !== 0) log('  (soft: proceeding anyway)');
 
-  run('xcrun', ['simctl', 'openurl', udid, 'https://localhost:' + PORT + '/blade']);
-  const cap = await blade.wait();
+  const target = 'https://localhost:' + PORT + '/blade';
+  let done = false;
+  const pull = () => Promise.race([blade.wait(), new Promise((_, rej) => setTimeout(() => rej(new Error('pending')), 900))]).then((c) => { done = true; return c; }).catch(() => run('xcrun', ['simctl', 'openurl', udid, target], { stdio: 'ignore' }));
+  run('xcrun', ['simctl', 'openurl', udid, target], { stdio: 'ignore' });
+  for (let attempt = 1; attempt <= 4 && !done; attempt++) {
+    await pull();
+    await delay(8000);
+  }
+  log('nav attempts done, done=' + done);
+  if (!done) { const cap2 = await blade.wait(); done = !!cap2; }
   run('xcrun', ['simctl', 'shutdown', udid], { stdio: 'ignore' });
   blade.close();
-  if (!cap) { console.error('VEIN-H-IOSIM FAIL no request captured'); process.exit(14); }
+  if (!done) { console.error('VEIN-H-IOSIM FAIL no request captured'); process.exit(14); }
+  const cap = await blade.wait();
 
   const h2Code = measuredOrderCode(cap.order);
   const declared = mspa.H2_ORDER.safari;

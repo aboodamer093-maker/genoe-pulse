@@ -106,7 +106,7 @@ jobs:
 
       - name: vein-h — real Mobile Safari (iOS simulator) h2 HEADERS blade
         if: always()
-        timeout-minutes: 4
+        timeout-minutes: 6
         run: |
           set +e
           node free-truth-probe/genes/vein-h-iosim.js

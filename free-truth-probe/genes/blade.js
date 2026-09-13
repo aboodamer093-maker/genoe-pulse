@@ -21,7 +21,7 @@ function trustCert() {
   const key = path.join(dir, 'key.pem');
   const crt = path.join(dir, 'crt.pem');
   const ext = path.join(dir, 'san.cnf');
-  fs.writeFileSync(ext, `[req]\ndistinguished_name=dn\nx509_extensions=v3\nprompt=no\n[dn]\nCN=localhost\n[v3]\nsubjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1\nbasicConstraints=CA:FALSE\nkeyUsage=digitalSignature,keyEncipherment\nextendedKeyUsage=serverAuth\n`);
+  fs.writeFileSync(ext, `[req]\ndistinguished_name=dn\nx509_extensions=v3\nprompt=no\n[dn]\nCN=localhost\n[v3]\nsubjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1\nbasicConstraints=critical,CA:TRUE\nkeyUsage=critical,keyCertSign,digitalSignature,keyEncipherment\nextendedKeyUsage=serverAuth\n`);
   const r = spawnSync('openssl', ['req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-days', '1', '-keyout', key, '-out', crt, '-config', ext], { timeout: 25000, maxBuffer: 1 << 20, encoding: 'utf8' });
   if (r.status !== 0) throw new Error('openssl cert gen: ' + ((r.stderr || '') + ' ' + (r.error ? r.error.message : '')).slice(0, 300));
   // headless runners can hang on the keychain UI prompt — bound it hard
