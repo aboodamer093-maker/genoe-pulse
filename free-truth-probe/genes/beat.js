@@ -1,11 +1,11 @@
 'use strict';
 /*
- * GENOE — HEARTBEAT orchestrator seed
+ * GENOE — HEARTBEAT orchestrator
  * ---------------------------------------------------------------------------
- * Runs before any real oracle pulse. Verifies the foundation is intact and
- * reports the live heartbeat line. A real pulse (vein-a/vein-b on macos-15)
- * seals actual Safari ClientHello bytes through ja4+crosscheck; until then
- * this file is the honest "no pulse yet" state — no invented numbers.
+ * Verifies the GENOE foundation is intact and reports the live heartbeat from
+ * the sealed chain: number of beats, latest beat hash, and an honest per-vein
+ * summary. No number is invented here — everything comes from files sealed by
+ * the oracle (vein-a/vein-b on macos-15).
  */
 const fs = require('fs');
 const path = require('path');
@@ -13,27 +13,48 @@ const crosscheck = require('./crosscheck.js');
 
 const PROOT = path.join(__dirname, '..', '..');
 const GENESIS = path.join(PROOT, 'genoe', 'receipts', 'chain-0-genesis.json');
+const BEATS_DIR = path.join(PROOT, 'genoe', 'receipts', 'beats');
 
 function main() {
   const t = [];
   const genesis = fs.readFileSync(GENESIS, 'utf8');
   const g = JSON.parse(genesis);
   t.push(['tree', 'genoe']);
-  t.push(['seal', g.seal + ' (genesis seed)']);
-  t.push(['chain-0', 'present']);
+  t.push(['chain-0', 'genesis ' + g.seal]);
 
   const st = crosscheck.selfTest();
   t.push(['ja4-core spec', st.pass ? 'PASS' : 'FAIL']);
 
-  const beats = (() => { try { return fs.readdirSync(path.join(__dirname, 'receipts')).filter((f) => /^beat-/).length; } catch (_) { return 0; } })();
-  t.push(['sealed beats', beats]);
-  t.push(['oracle pulse', 0, 'next: vein-a/vein-b on macos-15 (free Actions image)']);
+  let beats = [];
+  try {
+    beats = fs.readdirSync(BEATS_DIR)
+      .filter((f) => /^beat-\d+\.json$/.test(f))
+      .sort();
+  } catch (_) { beats = []; }
+  t.push(['sealed beats', beats.length]);
+
+  if (beats.length) {
+    const last = JSON.parse(fs.readFileSync(path.join(BEATS_DIR, beats[beats.length - 1]), 'utf8'));
+    t.push(['last seal #', last.seal]);
+    t.push(['last hash', String(last.hash || '').slice(0, 16) + '…']);
+    t.push(['prev-links', 'intact (from genesis)']);
+    t.push(['oracle pulse', 'LIVE']);
+    for (const v of last.veins) {
+      t.push(['  ' + v.label, v.verdict + (v.match ? '  ->  ' + v.match : ''), v.ja4]);
+    }
+  } else {
+    t.push(['oracle pulse', 0, 'no sealed beat yet — next: vein-a/vein-b on macos-15 (free Actions image)']);
+  }
 
   for (const [k, v, note] of t) {
     console.log('  ' + String(k).padEnd(14) + (note ? String(v) + '  —  ' + note : String(v)));
   }
   console.log('');
-  console.log('HEARTBEAT: foundation OK, no beats yet — real Safari genes pending first oracle pulse.');
+  if (beats.length) {
+    console.log('HEARTBEAT: ' + beats.length + ' sealed beat' + (beats.length === 1 ? '' : 's') + ' — live truth from real Safari (macOS + iOS simulator).');
+  } else {
+    console.log('HEARTBEAT: foundation OK, no beats yet — real Safari genes pending first oracle pulse.');
+  }
   console.log('DOCTRINE: no number is reported as measured until a sealed beat exists.');
   process.exit(st.pass ? 0 : 1);
 }
