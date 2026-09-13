@@ -52,13 +52,21 @@ async function main() {
     }
   }
 
-  const created = run('xcrun', ['simctl', 'create', 'genoe-blade', deviceType, runtime]);
-  const udid = (created.stdout || '').trim();
-  if (!udid) { console.error('VEIN-H-IOSIM FAIL no udid'); process.exit(11); }
-  log('device ' + udid + ' created');
-  run('xcrun', ['simctl', 'boot', udid], { stdio: 'ignore' });
-  run('xcrun', ['simctl', 'bootstatus', udid, '-b'], { stdio: 'ignore', timeout: 120000 });
-  log('booted');
+  // REUSE the device booted by vein-b when present (one sim per pulse — cold
+  // double-boot thrashes the runner); else fall back to a fresh boot
+  let udid = (fs.existsSync(path.join(OUTDIR, '.sim-udid')) ? fs.readFileSync(path.join(OUTDIR, '.sim-udid'), 'utf8').trim() : '');
+  if (udid && run('xcrun', ['simctl', 'list', 'devices', udid, '-j']).status === 0) {
+    log('reusing shared device ' + udid + ' (kept alive by vein-b)');
+  } else {
+    udid = '';
+    const created = run('xcrun', ['simctl', 'create', 'genoe-blade', deviceType, runtime]);
+    udid = (created.stdout || '').trim();
+    if (!udid) { console.error('VEIN-H-IOSIM FAIL no udid'); process.exit(11); }
+    log('device ' + udid + ' created (own boot)');
+    run('xcrun', ['simctl', 'boot', udid], { stdio: 'ignore' });
+    run('xcrun', ['simctl', 'bootstatus', udid, '-b'], { stdio: 'ignore', timeout: 120000 });
+    log('booted');
+  }
 
   // host LAN IP — loopback can be h2-special-cased by WebKit; a real LAN target
   // forces the NORMAL h2 path (sim shares the host's network stack)
@@ -98,6 +106,7 @@ async function main() {
     done = !!extra;
   }
   run('xcrun', ['simctl', 'shutdown', udid], { stdio: 'ignore' });
+  try { fs.unlinkSync(path.join(OUTDIR, '.sim-udid')); } catch (_) {}
   blade.close();
   if (!done) { console.error('VEIN-H-IOSIM FAIL no request captured'); process.exit(14); }
   const cap = await blade.wait();

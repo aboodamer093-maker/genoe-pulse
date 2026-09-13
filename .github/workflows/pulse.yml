@@ -37,7 +37,8 @@ jobs:
                 free-truth-probe/genes/receipts/vein-h-firefox.json \
                 free-truth-probe/genes/receipts/vein-h-iosim.json \
                 free-truth-probe/genes/receipts/hello-vein-a-safari.txt \
-                free-truth-probe/genes/receipts/hello-vein-b-iosim.txt
+                free-truth-probe/genes/receipts/hello-vein-b-iosim.txt \
+                free-truth-probe/genes/receipts/.sim-udid
           rm -rf free-truth-probe/genes/receipts/wire-verify
           echo "run-owned receipts cleared"
 

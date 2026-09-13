@@ -19,7 +19,7 @@ const OUTDIR = path.join(__dirname, 'receipts');
 
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
-  setTimeout(() => { console.error('VEIN-H-FIREFOX WATCHDOG exit'); process.exit(3); }, 130000).unref();
+  setTimeout(() => { console.error('VEIN-H-FIREFOX WATCHDOG exit'); process.exit(3); }, 170000).unref();
 
   if (!fs.existsSync(BIN)) {
     fs.writeFileSync(path.join(OUTDIR, LABEL + '.json'), JSON.stringify({
@@ -37,15 +37,25 @@ async function main() {
   // this the blade's system-trusted root is unknown to Gecko and the h2 request
   // NEVER happens (flaky timeout). Explicitly enable it for this profile.
   fs.writeFileSync(path.join(profile, 'user.js'),
-    'pref("security.enterprise_roots.enabled", true);\npref("app.update.disabledForTesting", true);\n');
-  const navigate = () => spawn(BIN, ['--headless', '--profile', profile, 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore' });
+    'pref("security.enterprise_roots.enabled", true);\n' +
+    'pref("app.update.disabledForTesting", true);\n' +
+    'pref("browser.startup.homepage", "about:blank");\n' +
+    'pref("browser.startup.page", 0);\n' +
+    'pref("browser.shell.checkDefaultBrowser", false);\n' +
+    'pref("browser.tabs.warnOnClose", false);\n' +
+    'pref("network.http.max-connections", 64);\n');
+  const navigate = () => spawn(BIN, ['--headless', '--profile', profile, '--no-remote', 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore' });
+  const attempts = [];
   let child = navigate();
-  let cap = await blade.wait();
-  if (!cap) { // bounded cold-start retry: kill and relaunch once
+  attempts.push(blade.wait());
+  let cap = await Promise.race(attempts);
+  let shot = 1;
+  while (!cap && shot < 3) {
     try { child.kill('SIGTERM'); } catch (_) {}
-    await new Promise((r) => setTimeout(r, 5000));
+    await new Promise((r) => setTimeout(r, 6000));
     child = navigate();
-    cap = await blade.wait();
+    cap = await Promise.race([blade.wait()]);
+    shot++;
   }
   try { child.kill('SIGTERM'); } catch (_) {}
   blade.close();
