@@ -1,6 +1,6 @@
 {
   "label": "vein-s-macos",
-  "at": "2026-09-13T15:50:50.499Z",
+  "at": "2026-09-13T19:04:28.303Z",
   "platform": "macOS",
   "source": "measured",
   "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
@@ -30,15 +30,15 @@
       "width": 1024,
       "height": 768,
       "availWidth": 1024,
-      "availHeight": 681,
+      "availHeight": 688,
       "colorDepth": 24,
       "orientation": "landscape-primary"
     },
     "window": {
-      "innerWidth": 800,
-      "innerHeight": 628,
-      "outerWidth": 800,
-      "outerHeight": 680,
+      "innerWidth": 1024,
+      "innerHeight": 716,
+      "outerWidth": 1024,
+      "outerHeight": 768,
       "dpr": 1
     },
     "webgl": {
@@ -66,6 +66,6 @@
       "Zapfino": true,
       "_base_": 1498
     },
-    "canvasFp": 6222
+    "canvasFp": 5746
   }
 }

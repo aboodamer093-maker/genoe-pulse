@@ -1,0 +1,33 @@
+{
+  "kind": "genoe/chain/beat",
+  "seal": 17,
+  "at": "2026-09-13T19:20:03.426Z",
+  "prevHash": "173fb3dd13d4c3a536c53b13e93dd88e839defa222e0c551e60ef7a46721b0cd",
+  "veins": [
+    {
+      "label": "vein-a-safari",
+      "at": "2026-09-13T19:01:26.360Z",
+      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+      "verdict": "EXACT-MATCH",
+      "match": "Sealed measured beat-000.json"
+    }
+  ],
+  "surface": {
+    "label": "vein-s-macos",
+    "at": "2026-09-13T19:04:28.303Z",
+    "platform": "macOS",
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
+    "uaChAbsent": true
+  },
+  "h2": [],
+  "witnesses": [],
+  "summary": {
+    "veins": 1,
+    "exactMatches": 1,
+    "references": 0,
+    "surface": 1,
+    "h2Blades": 0,
+    "witnesses": 0
+  },
+  "hash": "ab0ba28436eb55e2984b54cbaa5bdd6ab6ef1ff12c492be49c22d83952157741"
+}

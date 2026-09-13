@@ -1,11 +1,8 @@
 {
   "label": "vein-b-iosim",
-  "at": "2026-09-13T15:50:27.939Z",
+  "at": "2026-09-13T19:14:23.406Z",
   "device": "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
   "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-26-2",
-  "ja4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
-  "a": "t13d2013h2",
-  "verdict": "EXACT-MATCH",
-  "match": "Safari 26.0.1",
-  "helloHexFile": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/hello-vein-b-iosim.txt"
+  "available": false,
+  "note": "capture flake on runner: capture timeout (vein-b-iosim): no full ClientHello in 150000ms"
 }

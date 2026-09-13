@@ -1,0 +1,10 @@
+{
+  "label": "vein-v-chrome",
+  "at": "2026-09-13T19:01:05.910Z",
+  "mode": "local-raw-tcp",
+  "ja4": "t13d1517h2_8daaf6152771_a323666e1952",
+  "a": "t13d1517h2",
+  "sni": "tls.peet.ws",
+  "verdict": "captured-local-raw-tcp-im",
+  "helloHexFile": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/hello-vein-v-chrome.txt"
+}
