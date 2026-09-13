@@ -10,7 +10,7 @@
  * oracle header-vein (S14) replaces them with measured values.
  */
 const UA_TEMPLATE = {
-  'safari-macos': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15',
+  'safari-macos': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15',
   'safari-ios':   'Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1',
   'crios-ios':    'Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/138.0.7152.87 Mobile/15E148 Safari/604.1',
   'edgios-ios':   'Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) EdgiOS/138.0.7168.58 Mobile/15E148 Safari/604.1',
@@ -33,6 +33,8 @@ const ROWS = [
   { skin: 'chrome-macos',  ua: UA_TEMPLATE['chrome-macos'],  uaCh: 'full', note: 'desktop Chrome emits full UA-CH' },
   { skin: 'firefox-macos', ua: UA_TEMPLATE['firefox-macos'], uaCh: 'none', note: 'Firefox emits no UA-CH' },
 ];
+// safari-macos UA replaced by the MEASURED value from S14 vein-s (sealed
+// beat-001): the oracle runner's real Safari 26.6.1 — a declaration no longer.
 
 function selfTest() {
   const results = [];
@@ -53,7 +55,7 @@ if (require.main === module) {
   for (const res of r.results) {
     console.log('  [' + (res.pass ? 'PASS' : 'FAIL') + '] ' + res.skin.padEnd(24) + ' uaCh=' + res.uaCh);
   }
-  console.log('  (UA strings declared from official templates — pending measurable S14 header-vein)');
+  console.log('  (safari-macos UA = measured S14 vein-s; others are declared from official templates — payable via header-vein)');
   process.exit(r.pass ? 0 : 1);
 }
 
