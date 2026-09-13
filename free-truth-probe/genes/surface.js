@@ -39,9 +39,14 @@ const COLLECTOR_JS = `
     var draft = ['-apple-system','Helvetica Neue','Arial','Courier New','Times New Roman','Menlo','Monaco','Verdana','Tahoma','Georgia','Palatino','Comic Sans MS','Impact','Zapfino'];
     var out = {};
     try {
+      var c = document.createElement('canvas'); var g = c.getContext('2d');
+      var probe = 'genoe glyph check 0123456789 missingabsence of fonts';
+      g.font = '48px monospace'; var base = g.measureText(probe).width;
       for (var i=0;i<draft.length;i++){
-        out[draft[i]] = document.fonts ? document.fonts.check('16px "' + draft[i] + '"') : null;
+        g.font = '48px "' + draft[i] + '",monospace';
+        out[draft[i]] = Math.round(g.measureText(probe).width) !== Math.round(base);
       }
+      out._base_ = Math.round(base);
     } catch(e){ out.error = String(e); }
     return out;
   }
