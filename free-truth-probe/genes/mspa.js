@@ -12,9 +12,9 @@
  *   Firefox = mpas
  */
 const H2_ORDER = {
-  safari: { code: 'msap', seq: [':method', ':scheme', ':authority', ':path'], src: 'measured (sealed beat-002 vein-h)' },
-  chrome: { code: 'masp', seq: [':method', ':authority', ':scheme', ':path'], src: 'curl-impersonate official (pending our measured blade)' },
-  firefox: { code: 'mpas', seq: [':method', ':path', ':authority', ':scheme'], src: 'curl-impersonate official (pending our measured blade)' },
+  safari: { code: 'msap', seq: [':method', ':scheme', ':authority', ':path'], src: 'measured (sealed beat-002 vein-h + beat-005 vein-h-safari)' },
+  chrome: { code: 'masp', seq: [':method', ':authority', ':scheme', ':path'], src: 'measured (sealed beat-005 vein-h-chrome)' },
+  firefox: { code: 'mpas', seq: [':method', ':path', ':authority', ':scheme'], src: 'measured (sealed beat-005 vein-h-firefox)' },
 };
 
 function orderingFor(skin) {

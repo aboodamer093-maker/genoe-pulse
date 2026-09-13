@@ -31,6 +31,7 @@ jobs:
           rm -f free-truth-probe/genes/receipts/vein-a-safari.json \
                 free-truth-probe/genes/receipts/vein-b-iosim.json \
                 free-truth-probe/genes/receipts/vein-s-macos.json \
+                free-truth-probe/genes/receipts/vein-h-macos.json \
                 free-truth-probe/genes/receipts/vein-h-safari.json \
                 free-truth-probe/genes/receipts/vein-h-chrome.json \
                 free-truth-probe/genes/receipts/vein-h-firefox.json \

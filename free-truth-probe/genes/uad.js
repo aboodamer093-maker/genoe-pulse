@@ -30,8 +30,8 @@ const ROWS = [
   { skin: 'crios-ios',     ua: UA_TEMPLATE['crios-ios'],     uaCh: 'none', note: 'CriOS is WKWebView; iOS WebKit does not emit UA-CH' },
   { skin: 'edgios-ios',    ua: UA_TEMPLATE['edgios-ios'],    uaCh: 'none', note: 'EdgiOS is WKWebView; no UA-CH' },
   { skin: 'fxios-ios',     ua: UA_TEMPLATE['fxios-ios'],     uaCh: 'none', note: 'FxiOS is WKWebView; no UA-CH' },
-  { skin: 'chrome-macos',  ua: UA_TEMPLATE['chrome-macos'],  uaCh: 'full', note: 'desktop Chrome emits full UA-CH' },
-  { skin: 'firefox-macos', ua: UA_TEMPLATE['firefox-macos'], uaCh: 'none', note: 'Firefox emits no UA-CH' },
+  { skin: 'chrome-macos',  ua: UA_TEMPLATE['chrome-macos'],  uaCh: 'full', note: 'desktop Chrome emits UA-CH (MEASURED vein-h-chrome: sec-ch-ua present)' },
+  { skin: 'firefox-macos', ua: UA_TEMPLATE['firefox-macos'], uaCh: 'none', note: 'Firefox emits no UA-CH (MEASURED vein-h-firefox: sec-ch-ua absent)' },
 ];
 // safari-macos UA replaced by the MEASURED value from S14 vein-s (sealed
 // beat-001): the oracle runner's real Safari 26.6.1 — a declaration no longer.
