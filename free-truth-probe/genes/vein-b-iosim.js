@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 const { startCaptureServer } = require('./capture.js');
 const ja4 = require('./ja4.js');
-const corpus = require('./safari-corpus.js');
+const { effectiveCorpus } = require('./effective-corpus.js');
 
 const PORT = 10902;
 const LABEL = 'vein-b-iosim';
@@ -94,7 +94,7 @@ async function main() {
   run('xcrun', ['simctl', 'shutdown', udid], { stdio: 'ignore' });
 
   const r = ja4.fromBuffer(Buffer.from(result.helloHex, 'hex'));
-  const hit = corpus.find((e) => e.ja4 === r.ja4);
+  const hit = effectiveCorpus().find((e) => e.ja4 === r.ja4);
   const hexFile = path.join(OUTDIR, 'hello-' + LABEL + '.txt');
   fs.writeFileSync(hexFile, result.helloHex + '\n');
   const doc = {

@@ -1,0 +1,86 @@
+{
+  "at": "2026-09-13T01:16:17.512Z",
+  "engine": "curl_cffi 0.16.3",
+  "rows": [
+    {
+      "profile": "safari153",
+      "ja4": "t13d2613h2_2802a3db6c62_845d286b0d67",
+      "status": "no-match",
+      "match": null
+    },
+    {
+      "profile": "safari155",
+      "ja4": "t13d2014h2_a09f3c656075_14788d8d241b",
+      "status": "no-match",
+      "match": null
+    },
+    {
+      "profile": "safari15_3",
+      "ja4": "t13d2613h2_2802a3db6c62_845d286b0d67",
+      "status": "no-match",
+      "match": null
+    },
+    {
+      "profile": "safari15_5",
+      "ja4": "t13d2014h2_a09f3c656075_14788d8d241b",
+      "status": "no-match",
+      "match": null
+    },
+    {
+      "profile": "safari170",
+      "ja4": "t13d2014h2_a09f3c656075_14788d8d241b",
+      "status": "no-match",
+      "match": null
+    },
+    {
+      "profile": "safari17_0",
+      "ja4": "t13d2014h2_a09f3c656075_14788d8d241b",
+      "status": "no-match",
+      "match": null
+    },
+    {
+      "profile": "safari180",
+      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+      "status": "PARITY",
+      "match": "Sealed measured beat-000.json [sealed-beat #0 (2026-09-13)]"
+    },
+    {
+      "profile": "safari18_0",
+      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+      "status": "PARITY",
+      "match": "Sealed measured beat-000.json [sealed-beat #0 (2026-09-13)]"
+    },
+    {
+      "profile": "safari184",
+      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+      "status": "PARITY",
+      "match": "Sealed measured beat-000.json [sealed-beat #0 (2026-09-13)]"
+    },
+    {
+      "profile": "safari18_0",
+      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+      "status": "PARITY",
+      "match": "Sealed measured beat-000.json [sealed-beat #0 (2026-09-13)]"
+    },
+    {
+      "profile": "safari260",
+      "ja4": "t13d2014h2_a09f3c656075_d0a99439f9b1",
+      "status": "PARITY",
+      "match": "Safari 26.0 [public JA4 corpus (krowdev) — declared-prior reference]"
+    },
+    {
+      "profile": "safari2601",
+      "ja4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
+      "status": "PARITY",
+      "match": "Safari 26.0.1 [public JA4 corpus (krowdev) — declared-prior reference]"
+    },
+    {
+      "profile": "safari260_ios",
+      "ja4": "t13d2015h2_a09f3c656075_c258b721e490",
+      "status": "no-match",
+      "match": null
+    }
+  ],
+  "parity": 6,
+  "total": 13
+}

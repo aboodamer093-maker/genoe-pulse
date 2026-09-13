@@ -10,12 +10,24 @@ const crosscheck = require('./crosscheck.js');
 const cassette = require('./cassette.js');
 const mspa = require('./mspa.js');
 const uad = require('./uad.js');
+const effectiveCorpus = require('./effective-corpus.js');
+const fs = require('fs');
+const path = require('path');
+
+const parityCached = { pass: false, results: [{ name: 'wire-parity', pass: false, detail: 'no cached parity run' }] };
+try {
+  const p = JSON.parse(fs.readFileSync(path.join(__dirname, 'receipts', 'parity-curl.json'), 'utf8'));
+  parityCached.pass = p.parity && p.parity >= 1;
+  parityCached.results = [{ name: 'wire-parity', pass: parityCached.pass, detail: p.parity + '/' + p.total + ' parity (cached ' + (p.at || '').slice(0, 10) + ')' }];
+} catch (_) {}
 
 const gates = [
   { name: 'ja4-core (4 refs)', run: () => crosscheck.selfTest() },
   { name: 'wire cassette', run: () => cassette.selfTest() },
   { name: 'mspa / JA4H', run: () => mspa.selfTest() },
   { name: 'UAD matrix', run: () => uad.selfTest() },
+  { name: 'effective corpus', run: () => effectiveCorpus.selfTest() },
+  { name: 'wire parity', run: () => parityCached },
 ];
 
 let allPass = true;
