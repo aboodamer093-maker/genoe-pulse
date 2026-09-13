@@ -44,7 +44,17 @@ jobs:
           echo "vein-b FAILED (exit $ec)"
           exit $ec
 
+      - name: vein-s — real macOS Safari surface genes
+        run: |
+          set +e
+          node free-truth-probe/genes/vein-s-macos.js
+          ec=$?
+          if [ $ec -eq 0 ]; then echo "vein-s green (surface snapshot captured)"; exit 0; fi
+          echo "vein-s FAILED (exit $ec)"
+          exit $ec
+
       - name: seal — GENOE chain #1
+        if: always()
         run: node free-truth-probe/genes/seal.js
 
       - name: persist sealed chain back to repo

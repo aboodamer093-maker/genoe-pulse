@@ -31,6 +31,13 @@ function loadVeins() {
   return out;
 }
 
+function loadSurface() {
+  const p = path.join(RECEIPTS, 'vein-s-macos.json');
+  if (!fs.existsSync(p)) return null;
+  const v = JSON.parse(fs.readFileSync(p, 'utf8'));
+  return { label: v.label, at: v.at, platform: v.platform, ua: v.ua, uaChAbsent: v.uaChAbsent };
+}
+
 function main() {
   if (!fs.existsSync(GENESIS)) { console.error('SEAL FAIL missing genesis ' + GENESIS); process.exit(20); }
   fs.mkdirSync(BEATS_DIR, { recursive: true });
@@ -51,10 +58,12 @@ function main() {
     at: new Date().toISOString(),
     prevHash,
     veins,
+    surface: loadSurface(),
     summary: {
       veins: veins.length,
       exactMatches: veins.filter((v) => v.verdict === 'EXACT-MATCH').length,
       references: veins.filter((v) => v.verdict === 'NOT-IN-CORPUS').length,
+      surface: loadSurface() ? 1 : 0,
     },
   };
   block.hash = sha256(block);
