@@ -4,17 +4,17 @@
  * ---------------------------------------------------------------------------
  * Per-browser ordering of the HTTP/2 HEADERS pseudo-block:
  *   m = :method, s = :scheme, p = :path, a = :authority
- * Actually the header block shows :authority/:method/:path/:scheme; the JA4H
- * ordering letter-code reflects the sequence they are emitted.
  *
- *   Safari  = mspa   (measured: sealed beats + official safari signatures)
+ *   Safari  = msap   (MEASURED: sealed beat-002 vein-h — real 26.6.1 wire
+ *                     shows :method,:scheme,:authority,:path. The earlier
+ *                     mspa declaration was WRONG cancel of oracle value.)
  *   Chrome  = masp
  *   Firefox = mpas
  */
 const H2_ORDER = {
-  safari: { code: 'mspa', seq: [':method', ':scheme', ':path', ':authority'], src: 'measured (oracle) + official signatures' },
-  chrome: { code: 'masp', seq: [':method', ':authority', ':scheme', ':path'], src: 'curl-impersonate official' },
-  firefox: { code: 'mpas', seq: [':method', ':path', ':authority', ':scheme'], src: 'curl-impersonate official' },
+  safari: { code: 'msap', seq: [':method', ':scheme', ':authority', ':path'], src: 'measured (sealed beat-002 vein-h)' },
+  chrome: { code: 'masp', seq: [':method', ':authority', ':scheme', ':path'], src: 'curl-impersonate official (pending our measured blade)' },
+  firefox: { code: 'mpas', seq: [':method', ':path', ':authority', ':scheme'], src: 'curl-impersonate official (pending our measured blade)' },
 };
 
 function orderingFor(skin) {
@@ -27,7 +27,7 @@ function orderingFor(skin) {
 
 function selfTest() {
   const checks = [
-    ['safari', 'mspa'], ['Safari 26.6 skin', 'mspa'], ['crios', 'masp'],
+    ['safari', 'msap'], ['Safari 26.6 skin', 'msap'], ['crios', 'masp'],
     ['edgios', 'masp'], ['fxios', 'mpas'], ['chrome', 'masp'],
   ];
   const results = checks.map(([skin, want]) => {
