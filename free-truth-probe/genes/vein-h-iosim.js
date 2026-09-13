@@ -21,7 +21,7 @@ const run = (cmd, args, opts = {}) => spawnSync(cmd, args, { encoding: 'utf8', .
 
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
-  setTimeout(() => { console.error('VEIN-H-IOSIM WATCHDOG exit'); process.exit(3); }, 320000).unref();
+  setTimeout(() => { console.error('VEIN-H-IOSIM WATCHDOG exit'); process.exit(3); }, 440000).unref();
   const log = (s) => console.log('VEIN-H-IOSIM ' + s);
 
   run('xcrun', ['simctl', 'list']);
@@ -93,7 +93,7 @@ async function main() {
   let done = false;
   const pull = () => Promise.race([blade.wait(), new Promise((_, rej) => setTimeout(() => rej(new Error('pending')), 900))]).then((c) => { done = true; return c; }).catch(() => run('xcrun', ['simctl', 'openurl', udid, target], { stdio: 'ignore' }));
   run('xcrun', ['simctl', 'openurl', udid, target], { stdio: 'ignore' });
-  for (let attempt = 1; attempt <= 4 && !done; attempt++) {
+  for (let attempt = 1; attempt <= 6 && !done; attempt++) {
     await pull();
     await delay(8000);
   }
@@ -112,6 +112,7 @@ async function main() {
     fs.writeFileSync(path.join(OUTDIR, LABEL + '.json'), JSON.stringify({
       label: LABEL, engine: 'safari-ios', at: new Date().toISOString(), available: true, captured: false,
       note: 'mobile surface present but no h2 HEADERS request completed on sim (trust/loopback quirk)',
+      diagnostics: blade.diagnostics.slice().slice(-8),
     }, null, 2) + '\n');
     console.error('VEIN-H-IOSIM FAIL no request captured (receipt recorded)');
     process.exit(14);

@@ -19,7 +19,7 @@ const OUTDIR = path.join(__dirname, 'receipts');
 
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
-  setTimeout(() => { console.error('VEIN-H-FIREFOX WATCHDOG exit'); process.exit(3); }, 170000).unref();
+  setTimeout(() => { console.error('VEIN-H-FIREFOX WATCHDOG exit'); process.exit(3); }, 300000).unref();
 
   if (!fs.existsSync(BIN)) {
     fs.writeFileSync(path.join(OUTDIR, LABEL + '.json'), JSON.stringify({
@@ -63,6 +63,7 @@ async function main() {
     fs.writeFileSync(path.join(OUTDIR, LABEL + '.json'), JSON.stringify({
       label: LABEL, engine: 'firefox', at: new Date().toISOString(), available: true, captured: false,
       note: 'engine present but no h2 request captured on runner this pulse (cold-start/trust flake)',
+      diagnostics: blade.diagnostics.slice().slice(-8),
     }, null, 2) + '\n');
     console.error('VEIN-H-FIREFOX FAIL no request captured (receipt recorded)');
     process.exit(14);

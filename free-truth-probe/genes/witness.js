@@ -172,17 +172,59 @@ async function safariSource(urls, opts) {
   });
 }
 
+// geckodriver lives in /usr/local/bin on Intel images and /opt/homebrew/bin on
+// arm64 (macos-15-arm64) — resolve it, don't guess.
+function resolveGeckodriver() {
+  const candidates = [
+    '/opt/homebrew/bin/geckodriver',
+    '/usr/local/bin/geckodriver',
+    '/usr/bin/geckodriver',
+    '/usr/local/opt/geckodriver/bin/geckodriver',
+  ];
+  for (const c of candidates) if (fs.existsSync(c)) return c;
+  const which = spawnSync('which', ['geckodriver'], { encoding: 'utf8', timeout: 10000 });
+  if (which.status === 0 && which.stdout) return which.stdout.trim();
+  return null;
+}
+
 async function firefoxSource(urls, opts) {
+  const gecko = resolveGeckodriver();
+  if (!gecko) return { ok: false, reason: 'channel-unavailable', error: 'geckodriver not found on PATH' };
   return webdriverSource({
-    driverBin: '/usr/local/bin/geckodriver', driverArgs: ['--port', '4446'],
+    driverBin: gecko, driverArgs: ['--port', '4446'],
     browserName: 'firefox', navigate: Array.isArray(urls) ? urls : [urls], ...opts,
   });
 }
 
+// swiftc may not be on the xcrun path when Xcode is unselected; probe known
+// toolchains + xcode-select fallback before giving up (OCR needs Xcode).
+function resolveSwiftc() {
+  const runTry = (cmd, args) => { const r = spawnSync(cmd, args, { encoding: 'utf8', timeout: 15000 }); return r.status === 0 ? r.stdout.trim() : ''; };
+  let found = runTry('xcrun', ['--find', 'swiftc']);
+  if (found) return found;
+  found = runTry('which', ['swiftc']);
+  if (found) return found;
+  try {
+    for (const d of fs.readdirSync('/Applications')) {
+      if (!/^Xcode/.test(d)) continue;
+      const tol = '/Applications/' + d + '/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc';
+      if (fs.existsSync(tol)) return tol;
+    }
+  } catch (_) {}
+  // last resort: point xcode-select at the newest Xcode, then retry xcrun
+  try {
+    const xcodes = fs.readdirSync('/Applications').filter((d) => /^Xcode/.test(d)).sort();
+    if (xcodes.length) {
+      runTry('sudo', ['xcode-select', '-s', '/Applications/' + xcodes[xcodes.length - 1]]);
+      found = runTry('xcrun', ['--find', 'swiftc']);
+    }
+  } catch (_) {}
+  return found || null;
+}
+
 let _ocrBin = null;
 function ocrSwift(png) {
-  const wh = spawnSync('xcrun', ['--find', 'swiftc'], { encoding: 'utf8', timeout: 15000 });
-  const swiftc = wh.status === 0 ? wh.stdout.trim() : '';
+  const swiftc = resolveSwiftc();
   if (!swiftc) return { ok: false, error: 'no swiftc (Xcode absent)' };
   if (!_ocrBin) {
     _ocrBin = path.join(os.tmpdir(), 'genoe-ocr-' + process.pid);

@@ -122,7 +122,10 @@ jobs:
         timeout-minutes: 3
         run: |
           set +e
-          python3 -m pip install --quiet --disable-pip-version-check curl_cffi
+          # runner python3 is Homebrew (PEP 668 externally-managed) — CI is
+          # ephemeral so --break-system-packages is the honest install path.
+          python3 -m pip install --break-system-packages --quiet --disable-pip-version-check curl_cffi
+          python3 -c "import curl_cffi; print('curl_cffi canary OK')"
           node free-truth-probe/genes/wire-verify.js
           ec=$?
           if [ $ec -eq 0 ] || [ $ec -eq 5 ]; then echo "vein-x green (external measurement recorded)"; exit 0; fi

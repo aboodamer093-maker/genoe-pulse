@@ -56,8 +56,6 @@ function buildReceipt(engine, token, read, peet, recorderB, localRef) {
     error: read.ok ? null : read.error || null,
     pngEvidence: read.png || null,
   };
-  if (peet && peet.ok && token) peelTokenEcho(peet, token);
-  if (recorderB && recorderB.ok && token) peelTokenEcho(recorderB, token);
   rec.peet = peet ? {
     ok: peet.ok, ja4: peet.ja4, ja4_r: peet.ja4_r, ja3_hash: peet.ja3_hash,
     h2: peet.h2, h2PseudoOrder: peet.h2PseudoOrder, userAgent: peet.userAgent,
@@ -89,11 +87,6 @@ function buildReceipt(engine, token, read, peet, recorderB, localRef) {
   else rec.verdict = 'NOT-IN-LOCAL';
   rec.witnessed = rec.verdict.startsWith('WITNESSED');
   return rec;
-}
-
-// the token is carried in the :path the outside world echoed; record it.
-function peelTokenEcho(parsed, token) {
-  parsed.tokenEcho = JSON.stringify(parsed).includes(token);
 }
 
 async function runEngine(engine) {
@@ -128,9 +121,19 @@ async function runEngine(engine) {
     read = { ...read, channel: 'ios-screenshot-ocr', pngEvidence: read.png || null };
   }
 
+  // honest token correlation: the outside world echoes our per-shot token in
+  // the HEADERS it observed (:path) — record it directly from the raw body.
+  if (peetRaw && peetRaw.ok) {
+    const peetText = read.ok ? (Array.isArray(read.texts) ? read.texts[0] : read.text) : null;
+    peetRaw.tokenEcho = Boolean(peetText) && peetText.includes(token);
+  }
+  if (blRaw && blRaw.ok) {
+    const blText = read.ok && Array.isArray(read.texts) ? read.texts[1] : null;
+    blRaw.tokenEcho = Boolean(blText) && blText.includes(token);
+  }
+
   if (!peetRaw) return buildReceipt(engine, token, read, null, null, localRef);
-  const rec = buildReceipt(engine, token, read, peetRaw, blRaw, localRef);
-  return rec;
+  return buildReceipt(engine, token, read, peetRaw, blRaw, localRef);
 }
 
 async function main() {
