@@ -1,8 +1,8 @@
 {
   "label": "witness-chrome",
   "engine": "chrome",
-  "token": "obs=chrome.202609130600403.ihvuvc",
-  "at": "2026-09-13T06:07:18.081Z",
+  "token": "obs=chrome.202609130633364.coma47",
+  "at": "2026-09-13T06:37:26.785Z",
   "readback": "chrome-dump-dom",
   "error": null,
   "pngEvidence": null,
@@ -10,11 +10,11 @@
     "ok": true,
     "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
     "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
-    "ja3_hash": "c6a6993541857413f70ec9a80987cf38",
+    "ja3_hash": "cb053c4c8e63be38c3da2ba42a7c269a",
     "h2": true,
     "h2PseudoOrder": "masp",
     "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
-    "tokenEcho": false
+    "tokenEcho": true
   },
   "recorderB": {
     "ok": true,

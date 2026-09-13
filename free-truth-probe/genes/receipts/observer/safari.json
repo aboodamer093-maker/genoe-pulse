@@ -1,8 +1,8 @@
 {
   "label": "witness-safari",
   "engine": "safari",
-  "token": "obs=safari.202609130600403.gpnm1y",
-  "at": "2026-09-13T06:01:18.438Z",
+  "token": "obs=safari.202609130633364.kbow9i",
+  "at": "2026-09-13T06:34:04.567Z",
   "readback": "webdriver-source",
   "error": null,
   "pngEvidence": null,
@@ -14,7 +14,7 @@
     "h2": true,
     "h2PseudoOrder": "msap",
     "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
-    "tokenEcho": false
+    "tokenEcho": true
   },
   "recorderB": {
     "ok": true,

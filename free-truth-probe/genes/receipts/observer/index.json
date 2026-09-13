@@ -1,13 +1,13 @@
 {
-  "at": "2026-09-13T06:07:18.167Z",
-  "run": "202609130600403",
+  "at": "2026-09-13T06:38:02.221Z",
+  "run": "202609130633364",
   "service": "https://tls.peet.ws/api/all",
   "engines": [
     {
       "label": "witness-safari",
       "engine": "safari",
-      "token": "obs=safari.202609130600403.gpnm1y",
-      "at": "2026-09-13T06:01:18.438Z",
+      "token": "obs=safari.202609130633364.kbow9i",
+      "at": "2026-09-13T06:34:04.567Z",
       "readback": "webdriver-source",
       "error": null,
       "pngEvidence": null,
@@ -19,7 +19,7 @@
         "h2": true,
         "h2PseudoOrder": "msap",
         "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
-        "tokenEcho": false
+        "tokenEcho": true
       },
       "recorderB": {
         "ok": true,
@@ -45,15 +45,15 @@
     {
       "label": "witness-safari-ios",
       "engine": "safari-ios",
-      "token": "obs=safari-ios.202609130600403.c73atz",
-      "at": "2026-09-13T06:06:07.497Z",
+      "token": "obs=safari-ios.202609130633364.lugqoe",
+      "at": "2026-09-13T06:36:16.713Z",
       "readback": "readback-failed",
-      "error": "no swiftc (Xcode absent)",
-      "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202609130600403.c73atz.png",
+      "error": "swiftc build: <unknown>:0: error: unable to load standard library for target 'arm64-apple-macosx15.0'\n",
+      "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202609130633364.lugqoe.png",
       "peet": null,
       "recorderB": null,
       "local": {
-        "refJa4": null,
+        "refJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
         "refH2": null,
         "declaredH2": "msap"
       },
@@ -63,8 +63,8 @@
     {
       "label": "witness-chrome",
       "engine": "chrome",
-      "token": "obs=chrome.202609130600403.ihvuvc",
-      "at": "2026-09-13T06:07:18.081Z",
+      "token": "obs=chrome.202609130633364.coma47",
+      "at": "2026-09-13T06:37:26.785Z",
       "readback": "chrome-dump-dom",
       "error": null,
       "pngEvidence": null,
@@ -72,11 +72,11 @@
         "ok": true,
         "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
         "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
-        "ja3_hash": "c6a6993541857413f70ec9a80987cf38",
+        "ja3_hash": "cb053c4c8e63be38c3da2ba42a7c269a",
         "h2": true,
         "h2PseudoOrder": "masp",
         "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
-        "tokenEcho": false
+        "tokenEcho": true
       },
       "recorderB": {
         "ok": true,
@@ -102,10 +102,10 @@
     {
       "label": "witness-firefox",
       "engine": "firefox",
-      "token": "obs=firefox.202609130600403.oe6f5h",
-      "at": "2026-09-13T06:07:18.150Z",
-      "readback": "channel-unavailable",
-      "error": "/usr/local/bin/geckodriver absent",
+      "token": "obs=firefox.202609130633364.1i46gn",
+      "at": "2026-09-13T06:38:02.216Z",
+      "readback": "readback-failed",
+      "error": "no webdriver session",
       "pngEvidence": null,
       "peet": null,
       "recorderB": null,
