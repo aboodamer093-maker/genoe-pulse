@@ -1,0 +1,20 @@
+# GENOE oracle host — whitelist only what the pulse needs.
+# Tree-1 (desktop/, engines/, app/, engine/, backups/, snapshots/, tests/) is
+# excluded by construction and can never be committed here.
+*
+!/.github/
+!/.github/workflows/
+!/.github/workflows/pulse.yml
+!/free-truth-probe/
+!/free-truth-probe/genes/
+!/free-truth-probe/genes/*
+!/free-truth-probe/genes/receipts/
+!/free-truth-probe/genes/receipts/**
+!/free-truth-probe/tools/
+!/free-truth-probe/tools/*
+!/genoe/
+!/genoe/package.json
+!/genoe/receipts/
+!/genoe/receipts/chain-0-genesis.json
+!/genoe/receipts/beats/
+!/genoe/receipts/beats/**

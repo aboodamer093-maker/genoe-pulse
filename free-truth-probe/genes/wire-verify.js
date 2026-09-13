@@ -15,7 +15,7 @@ const path = require('path');
 const { effectiveCorpus } = require('./effective-corpus.js');
 const cassette = require('./cassette.js');
 
-const PY = 'python';
+const PY = 'python3';
 const TOOL = path.join(__dirname, '..', 'tools', 'wire-verify-py.py');
 const OUTDIR = path.join(__dirname, 'receipts', 'wire-verify');
 const SERVICE = 'https://tls.peet.ws/api/all';
@@ -32,6 +32,16 @@ async function main() {
   const corpus = effectiveCorpus();
   const rows = [];
   console.log('EXTERNAL WIRE VERIFICATION  (independent service: ' + SERVICE + ')');
+  if (!fs.existsSync(TOOL)) {
+    for (const p of PROFILES) {
+      const rec = { profile: p.profile, product: p.product, cassetteJa4: p.cassetteJa4, outsideJa4: null, outsideJa3: null, verdict: 'tool-missing', error: 'wire-verify-py.py not present in free-truth-probe/tools (untracked?)' };
+      rows.push(rec);
+      console.log('  ' + p.profile.padEnd(14) + ' tool-missing');
+    }
+    fs.writeFileSync(path.join(OUTDIR, 'summary.json'), JSON.stringify({ at: new Date().toISOString(), service: SERVICE, rows }, null, 2) + '\n');
+    console.log('EXTERNAL VERIFY TOOL MISSING -> receipts/wire-verify/summary.json (honest, non-green)');
+    process.exit(7);
+  }
   for (const p of PROFILES) {
     const r = spawnSync(PY, [TOOL, '--profile', p.profile, '--service', SERVICE], { encoding: 'utf8', timeout: 70000, maxBuffer: 1 << 22 });
     let rec = { profile: p.profile, product: p.product, cassetteJa4: p.cassetteJa4, outsideJa4: null, outsideJa3: null, verdict: 'fetch-failed', error: null };

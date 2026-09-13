@@ -56,6 +56,31 @@ function loadH2() {
   return out;
 }
 
+// external observer witnesses inside the fresh rolling window: seals the
+// outside world's own verdict (peet ja4/h2-order) cross-checked per engine.
+function loadWitnesses() {
+  const dir = path.join(RECEIPTS, 'observer');
+  if (!fs.existsSync(dir)) return [];
+  const out = [];
+  for (const f of fs.readdirSync(dir)) {
+    if (!f.endsWith('.json') || f === 'index.json') continue;
+    let v;
+    try { v = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')); } catch (_) { continue; }
+    if (!fresh(v.at) || !v.witnessed) continue;
+    out.push({
+      engine: v.engine,
+      at: v.at,
+      token: v.token || null,
+      verdict: v.verdict,
+      ja4: (v.peet && v.peet.ja4) || null,
+      h2PseudoOrder: (v.peet && v.peet.h2PseudoOrder) || null,
+      cross: v.cross || null,
+      recorderBJa4: (v.recorderB && v.recorderB.ja4) || null,
+    });
+  }
+  return out;
+}
+
 function main() {
   if (!fs.existsSync(GENESIS)) { console.error('SEAL FAIL missing genesis ' + GENESIS); process.exit(20); }
   fs.mkdirSync(BEATS_DIR, { recursive: true });
@@ -69,6 +94,7 @@ function main() {
   const seal = existing.length;
   const prevFile = seal === 0 ? GENESIS : path.join(BEATS_DIR, existing[existing.length - 1]);
   const prevHash = sha256(fs.readFileSync(prevFile, 'utf8'));
+  const witnesses = loadWitnesses();
 
   const block = {
     kind: 'genoe/chain/beat',
@@ -78,12 +104,14 @@ function main() {
     veins,
     surface: loadSurface(),
     h2: loadH2(),
+    witnesses,
     summary: {
       veins: veins.length,
       exactMatches: veins.filter((v) => v.verdict === 'EXACT-MATCH').length,
       references: veins.filter((v) => v.verdict === 'NOT-IN-CORPUS').length,
       surface: loadSurface() ? 1 : 0,
       h2Blades: loadH2().length,
+      witnesses: witnesses.length,
     },
   };
   block.hash = sha256(block);
@@ -98,7 +126,7 @@ function main() {
   }, null, 2) + '\n');
 
   console.log('SEAL #' + seal + ' beat=' + outName);
-  console.log('  veins=' + block.summary.veins + ' exact=' + block.summary.exactMatches + ' refs=' + block.summary.references);
+  console.log('  veins=' + block.summary.veins + ' exact=' + block.summary.exactMatches + ' refs=' + block.summary.references + '  witnesses=' + block.summary.witnesses);
   for (const v of veins) console.log('  ' + v.label.padEnd(14) + v.verdict.padEnd(12) + v.ja4 + (v.match ? '  -> ' + v.match : ''));
   console.log('  hash=' + block.hash.slice(0, 16) + '…  prev=' + prevHash.slice(0, 16) + '…');
   process.exit(0);

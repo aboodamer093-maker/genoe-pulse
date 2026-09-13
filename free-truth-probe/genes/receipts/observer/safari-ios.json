@@ -1,0 +1,18 @@
+{
+  "label": "witness-safari-ios",
+  "engine": "safari-ios",
+  "token": "obs=safari-ios.202609130538326.r9dqnk",
+  "at": "2026-09-13T05:38:32.703Z",
+  "readback": "channel-unavailable",
+  "error": "no iPhone device type",
+  "pngEvidence": null,
+  "peet": null,
+  "recorderB": null,
+  "local": {
+    "refJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
+    "refH2": null,
+    "declaredH2": "msap"
+  },
+  "verdict": "CHANNEL-UNAVAILABLE",
+  "witnessed": false
+}

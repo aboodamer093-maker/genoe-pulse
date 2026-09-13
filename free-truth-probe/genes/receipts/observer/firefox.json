@@ -1,0 +1,18 @@
+{
+  "label": "witness-firefox",
+  "engine": "firefox",
+  "token": "obs=firefox.202609130538326.jk4lgz",
+  "at": "2026-09-13T05:38:32.733Z",
+  "readback": "channel-unavailable",
+  "error": "/usr/local/bin/geckodriver absent",
+  "pngEvidence": null,
+  "peet": null,
+  "recorderB": null,
+  "local": {
+    "refJa4": null,
+    "refH2": null,
+    "declaredH2": "mpas"
+  },
+  "verdict": "CHANNEL-UNAVAILABLE",
+  "witnessed": false
+}

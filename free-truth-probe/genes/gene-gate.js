@@ -39,6 +39,28 @@ try {
 } catch (_) {}
 gates.push({ name: 'external wire verify', run: () => extCached });
 
+// observer authority: the outside world's own verdict (peet/browserleaks) is
+// WITNESSED when >=1 engine agrees externally this pulse. Absence (no observer
+// receipts — e.g. a pure offline check) never turns the gate red on its own:
+// GENOE_REQUIRE_WITNESS=1 forces the demand where a full pulse is expected.
+const obsCached = { pass: true, results: [{ name: 'observer-witness', pass: true, detail: 'no observer receipts (not required offline)' }] };
+try {
+  const dir = path.join(__dirname, 'receipts', 'observer');
+  if (fs.existsSync(dir)) {
+    const files = fs.readdirSync(dir).filter((f) => f.endsWith('.json') && f !== 'index.json');
+    if (files.length) {
+      const rows = files.map((f) => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')));
+      const witnessed = rows.filter((r) => r.witnessed).length;
+      const requireW = process.env.GENOE_REQUIRE_WITNESS === '1';
+      obsCached.pass = witnessed > 0 || !requireW;
+      obsCached.results = [{ name: 'observer-witness', pass: obsCached.pass, detail: witnessed + '/' + rows.length + ' engines externally witnessed' + (requireW ? ' (required)' : ' (advisory)') }];
+    } else {
+      obsCached.results = [{ name: 'observer-witness', pass: true, detail: 'observer receipts cleared this pulse' }];
+    }
+  }
+} catch (_) {}
+gates.push({ name: 'observer authority', run: () => obsCached });
+
 let allPass = true;
 console.log('GENOE GENE GATE');
 for (const g of gates) {

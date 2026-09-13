@@ -43,6 +43,7 @@ function startBlade({ port, timeoutMs = 60000, extraSans = [] } = {}) {
   let captured = null;
   let resolveCap;
   const capturedPromise = new Promise((r) => { resolveCap = r; });
+  const diagnostics = [];
 
   server.on('request', (req, res) => {
     if (!captured) {
@@ -52,6 +53,7 @@ function startBlade({ port, timeoutMs = 60000, extraSans = [] } = {}) {
         remote: req.socket.remoteAddress,
         headers: req.headers,
         order: Object.keys(req.headers),
+        diagnostics: diagnostics.slice(),
       };
       resolveCap(captured);
       setTimeout(() => { try { server.close(); } catch (_) {} }, 300);
@@ -59,7 +61,25 @@ function startBlade({ port, timeoutMs = 60000, extraSans = [] } = {}) {
     res.writeHead(200, { 'content-type': 'text/plain' });
     res.end('GENOE h2 blade captured');
   });
-  server.on('error', (e) => { if (!captured) resolveCap(null); });
+
+  // honest per-observer diagnostics: engines that reach the blade but fail TLS
+  // (cert untrusted, ALPN mismatch, reset) are RECORDED, not silently swallowed.
+  server.on('tlsClientError', (err, socket) => {
+    diagnostics.push({ kind: 'tls', at: new Date().toISOString(), remote: socket && socket.remoteAddress, error: String(err && err.message || err).slice(0, 160) });
+  });
+  server.on('sessionError', (err, socket) => {
+    diagnostics.push({ kind: 'session', at: new Date().toISOString(), error: String(err && err.message || err).slice(0, 160) });
+  });
+  server.on('streamError', (err, socket) => {
+    diagnostics.push({ kind: 'stream', at: new Date().toISOString(), error: String(err && err.message || err).slice(0, 160) });
+  });
+  server.on('error', (e) => {
+    diagnostics.push({ kind: 'server', at: new Date().toISOString(), error: String(e && e.message || e).slice(0, 160) });
+    // Only LISTEN-level failures abort the wait. Transient socket resets must
+    // not kill a capture that a genuine engine request may still complete.
+    const fatal = e && /EADDRINUSE|EACCES|EADDRNOTAVAIL|ERR_SERVER_ALREADY_LISTEN/.test(String(e.code || e.message || ''));
+    if (!captured && fatal) resolveCap(null);
+  });
 
   const listenP = new Promise((res, rej) => { server.once('error', rej); server.listen(port, res); });
 
@@ -73,6 +93,7 @@ function startBlade({ port, timeoutMs = 60000, extraSans = [] } = {}) {
     server,
     listenP,
     wait,
+    diagnostics,
     close() { try { server.close(); } catch (_) {} },
   };
 }

@@ -1,0 +1,79 @@
+{
+  "at": "2026-09-13T05:38:32.736Z",
+  "run": "202609130538326",
+  "service": "https://tls.peet.ws/api/all",
+  "engines": [
+    {
+      "label": "witness-safari",
+      "engine": "safari",
+      "token": "obs=safari.202609130538326.013ckd",
+      "at": "2026-09-13T05:38:32.678Z",
+      "readback": "channel-unavailable",
+      "error": "/usr/bin/safaridriver absent",
+      "pngEvidence": null,
+      "peet": null,
+      "recorderB": null,
+      "local": {
+        "refJa4": "t13d2014h2_a09f3c656075_e42f34c56612",
+        "refH2": "msap",
+        "declaredH2": "msap"
+      },
+      "verdict": "CHANNEL-UNAVAILABLE",
+      "witnessed": false
+    },
+    {
+      "label": "witness-safari-ios",
+      "engine": "safari-ios",
+      "token": "obs=safari-ios.202609130538326.r9dqnk",
+      "at": "2026-09-13T05:38:32.703Z",
+      "readback": "channel-unavailable",
+      "error": "no iPhone device type",
+      "pngEvidence": null,
+      "peet": null,
+      "recorderB": null,
+      "local": {
+        "refJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
+        "refH2": null,
+        "declaredH2": "msap"
+      },
+      "verdict": "CHANNEL-UNAVAILABLE",
+      "witnessed": false
+    },
+    {
+      "label": "witness-chrome",
+      "engine": "chrome",
+      "token": "obs=chrome.202609130538326.flcqa7",
+      "at": "2026-09-13T05:38:32.721Z",
+      "readback": "channel-unavailable",
+      "error": "chrome binary absent",
+      "pngEvidence": null,
+      "peet": null,
+      "recorderB": null,
+      "local": {
+        "refJa4": null,
+        "refH2": "masp",
+        "declaredH2": "masp"
+      },
+      "verdict": "CHANNEL-UNAVAILABLE",
+      "witnessed": false
+    },
+    {
+      "label": "witness-firefox",
+      "engine": "firefox",
+      "token": "obs=firefox.202609130538326.jk4lgz",
+      "at": "2026-09-13T05:38:32.733Z",
+      "readback": "channel-unavailable",
+      "error": "/usr/local/bin/geckodriver absent",
+      "pngEvidence": null,
+      "peet": null,
+      "recorderB": null,
+      "local": {
+        "refJa4": null,
+        "refH2": null,
+        "declaredH2": "mpas"
+      },
+      "verdict": "CHANNEL-UNAVAILABLE",
+      "witnessed": false
+    }
+  ]
+}

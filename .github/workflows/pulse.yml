@@ -15,13 +15,13 @@ concurrency:
 jobs:
   pulse:
     runs-on: macos-15
-    timeout-minutes: 45
+    timeout-minutes: 80
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: pre-check core on host
         run: node free-truth-probe/genes/crosscheck.js --self-test
@@ -40,6 +40,7 @@ jobs:
                 free-truth-probe/genes/receipts/hello-vein-b-iosim.txt \
                 free-truth-probe/genes/receipts/.sim-udid
           rm -rf free-truth-probe/genes/receipts/wire-verify
+          rm -rf free-truth-probe/genes/receipts/observer
           echo "run-owned receipts cleared"
 
       - name: vein-a — real macOS Safari
@@ -126,6 +127,17 @@ jobs:
           ec=$?
           if [ $ec -eq 0 ] || [ $ec -eq 5 ]; then echo "vein-x green (external measurement recorded)"; exit 0; fi
           echo "vein-x FAILED (exit $ec)"
+          exit $ec
+
+      - name: vein-o — CROSS-OBSERVER witness matrix (public h2 observers)
+        if: always()
+        timeout-minutes: 15
+        run: |
+          set +e
+          node free-truth-probe/genes/observer.js
+          ec=$?
+          if [ $ec -eq 0 ]; then echo "vein-o green (observer matrix recorded)"; exit 0; fi
+          echo "vein-o FAILED (exit $ec)"
           exit $ec
 
       - name: seal — GENOE chain #1

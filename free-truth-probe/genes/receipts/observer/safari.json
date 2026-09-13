@@ -1,0 +1,18 @@
+{
+  "label": "witness-safari",
+  "engine": "safari",
+  "token": "obs=safari.202609130538326.013ckd",
+  "at": "2026-09-13T05:38:32.678Z",
+  "readback": "channel-unavailable",
+  "error": "/usr/bin/safaridriver absent",
+  "pngEvidence": null,
+  "peet": null,
+  "recorderB": null,
+  "local": {
+    "refJa4": "t13d2014h2_a09f3c656075_e42f34c56612",
+    "refH2": "msap",
+    "declaredH2": "msap"
+  },
+  "verdict": "CHANNEL-UNAVAILABLE",
+  "witnessed": false
+}

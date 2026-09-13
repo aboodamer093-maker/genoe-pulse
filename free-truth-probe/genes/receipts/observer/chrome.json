@@ -1,0 +1,18 @@
+{
+  "label": "witness-chrome",
+  "engine": "chrome",
+  "token": "obs=chrome.202609130538326.flcqa7",
+  "at": "2026-09-13T05:38:32.721Z",
+  "readback": "channel-unavailable",
+  "error": "chrome binary absent",
+  "pngEvidence": null,
+  "peet": null,
+  "recorderB": null,
+  "local": {
+    "refJa4": null,
+    "refH2": "masp",
+    "declaredH2": "masp"
+  },
+  "verdict": "CHANNEL-UNAVAILABLE",
+  "witnessed": false
+}

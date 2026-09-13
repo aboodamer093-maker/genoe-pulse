@@ -42,6 +42,13 @@ function main() {
     for (const v of last.veins) {
       t.push(['  ' + v.label, v.verdict + (v.match ? '  ->  ' + v.match : ''), v.ja4]);
     }
+    if (last.witnesses && last.witnesses.length) {
+      for (const w of last.witnesses) {
+        t.push(['  ' + w.engine, w.verdict, w.ja4 + (w.h2PseudoOrder ? '  h2=' + w.h2PseudoOrder : '')]);
+      }
+    } else {
+      t.push(['witnessed', 0, 'no external witness sealed this beat']);
+    }
   } else {
     t.push(['oracle pulse', 0, 'no sealed beat yet — next: vein-a/vein-b on macos-15 (free Actions image)']);
   }
