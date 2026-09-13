@@ -1,7 +1,7 @@
 {
   "label": "vein-h-firefox",
   "engine": "firefox",
-  "at": "2026-09-13T08:24:06.968Z",
+  "at": "2026-09-13T15:54:25.137Z",
   "available": true,
   "captured": false,
   "mode": "blade-observational-skip",
@@ -10,69 +10,69 @@
   "diagnostics": [
     {
       "kind": "conn",
-      "at": "2026-09-13T08:22:04.061Z",
+      "at": "2026-09-13T15:52:23.562Z",
       "remote": "::ffff:127.0.0.1"
     },
     {
       "kind": "tls",
-      "at": "2026-09-13T08:22:04.094Z",
+      "at": "2026-09-13T15:52:23.600Z",
       "remote": "::ffff:127.0.0.1",
-      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+      "error": "C0E2400102000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
     },
     {
       "kind": "conn",
-      "at": "2026-09-13T08:22:04.117Z",
+      "at": "2026-09-13T15:52:23.726Z",
       "remote": "::ffff:127.0.0.1"
     },
     {
       "kind": "tls",
-      "at": "2026-09-13T08:22:04.119Z",
+      "at": "2026-09-13T15:52:23.732Z",
       "remote": "::ffff:127.0.0.1",
-      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+      "error": "C0E2400102000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
     },
     {
       "kind": "conn",
-      "at": "2026-09-13T08:22:04.123Z",
+      "at": "2026-09-13T15:52:23.747Z",
       "remote": "::ffff:127.0.0.1"
     },
     {
       "kind": "tls",
-      "at": "2026-09-13T08:22:04.125Z",
+      "at": "2026-09-13T15:52:23.768Z",
       "remote": "::ffff:127.0.0.1",
-      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+      "error": "C0E2400102000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
     },
     {
       "kind": "conn",
-      "at": "2026-09-13T08:23:09.593Z",
+      "at": "2026-09-13T15:53:28.517Z",
       "remote": "::ffff:127.0.0.1"
     },
     {
       "kind": "tls",
-      "at": "2026-09-13T08:23:09.618Z",
+      "at": "2026-09-13T15:53:28.554Z",
       "remote": "::ffff:127.0.0.1",
-      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+      "error": "C0E2400102000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
     },
     {
       "kind": "conn",
-      "at": "2026-09-13T08:23:09.658Z",
+      "at": "2026-09-13T15:53:28.630Z",
       "remote": "::ffff:127.0.0.1"
     },
     {
       "kind": "tls",
-      "at": "2026-09-13T08:23:09.667Z",
+      "at": "2026-09-13T15:53:28.632Z",
       "remote": "::ffff:127.0.0.1",
-      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+      "error": "C0E2400102000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
     },
     {
       "kind": "conn",
-      "at": "2026-09-13T08:23:09.670Z",
+      "at": "2026-09-13T15:53:28.649Z",
       "remote": "::ffff:127.0.0.1"
     },
     {
       "kind": "tls",
-      "at": "2026-09-13T08:23:09.673Z",
+      "at": "2026-09-13T15:53:28.652Z",
       "remote": "::ffff:127.0.0.1",
-      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+      "error": "C0E2400102000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
     }
   ]
 }
