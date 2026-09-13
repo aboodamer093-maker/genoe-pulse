@@ -1,11 +1,12 @@
 {
   "label": "witness-safari",
   "engine": "safari",
-  "token": "obs=safari.202609130747376.wmc4u0",
-  "at": "2026-09-13T07:48:07.260Z",
+  "token": "obs=safari.202609130826064.m5czh9",
+  "at": "2026-09-13T08:26:35.088Z",
   "readback": "webdriver-source",
   "error": null,
   "pngEvidence": null,
+  "readbackPreview": null,
   "peet": {
     "ok": true,
     "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",

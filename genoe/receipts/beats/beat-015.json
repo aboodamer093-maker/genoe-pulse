@@ -1,0 +1,88 @@
+{
+  "kind": "genoe/chain/beat",
+  "seal": 15,
+  "at": "2026-09-13T08:30:26.386Z",
+  "prevHash": "f7a8264b6e80f752fa9436f2d618421ce8ba6070815baa375aef158dd74d5cc7",
+  "veins": [
+    {
+      "label": "vein-a-safari",
+      "at": "2026-09-13T08:17:51.528Z",
+      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+      "verdict": "EXACT-MATCH",
+      "match": "Sealed measured beat-000.json"
+    },
+    {
+      "label": "vein-b-iosim",
+      "at": "2026-09-13T08:20:04.554Z",
+      "ja4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
+      "verdict": "EXACT-MATCH",
+      "match": "Safari 26.0.1"
+    }
+  ],
+  "surface": {
+    "label": "vein-s-macos",
+    "at": "2026-09-13T08:20:25.471Z",
+    "platform": "macOS",
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
+    "uaChAbsent": true
+  },
+  "h2": [
+    {
+      "label": "vein-h-chrome",
+      "engine": "chrome",
+      "at": "2026-09-13T08:20:53.120Z",
+      "h2Code": "masp",
+      "matchesDeclared": true
+    },
+    {
+      "label": "vein-h-safari",
+      "engine": "safari",
+      "at": "2026-09-13T08:20:39.444Z",
+      "h2Code": "msap",
+      "matchesDeclared": true
+    }
+  ],
+  "witnesses": [
+    {
+      "engine": "chrome",
+      "at": "2026-09-13T08:29:50.860Z",
+      "token": "obs=chrome.202609130826064.j4hqqm",
+      "verdict": "WITNESSED-EXTERNAL",
+      "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
+      "h2PseudoOrder": "masp",
+      "cross": {
+        "ja4AgreeLocal": null,
+        "ja4AgreeRecorderB": true,
+        "corpusHit": null,
+        "h2AgreeLocal": true,
+        "h2AgreeDeclared": true
+      },
+      "recorderBJa4": "t13d1517h2_8daaf6152771_cb7bf5808d99"
+    },
+    {
+      "engine": "safari",
+      "at": "2026-09-13T08:26:35.088Z",
+      "token": "obs=safari.202609130826064.m5czh9",
+      "verdict": "WITNESSED-DOUBLE",
+      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+      "h2PseudoOrder": "msap",
+      "cross": {
+        "ja4AgreeLocal": true,
+        "ja4AgreeRecorderB": true,
+        "corpusHit": "Sealed measured beat-000.json",
+        "h2AgreeLocal": true,
+        "h2AgreeDeclared": true
+      },
+      "recorderBJa4": "t13d2014h2_a09f3c656075_e42f34c56612"
+    }
+  ],
+  "summary": {
+    "veins": 2,
+    "exactMatches": 2,
+    "references": 0,
+    "surface": 1,
+    "h2Blades": 2,
+    "witnesses": 2
+  },
+  "hash": "6febfbb124d36bfbb0979b25deac55c98e349ed1c59ff277942400cb74a4a85c"
+}

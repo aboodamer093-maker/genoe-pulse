@@ -1,9 +1,11 @@
 {
   "label": "vein-h-iosim",
   "engine": "safari-ios",
-  "at": "2026-09-13T07:47:33.633Z",
+  "at": "2026-09-13T08:26:03.372Z",
   "available": true,
   "captured": false,
-  "note": "mobile surface present but no h2 HEADERS request completed on sim (trust/loopback quirk)",
+  "mode": "blade-observational-skip",
+  "reason": "sim-mobile-safari-cannot-reach-hosted-private-blade (loopback/bridge unreachable)",
+  "coveredBy": "external observer lane (iOS OCR) + sealed beats + vein-b corpus",
   "diagnostics": []
 }

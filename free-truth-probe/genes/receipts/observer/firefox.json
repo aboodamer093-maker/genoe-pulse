@@ -1,11 +1,12 @@
 {
   "label": "witness-firefox",
   "engine": "firefox",
-  "token": "obs=firefox.202609130747376.tgmum7",
-  "at": "2026-09-13T07:53:23.122Z",
+  "token": "obs=firefox.202609130826064.gotn2o",
+  "at": "2026-09-13T08:30:26.086Z",
   "readback": "readback-failed",
   "error": "no webdriver session — no driver output",
   "pngEvidence": null,
+  "readbackPreview": null,
   "peet": null,
   "recorderB": null,
   "local": {

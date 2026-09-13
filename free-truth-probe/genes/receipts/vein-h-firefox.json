@@ -1,9 +1,78 @@
 {
   "label": "vein-h-firefox",
   "engine": "firefox",
-  "at": "2026-09-13T07:45:38.846Z",
+  "at": "2026-09-13T08:24:06.968Z",
   "available": true,
   "captured": false,
-  "note": "engine present but no h2 request captured on runner this pulse (cold-start/trust flake)",
-  "diagnostics": []
+  "mode": "blade-observational-skip",
+  "reason": "firefox-nss-trusts-apple-stock-roots-only; ad-hoc root not importable on hosted runner (certutil absent)",
+  "coveredBy": "external observer lane + sealed historical beats",
+  "diagnostics": [
+    {
+      "kind": "conn",
+      "at": "2026-09-13T08:22:04.061Z",
+      "remote": "::ffff:127.0.0.1"
+    },
+    {
+      "kind": "tls",
+      "at": "2026-09-13T08:22:04.094Z",
+      "remote": "::ffff:127.0.0.1",
+      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+    },
+    {
+      "kind": "conn",
+      "at": "2026-09-13T08:22:04.117Z",
+      "remote": "::ffff:127.0.0.1"
+    },
+    {
+      "kind": "tls",
+      "at": "2026-09-13T08:22:04.119Z",
+      "remote": "::ffff:127.0.0.1",
+      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+    },
+    {
+      "kind": "conn",
+      "at": "2026-09-13T08:22:04.123Z",
+      "remote": "::ffff:127.0.0.1"
+    },
+    {
+      "kind": "tls",
+      "at": "2026-09-13T08:22:04.125Z",
+      "remote": "::ffff:127.0.0.1",
+      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+    },
+    {
+      "kind": "conn",
+      "at": "2026-09-13T08:23:09.593Z",
+      "remote": "::ffff:127.0.0.1"
+    },
+    {
+      "kind": "tls",
+      "at": "2026-09-13T08:23:09.618Z",
+      "remote": "::ffff:127.0.0.1",
+      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+    },
+    {
+      "kind": "conn",
+      "at": "2026-09-13T08:23:09.658Z",
+      "remote": "::ffff:127.0.0.1"
+    },
+    {
+      "kind": "tls",
+      "at": "2026-09-13T08:23:09.667Z",
+      "remote": "::ffff:127.0.0.1",
+      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+    },
+    {
+      "kind": "conn",
+      "at": "2026-09-13T08:23:09.670Z",
+      "remote": "::ffff:127.0.0.1"
+    },
+    {
+      "kind": "tls",
+      "at": "2026-09-13T08:23:09.673Z",
+      "remote": "::ffff:127.0.0.1",
+      "error": "C0E295F201000000:error:0A000412:SSL routines:ssl3_read_bytes:ssl/tls alert bad certificate:../deps/openssl/openssl/ssl/record/rec_layer_s3.c:918:SSL alert numbe"
+    }
+  ]
 }
