@@ -1,10 +1,10 @@
 {
   "label": "vein-a-safari",
-  "at": "2026-09-13T00:53:57.305Z",
+  "at": "2026-09-13T01:19:58.232Z",
   "nav": "safaridriver",
   "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
   "a": "t13d2014h2",
-  "verdict": "NOT-IN-CORPUS",
-  "match": null,
+  "verdict": "EXACT-MATCH",
+  "match": "Sealed measured beat-000.json",
   "helloHexFile": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/hello-vein-a-safari.txt"
 }

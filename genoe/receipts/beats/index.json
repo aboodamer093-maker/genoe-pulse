@@ -3,7 +3,8 @@
   "rootSeed": "chain-0-genesis.json",
   "beats": [
     "beat-000.json",
-    "beat-001.json"
+    "beat-001.json",
+    "beat-002.json"
   ],
-  "lastHash": "68be2ae66ac019ba858fa8dd323d17c305931a0add959e7537f0c04fda6e58c5"
+  "lastHash": "3a6cfd35d42039bb661f5dd4bde0e0a0bc2be09a96f6128f97ffb4296986314e"
 }
