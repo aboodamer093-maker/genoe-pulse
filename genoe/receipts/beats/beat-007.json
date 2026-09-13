@@ -1,0 +1,53 @@
+{
+  "kind": "genoe/chain/beat",
+  "seal": 7,
+  "at": "2026-09-13T03:11:48.822Z",
+  "prevHash": "fc196ff823ca894ce671ae10402e4dab418694dff4af92572c47ca26dde2a835",
+  "veins": [
+    {
+      "label": "vein-a-safari",
+      "at": "2026-09-13T03:01:39.060Z",
+      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+      "verdict": "EXACT-MATCH",
+      "match": "Sealed measured beat-000.json"
+    },
+    {
+      "label": "vein-b-iosim",
+      "at": "2026-09-13T03:05:53.747Z",
+      "ja4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
+      "verdict": "EXACT-MATCH",
+      "match": "Safari 26.0.1"
+    }
+  ],
+  "surface": {
+    "label": "vein-s-macos",
+    "at": "2026-09-13T03:06:17.762Z",
+    "platform": "macOS",
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
+    "uaChAbsent": true
+  },
+  "h2": [
+    {
+      "label": "vein-h-chrome",
+      "engine": "chrome",
+      "at": "2026-09-13T03:06:41.435Z",
+      "h2Code": "masp",
+      "matchesDeclared": true
+    },
+    {
+      "label": "vein-h-safari",
+      "engine": "safari",
+      "at": "2026-09-13T03:06:28.681Z",
+      "h2Code": "msap",
+      "matchesDeclared": true
+    }
+  ],
+  "summary": {
+    "veins": 2,
+    "exactMatches": 2,
+    "references": 0,
+    "surface": 1,
+    "h2Blades": 2
+  },
+  "hash": "542c808e0fb25e0f71a5d02ff5e4d0c7c0cf2b3a4bf9279d5d417eba7374a869"
+}
