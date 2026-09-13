@@ -71,6 +71,9 @@ const VECTOR_SAFARI_266 = {
   alpnFirst: Buffer.from('h2'),
 };
 const EXPECTED_SAFARI_266 = 't1302013h2_a09f3c656075_e42f34c56612';
+// Domain-SNI (localhost capture target) variant, as measured by the oracle:
+// -> t13d2014h2_a09f3c656075_e42f34c56612
+const EXPECTED_SAFARI_266_DOMAIN = 't13d2014h2_a09f3c656075_e42f34c56612';
 
 function selfTest() {
   const suite = [
@@ -88,9 +91,9 @@ function selfTest() {
     const got = ja4.fromBuffer(Buffer.from(hex, 'hex'));
     results.push({
       name: 'Real captured Safari 26.6 buffer',
-      pass: got.ja4 === EXPECTED_SAFARI_266,
+      pass: got.ja4 === EXPECTED_SAFARI_266_DOMAIN,
       got: got.ja4,
-      expected: EXPECTED_SAFARI_266,
+      expected: EXPECTED_SAFARI_266_DOMAIN,
       buffer: true,
     });
   }
