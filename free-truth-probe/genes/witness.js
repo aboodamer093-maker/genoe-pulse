@@ -144,10 +144,15 @@ async function webdriverSource({ driverBin, driverArgs, browserName, navigate, r
     const sig = () => AbortSignal.timeout(20000);
     const base = 'http://127.0.0.1:' + driverArgs[driverArgs.indexOf('-p') + 1];
     let ssid = null;
+    let statusProbe = '';
     const caps = { browserName };
     if (firefoxArgs.length) caps['moz:firefoxOptions'] = { args: firefoxArgs };
+    if (browserName === 'firefox') caps['moz:firefoxOptions'].binary = '/Applications/Firefox.app/Contents/MacOS/firefox';
     const deadline = Date.now() + 30000;
     while (Date.now() < deadline) {
+      try {
+        await fetch(base + '/status', { signal: sig() }).then(async (s) => { const t = await s.text(); statusProbe = 'status:' + s.status + ' ' + t.slice(0, 80); }).catch((e) => { statusProbe = 'status-probe: ' + String(e.message).slice(0, 60); });
+      } catch (_) { statusProbe = 'status-probe: unreachable'; }
       try {
         const r = await fetch(base + '/session', {
           method: 'POST', signal: sig(), headers: { 'content-type': 'application/json' },
@@ -157,7 +162,7 @@ async function webdriverSource({ driverBin, driverArgs, browserName, navigate, r
       } catch (_) { /* driver still starting */ }
       await delay(700);
     }
-    if (!ssid) return { ok: false, reason: 'readback-failed', error: 'no webdriver session — ' + (stderrTail.trim() || 'no driver output') };
+    if (!ssid) return { ok: false, reason: 'readback-failed', error: 'no webdriver session — ' + (stderrTail.trim() || statusProbe || 'no driver output') };
     const results = [];
     for (const url of navigate) {
       await fetch(base + '/session/' + ssid + '/url', {
@@ -275,7 +280,12 @@ async function iosReadback({ udid, url, outDir, token }) {
   run('xcrun', ['simctl', 'openurl', udid, url], { stdio: 'ignore' });
   await delay(10000);
   const png = path.join(outDir, 'witness-ios-' + (token || 'shot') + '.png');
-  const shot = run('xcrun', ['simctl', 'io', udid, 'screenshot', png], { timeout: 20000 });
+  let shot = run('xcrun', ['simctl', 'io', udid, 'screenshot', png], { timeout: 20000 });
+  // simulator screenshots flake on loaded runners — one bounded retry
+  if (shot.status !== 0) {
+    await delay(4000);
+    shot = run('xcrun', ['simctl', 'io', udid, 'screenshot', png], { timeout: 20000 });
+  }
   if (shot.status !== 0) return { ok: false, error: 'screenshot failed', png: null };
   const ocr = ocrSwift(png);
   return { ok: ocr.ok, text: ocr.ok ? ocr.text : null, error: ocr.ok ? null : ocr.error, png, preview: ocr.ok ? String(ocr.text).slice(0, 500) : null };
