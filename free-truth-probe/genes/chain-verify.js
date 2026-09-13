@@ -75,18 +75,28 @@ function gateResult() {
 }
 
 if (require.main === module) {
-  const v = verifyChain();
+  // ALWAYS write a committed verdict file — even on crash — so a red post-seal
+  // verification can never hide its own cause from future analysis.
+  const verdictPath = path.join(__dirname, 'receipts', 'chain-verify.json');
+  const writeVerdict = (doc) => {
+    try {
+      fs.mkdirSync(path.dirname(verdictPath), { recursive: true });
+      fs.writeFileSync(verdictPath, JSON.stringify(doc, null, 2) + '\n');
+    } catch (_) {}
+  };
+  let v = null;
+  let crash = null;
+  try {
+    v = verifyChain();
+  } catch (e) {
+    crash = String(e && e.stack || e);
+    v = { ok: false, beats: [], maxSeal: -1, errors: ['CLI crashed: ' + crash] };
+  }
   console.log('CHAIN VERIFY ' + (v.ok ? 'GREEN' : 'RED'));
   console.log('  beats=' + v.beats.length + '  last=' + (v.maxSeal >= 0 ? 'beat-' + String(v.maxSeal).padStart(3, '0') : 'genesis only'));
   for (const e of (v.errors || []).slice(0, 25)) console.log('  ERR ' + e);
-  if (process.argv.includes('--json')) {
-    const out = path.join(__dirname, 'receipts', 'chain-verify.json');
-    try {
-      fs.mkdirSync(path.dirname(out), { recursive: true });
-      fs.writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), ok: v.ok, beats: v.beats.length, last: v.maxSeal, errors: (v.errors || []).slice(0, 40) }, null, 2) + '\n');
-      console.log('  verdict written to receipts/chain-verify.json');
-    } catch (e) { console.error('  could not write verdict: ' + e.message); }
-  }
+  writeVerdict({ at: new Date().toISOString(), ok: v.ok, beats: v.beats.length, last: v.maxSeal, errors: (v.errors || []).slice(0, 60), crash: crash || null });
+  console.log('  verdict written to receipts/chain-verify.json');
   process.exit(v.ok ? 0 : 22);
 }
 

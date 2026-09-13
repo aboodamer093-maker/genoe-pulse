@@ -141,7 +141,22 @@ async function runEngine(engine) {
 
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
-  setTimeout(() => { console.error('VEIN-O WATCHDOG exit'); process.exit(3); }, 600000).unref();
+  // pre-clean leftover drivers/browsers from the burst so this matrix is the
+  // only consumer of the runner's memory at its own start (the observer
+  // relaunches every engine itself right after)
+  try {
+    for (const k of ['geckodriver', 'safaridriver', 'Google Chrome', 'Firefox', 'Safari']) run('pkill', ['-f', k], { stdio: 'ignore' });
+  } catch (_) {}
+  // ALWAYS leave a committed index — even when the matrix itself dies — so a
+  // red observer can never hide its own cause from future analysis.
+  const writeIndex = (status, note) => {
+    try {
+      fs.writeFileSync(path.join(OUTDIR, 'index.json'), JSON.stringify({ at: new Date().toISOString(), run: RUN, service: PEET, status, note, engines: [] }, null, 2) + '\n');
+    } catch (_) {}
+  };
+  process.on('uncaughtException', (e) => { console.error('VEIN-O UNCAUGHT ' + (e && e.stack || e)); writeIndex('crashed', 'uncaughtException: ' + (e && e.message)); process.exit(12); });
+  process.on('unhandledRejection', (e) => { console.error('VEIN-O UNHANDLED-REJECTION ' + (e && e.stack || e)); writeIndex('crashed', 'unhandledRejection: ' + (e && e.message)); process.exit(13); });
+  setTimeout(() => { console.error('VEIN-O WATCHDOG exit'); writeIndex('watchdog', '600s watchdog'); process.exit(3); }, 600000).unref();
   console.log('VEIN-O observer matrix (independent public h2/JA4 observers)');
   console.log('VEIN-O watching ' + JSON.stringify(['safari', 'safari-ios', 'chrome', 'firefox']));
 
