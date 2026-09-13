@@ -122,27 +122,31 @@ function chromeDumpDom(url, { timeoutMs = 35000 } = {}) {
 // Generic W3C WebDriver readback: spawn driver, open a session (with bounded
 // retry for cold driver startup), navigate, then GET /session/:id/source.
 // navigate() may perform multiple URLs to give a single physical browser shot.
-async function webdriverSource({ driverBin, driverArgs, browserName, navigate, readyMs = 5000 }) {
+async function webdriverSource({ driverBin, driverArgs, browserName, navigate, readyMs = 5000, firefoxArgs = [], env = {} }) {
   if (!fs.existsSync(driverBin)) return { ok: false, reason: 'channel-unavailable', error: driverBin + ' absent' };
-  const drv = spawn(driverBin, driverArgs, { stdio: 'ignore' });
+  let stderrTail = '';
+  const drv = spawn(driverBin, driverArgs, { stdio: ['ignore', 'ignore', 'pipe'], env: { ...process.env, ...env } });
+  drv.stderr.on('data', (d) => { stderrTail = (stderrTail + String(d)).slice(-600); });
   const killNames = browserName === 'safari' ? ['Safari'] : [];
   try {
     await delay(readyMs);
     const sig = () => AbortSignal.timeout(20000);
     const base = 'http://127.0.0.1:' + driverArgs[driverArgs.indexOf('-p') + 1];
     let ssid = null;
+    const caps = { browserName };
+    if (firefoxArgs.length) caps['moz:firefoxOptions'] = { args: firefoxArgs };
     const deadline = Date.now() + 30000;
     while (Date.now() < deadline) {
       try {
         const r = await fetch(base + '/session', {
           method: 'POST', signal: sig(), headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ capabilities: { alwaysMatch: { browserName } } }),
+          body: JSON.stringify({ capabilities: { alwaysMatch: caps } }),
         }).then((x) => x.json());
         if (r && r.value && r.value.sessionId) { ssid = r.value.sessionId; break; }
       } catch (_) { /* driver still starting */ }
       await delay(700);
     }
-    if (!ssid) return { ok: false, reason: 'readback-failed', error: 'no webdriver session' };
+    if (!ssid) return { ok: false, reason: 'readback-failed', error: 'no webdriver session — ' + (stderrTail.trim() || 'no driver output') };
     const results = [];
     for (const url of navigate) {
       await fetch(base + '/session/' + ssid + '/url', {
@@ -190,9 +194,13 @@ function resolveGeckodriver() {
 async function firefoxSource(urls, opts) {
   const gecko = resolveGeckodriver();
   if (!gecko) return { ok: false, reason: 'channel-unavailable', error: 'geckodriver not found on PATH' };
+  // headless + proxy-free: runner envs proxy 127.0.0.1; Firefox must talk to
+  // the geckodriver-provoked session directly and open its own window-less
+  // profile on GUI-less CI images.
+  const env = { HTTP_PROXY: '', HTTPS_PROXY: '', ALL_PROXY: '', NO_PROXY: '127.0.0.1,localhost,::1', http_proxy: '', https_proxy: '', all_proxy: '', no_proxy: '127.0.0.1,localhost,::1' };
   return webdriverSource({
-    driverBin: gecko, driverArgs: ['--port', '4446'],
-    browserName: 'firefox', navigate: Array.isArray(urls) ? urls : [urls], ...opts,
+    driverBin: gecko, driverArgs: ['--port', '4446'], firefoxArgs: ['-headless'],
+    browserName: 'firefox', navigate: Array.isArray(urls) ? urls : [urls], env, ...opts,
   });
 }
 
@@ -230,7 +238,12 @@ function ocrSwift(png) {
     _ocrBin = path.join(os.tmpdir(), 'genoe-ocr-' + process.pid);
     const src = path.join(__dirname, '..', 'tools', 'ocr.swift');
     if (!fs.existsSync(src)) return { ok: false, error: 'tools/ocr.swift missing' };
-    const c = spawnSync(swiftc, ['-O', src, '-o', _ocrBin], { encoding: 'utf8', timeout: 180000 });
+    // the built-in stdlib is only found when the SDK the compiler targets is
+    // on board — a bare swiftc on an unselected-Xcode image fails with
+    // "unable to load standard library". Pin the macOS SDK explicitly.
+    const sdkPath = run('xcrun', ['--sdk', 'macosx', '--show-sdk-path']).stdout.trim();
+    const sdkArgs = sdkPath ? ['-sdk', sdkPath] : [];
+    const c = spawnSync(swiftc, ['-O', ...sdkArgs, src, '-o', _ocrBin], { encoding: 'utf8', timeout: 180000 });
     if (c.status !== 0) return { ok: false, error: 'swiftc build: ' + ((c.stderr || '').slice(0, 200) || 'rc ' + c.status) };
   }
   const r = spawnSync(_ocrBin, [png], { encoding: 'utf8', timeout: 45000, maxBuffer: 1 << 22 });

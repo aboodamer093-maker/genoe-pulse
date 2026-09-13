@@ -44,7 +44,8 @@ async function main() {
     'pref("browser.shell.checkDefaultBrowser", false);\n' +
     'pref("browser.tabs.warnOnClose", false);\n' +
     'pref("network.http.max-connections", 64);\n');
-  const navigate = () => spawn(BIN, ['--headless', '--profile', profile, '--no-remote', 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore' });
+  const clearProxy = { HTTP_PROXY: '', HTTPS_PROXY: '', ALL_PROXY: '', NO_PROXY: '127.0.0.1,localhost,::1', http_proxy: '', https_proxy: '', all_proxy: '', no_proxy: '127.0.0.1,localhost,::1' };
+  const navigate = () => spawn(BIN, ['--headless', '--allow-insecure-localhost', '--profile', profile, '--no-remote', 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore', env: { ...process.env, ...clearProxy } });
   const attempts = [];
   let child = navigate();
   attempts.push(blade.wait());

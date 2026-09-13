@@ -68,27 +68,35 @@ async function main() {
     log('booted');
   }
 
-  // host LAN IP — loopback can be h2-special-cased by WebKit; a real LAN target
-  // forces the NORMAL h2 path (sim shares the host's network stack)
-  let lanIp = null;
-  for (const iface of ['en0', 'en1']) {
-    const ip = run('ipconfig', ['getifaddr', iface]);
-    if (ip.status === 0 && /^\d+\.\d+\.\d+\.\d+$/.test((ip.stdout || '').trim())) { lanIp = ip.stdout.trim(); break; }
-  }
-  const extra = lanIp ? ['IP:' + lanIp] : [];
-  const blade = startBlade({ port: PORT, timeoutMs: 45000, extraSans: extra });
+  // host address the SIMULATOR can actually reach: not the host's own LAN IP
+  // (the sim routes out through a bridge), but the default-gateway IP the sim
+  // sees as its hop to the network — on Apple Virtualization sims that is
+  // 192.168.64.1. Loopback is NOT shared with the app on newer runtimes.
+  const reachableHost = () => {
+    const rt = run('netstat', ['-rn', '-f', 'inet']);
+    const gw = (rt.stdout || '').split('\n').filter((l) => /default/.test(l)).map((l) => l.trim().split(/\s+/)[1]).find((x) => /^\d+\.\d+\.\d+\.\d+$/.test(x || ''));
+    if (gw) return gw;
+    for (const iface of ['en0', 'en1']) {
+      const ip = run('ipconfig', ['getifaddr', iface]);
+      if (ip.status === 0 && /^\d+\.\d+\.\d+\.\d+$/.test((ip.stdout || '').trim())) return ip.stdout.trim();
+    }
+    return null;
+  };
+  const host = reachableHost();
+  const sans = host ? ['IP:' + host] : [];
+  const blade = startBlade({ port: PORT, timeoutMs: 45000, extraSans: sans });
   await blade.listenP;
-  log('blade on :' + PORT + (lanIp ? ' (+SAN ' + lanIp + ')' : ' (loopback only)'));
+  log('blade on :' + PORT + (host ? ' (+SAN ' + host + ')' : ' (loopback only)'));
 
   // install the SAME blade root into the simulator's OWN trust store (DER)
   const der = path.join(os.tmpdir(), 'genoe-blade-crt.der');
-  const { crt: pem } = trustCert({ extraSans: extra });
+  const { crt: pem } = trustCert({ extraSans: sans });
   const derConv = run('openssl', ['x509', '-in', pem, '-outform', 'der', '-out', der]);
   const added = run('xcrun', ['simctl', 'keychain', udid, 'add-root-cert', der]);
   log('sim trust openssl rc=' + (derConv.status ?? '?') + ' simctl rc=' + (added.status ?? '?'));
   if (derConv.status !== 0 || added.status !== 0) log('  (soft: proceeding anyway)');
 
-  const target = 'https://' + (lanIp || 'localhost') + ':' + PORT + '/blade';
+  const target = 'https://' + (host || 'localhost') + ':' + PORT + '/blade';
   log('navigating ' + target);
   let done = false;
   const pull = () => Promise.race([blade.wait(), new Promise((_, rej) => setTimeout(() => rej(new Error('pending')), 900))]).then((c) => { done = true; return c; }).catch(() => run('xcrun', ['simctl', 'openurl', udid, target], { stdio: 'ignore' }));
