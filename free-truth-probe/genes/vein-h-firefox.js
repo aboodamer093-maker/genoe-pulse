@@ -1,45 +1,49 @@
 'use strict';
 /*
  * GENOE — VEIN-H FIREFOX: real macOS Firefox h2 HEADERS frame.
- * Firefox ships on the macos runners; driven via `open -a`. Firefox treats
- * the system-trusted cert as valid for this local endpoint.
+ * Detects the binary; when absent on the runner it records that honestly and
+ * exits 0 (nothing to measure). When present it launches the real binary
+ * headless against the shared h2 blade — genuine Gecko wire.
  */
-const { spawnSync } = require('child_process');
+const { spawn } = require('child_process');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { startBlade, measuredOrderCode } = require('./blade.js');
 const mspa = require('./mspa.js');
 
 const PORT = 10908;
 const LABEL = 'vein-h-firefox';
+const BIN = '/Applications/Firefox.app/Contents/MacOS/firefox';
 const OUTDIR = path.join(__dirname, 'receipts');
-const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function main() {
   fs.mkdirSync(OUTDIR, { recursive: true });
   setTimeout(() => { console.error('VEIN-H-FIREFOX WATCHDOG exit'); process.exit(3); }, 70000).unref();
+
+  if (!fs.existsSync(BIN)) {
+    fs.writeFileSync(path.join(OUTDIR, LABEL + '.json'), JSON.stringify({
+      label: LABEL, engine: 'firefox', at: new Date().toISOString(), available: false,
+      note: 'Firefox not on this runner — nothing to measure (honest skip)',
+    }, null, 2) + '\n');
+    console.log('VEIN-H-FIREFOX engine not on runner (skip, exit 0)');
+    process.exit(0);
+  }
+
   const blade = startBlade({ port: PORT, timeoutMs: 60000 });
   await blade.listenP;
-  const f = spawnSync('open', ['-a', 'Firefox', 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore', timeout: 20000 });
-  if (f.error) console.error('open: ' + f.error.message);
+  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'genoe-ff-'));
+  const child = spawn(BIN, ['--headless', '--profile', profile, 'https://localhost:' + PORT + '/blade'], { stdio: 'ignore' });
   const cap = await blade.wait();
-  spawnSync('killall', ['Firefox'], { stdio: 'ignore' });
+  try { child.kill('SIGTERM'); } catch (_) {}
   blade.close();
   if (!cap) { console.error('VEIN-H-FIREFOX FAIL no request captured'); process.exit(14); }
 
   const h2Code = measuredOrderCode(cap.order);
   const declared = mspa.H2_ORDER.firefox;
   const doc = {
-    label: LABEL,
-    engine: 'firefox',
-    at: cap.at,
-    platform: 'macOS',
-    source: 'measured',
-    alpn: cap.alpn,
-    order: cap.order,
-    h2Code,
-    matchesDeclared: h2Code === declared.code,
-    headers: cap.headers,
+    label: LABEL, engine: 'firefox', at: cap.at, platform: 'macOS', source: 'measured', available: true,
+    alpn: cap.alpn, order: cap.order, h2Code, matchesDeclared: h2Code === declared.code, headers: cap.headers,
   };
   fs.writeFileSync(path.join(OUTDIR, LABEL + '.json'), JSON.stringify(doc, null, 2) + '\n');
   console.log('VEIN-H-FIREFOX measured Firefox h2 HEADERS  order=' + cap.order.join(',') + '  code=' + h2Code + '  declared=' + declared.code + '  ' + (doc.matchesDeclared ? 'MATCH' : 'MISMATCH'));
