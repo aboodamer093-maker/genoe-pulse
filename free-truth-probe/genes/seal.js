@@ -44,6 +44,14 @@ function loadSurface() {
   return { label: v.label, at: v.at, platform: v.platform, ua: v.ua, uaChAbsent: v.uaChAbsent };
 }
 
+function loadH2() {
+  const p = path.join(RECEIPTS, 'vein-h-macos.json');
+  if (!fs.existsSync(p)) return null;
+  const v = JSON.parse(fs.readFileSync(p, 'utf8'));
+  if (!fresh(v.at)) return null;
+  return { label: v.label, at: v.at, platform: v.platform, h2Code: v.h2Code, matchesDeclared: v.matchesDeclared, order: v.order };
+}
+
 function main() {
   if (!fs.existsSync(GENESIS)) { console.error('SEAL FAIL missing genesis ' + GENESIS); process.exit(20); }
   fs.mkdirSync(BEATS_DIR, { recursive: true });
@@ -65,11 +73,13 @@ function main() {
     prevHash,
     veins,
     surface: loadSurface(),
+    h2: loadH2(),
     summary: {
       veins: veins.length,
       exactMatches: veins.filter((v) => v.verdict === 'EXACT-MATCH').length,
       references: veins.filter((v) => v.verdict === 'NOT-IN-CORPUS').length,
       surface: loadSurface() ? 1 : 0,
+      h2Blade: loadH2() ? 1 : 0,
     },
   };
   block.hash = sha256(block);
