@@ -1,8 +1,8 @@
 {
   "label": "witness-chrome",
   "engine": "chrome",
-  "token": "obs=chrome.202609132319175.esa2bs",
-  "at": "2026-09-13T23:21:47.011Z",
+  "token": "obs=chrome.202609140036305.sw4hhz",
+  "at": "2026-09-14T00:39:58.305Z",
   "readback": "readback-failed",
   "error": "spawnSync /Applications/Google Chrome.app/Contents/MacOS/Google Chrome ETIMEDOUT",
   "pngEvidence": null,

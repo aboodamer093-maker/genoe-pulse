@@ -1,0 +1,40 @@
+{
+  "kind": "genoe/chain/beat",
+  "seal": 23,
+  "at": "2026-09-14T00:41:50.869Z",
+  "prevHash": "43c3e99dbca7f44bbdae6cacab75f4251e1f44d88145ae2f56a6079a5a526df4",
+  "veins": [
+    {
+      "label": "vein-a-safari",
+      "at": "2026-09-13T23:10:27.435Z",
+      "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+      "verdict": "EXACT-MATCH",
+      "match": "Sealed measured beat-000.json"
+    },
+    {
+      "label": "vein-b-iosim",
+      "at": "2026-09-13T23:16:46.459Z",
+      "ja4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
+      "verdict": "EXACT-MATCH",
+      "match": "Safari 26.0.1"
+    }
+  ],
+  "surface": {
+    "label": "vein-s-macos",
+    "at": "2026-09-13T23:13:34.367Z",
+    "platform": "macOS",
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
+    "uaChAbsent": true
+  },
+  "h2": [],
+  "witnesses": [],
+  "summary": {
+    "veins": 2,
+    "exactMatches": 2,
+    "references": 0,
+    "surface": 1,
+    "h2Blades": 0,
+    "witnesses": 0
+  },
+  "hash": "2ad4d270fb0ebbd9957846ab17d0b62342b35b4b7829f14f7e07c2a6137c7e0e"
+}
