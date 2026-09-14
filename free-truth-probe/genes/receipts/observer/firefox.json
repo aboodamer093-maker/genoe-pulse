@@ -1,8 +1,8 @@
 {
   "label": "witness-firefox",
   "engine": "firefox",
-  "token": "obs=firefox.202609140036305.4q6fdc",
-  "at": "2026-09-14T00:41:20.174Z",
+  "token": "obs=firefox.202609140855223.3r3bcv",
+  "at": "2026-09-14T09:01:04.170Z",
   "readback": "readback-failed",
   "error": "no webdriver session — *** You are running in headless mode.",
   "pngEvidence": null,
