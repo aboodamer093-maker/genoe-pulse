@@ -1,13 +1,13 @@
 {
-  "at": "2026-09-14T09:01:37.239Z",
-  "run": "202609140855223",
+  "at": "2026-09-21T09:02:50.199Z",
+  "run": "202609210857018",
   "service": "https://tls.peet.ws/api/all",
   "engines": [
     {
       "label": "witness-safari",
       "engine": "safari",
       "token": null,
-      "at": "2026-09-14T08:59:40.075Z",
+      "at": "2026-09-21T09:01:10.202Z",
       "verdict": "ENGINE-TIMEOUT",
       "witnessed": false,
       "error": "engine-timeout-after-240s",
@@ -22,8 +22,8 @@
     {
       "label": "witness-safari-ios",
       "engine": "safari-ios",
-      "token": "obs=safari-ios.202609140855223.2ua008",
-      "at": "2026-09-14T09:01:37.172Z",
+      "token": "obs=safari-ios.202609210857018.n7oncv",
+      "at": "2026-09-21T09:02:50.088Z",
       "readback": "readback-failed",
       "error": "screenshot failed",
       "pngEvidence": null,
@@ -41,8 +41,8 @@
     {
       "label": "witness-chrome",
       "engine": "chrome",
-      "token": "obs=chrome.202609140855223.hkjsr2",
-      "at": "2026-09-14T08:58:58.271Z",
+      "token": "obs=chrome.202609210857018.dz7cf2",
+      "at": "2026-09-21T09:00:23.363Z",
       "readback": "readback-failed",
       "error": "spawnSync /Applications/Google Chrome.app/Contents/MacOS/Google Chrome ETIMEDOUT",
       "pngEvidence": null,
@@ -60,10 +60,10 @@
     {
       "label": "witness-firefox",
       "engine": "firefox",
-      "token": "obs=firefox.202609140855223.3r3bcv",
-      "at": "2026-09-14T09:01:04.170Z",
+      "token": "obs=firefox.202609210857018.lobt3l",
+      "at": "2026-09-21T09:02:50.133Z",
       "readback": "readback-failed",
-      "error": "no webdriver session — *** You are running in headless mode.",
+      "error": "no webdriver session — status:200 {\"value\":{\"message\":\"\",\"ready\":true}}",
       "pngEvidence": null,
       "readbackPreview": null,
       "peet": null,
