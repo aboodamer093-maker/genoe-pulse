@@ -1,19 +1,21 @@
 {
   "label": "witness-safari-ios",
   "engine": "safari-ios",
-  "token": "obs=safari-ios.202609210857018.n7oncv",
-  "at": "2026-09-21T09:02:50.088Z",
-  "readback": "readback-failed",
-  "error": "screenshot failed",
-  "pngEvidence": null,
-  "readbackPreview": null,
-  "peet": null,
+  "token": "obs=safari-ios.202610051026407.kcdr6a",
+  "at": "2026-10-05T10:30:39.115Z",
+  "readback": "ios-screenshot-ocr",
+  "error": null,
+  "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202610051026407.kcdr6a.png",
+  "readbackPreview": "10:30\nMaps\nCalendar\nMon\n5\nCalendar\nPhotos\nReminders\nNews\nMaps\nHealth\nWallet\nSettings\nQ Search\n",
+  "peet": {
+    "ok": false
+  },
   "recorderB": null,
   "local": {
     "refJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
     "refH2": null,
     "declaredH2": "msap"
   },
-  "verdict": "CHANNEL-UNAVAILABLE",
+  "verdict": "READBACK-FAILED",
   "witnessed": false
 }

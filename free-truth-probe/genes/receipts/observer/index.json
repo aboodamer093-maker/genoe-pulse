@@ -1,80 +1,145 @@
 {
-  "at": "2026-09-21T09:02:50.199Z",
-  "run": "202609210857018",
+  "at": "2026-10-05T10:30:39.703Z",
+  "run": "202610051026407",
   "service": "https://tls.peet.ws/api/all",
   "engines": [
     {
       "label": "witness-safari",
       "engine": "safari",
-      "token": null,
-      "at": "2026-09-21T09:01:10.202Z",
-      "verdict": "ENGINE-TIMEOUT",
-      "witnessed": false,
-      "error": "engine-timeout-after-240s",
-      "peet": null,
-      "recorderB": null,
+      "token": "obs=safari.202610051026407.gtbnrr",
+      "at": "2026-10-05T10:30:13.821Z",
+      "readback": "webdriver-source",
+      "error": null,
+      "pngEvidence": null,
+      "readbackPreview": null,
+      "peet": {
+        "ok": true,
+        "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+        "ja4_r": "t13d2014h2_000a,002f,0035,009c,009d,1301,1302,1303,c008,c009,c00a,c012,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0015,0017,001b,002b,002d,0033,ff01_0403,0804,0401,0503,0805,0805,0501,0806,0601,0201",
+        "ja3_hash": "773906b0efdefa24a7f2b8eb6985bf37",
+        "h2": true,
+        "h2PseudoOrder": "msap",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6.1 Safari/605.1.15",
+        "tokenEcho": true
+      },
+      "recorderB": {
+        "ok": true,
+        "ja4": "t13d2014h2_a09f3c656075_e42f34c56612",
+        "ja4_r": "t13d2014h2_000a,002f,0035,009c,009d,1301,1302,1303,c008,c009,c00a,c012,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0015,0017,001b,002b,002d,0033,ff01_0403,0804,0401,0503,0805,0805,0501,0806,0601,0201",
+        "tokenEcho": false
+      },
       "local": {
-        "refJa4": null,
+        "refJa4": "t13d2014h2_a09f3c656075_e42f34c56612",
         "refH2": null,
         "declaredH2": "msap"
-      }
+      },
+      "cross": {
+        "ja4AgreeLocal": true,
+        "ja4AgreeRecorderB": true,
+        "corpusHit": "Sealed measured beat-000.json",
+        "h2AgreeLocal": null,
+        "h2AgreeDeclared": true
+      },
+      "verdict": "WITNESSED-DOUBLE",
+      "witnessed": true
     },
     {
       "label": "witness-safari-ios",
       "engine": "safari-ios",
-      "token": "obs=safari-ios.202609210857018.n7oncv",
-      "at": "2026-09-21T09:02:50.088Z",
-      "readback": "readback-failed",
-      "error": "screenshot failed",
-      "pngEvidence": null,
-      "readbackPreview": null,
-      "peet": null,
+      "token": "obs=safari-ios.202610051026407.kcdr6a",
+      "at": "2026-10-05T10:30:39.115Z",
+      "readback": "ios-screenshot-ocr",
+      "error": null,
+      "pngEvidence": "/Users/runner/work/genoe-pulse/genoe-pulse/free-truth-probe/genes/receipts/observer/witness-ios-obs=safari-ios.202610051026407.kcdr6a.png",
+      "readbackPreview": "10:30\nMaps\nCalendar\nMon\n5\nCalendar\nPhotos\nReminders\nNews\nMaps\nHealth\nWallet\nSettings\nQ Search\n",
+      "peet": {
+        "ok": false
+      },
       "recorderB": null,
       "local": {
         "refJa4": "t13d2013h2_a09f3c656075_7f0f34a4126d",
         "refH2": null,
         "declaredH2": "msap"
       },
-      "verdict": "CHANNEL-UNAVAILABLE",
+      "verdict": "READBACK-FAILED",
       "witnessed": false
     },
     {
       "label": "witness-chrome",
       "engine": "chrome",
-      "token": "obs=chrome.202609210857018.dz7cf2",
-      "at": "2026-09-21T09:00:23.363Z",
-      "readback": "readback-failed",
-      "error": "spawnSync /Applications/Google Chrome.app/Contents/MacOS/Google Chrome ETIMEDOUT",
+      "token": "obs=chrome.202610051026407.m1cg5h",
+      "at": "2026-10-05T10:29:32.401Z",
+      "readback": "chrome-dump-dom",
+      "error": null,
       "pngEvidence": null,
       "readbackPreview": null,
-      "peet": null,
-      "recorderB": null,
+      "peet": {
+        "ok": true,
+        "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
+        "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
+        "ja3_hash": "288c51bf0e20fc68f6350a60920fddc9",
+        "h2": true,
+        "h2PseudoOrder": "masp",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+        "tokenEcho": true
+      },
+      "recorderB": {
+        "ok": true,
+        "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
+        "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
+        "tokenEcho": false
+      },
       "local": {
         "refJa4": "t13d1517h2_8daaf6152771_a323666e1952",
         "refH2": null,
         "declaredH2": "masp"
       },
-      "verdict": "CHANNEL-UNAVAILABLE",
-      "witnessed": false
+      "cross": {
+        "ja4AgreeLocal": false,
+        "ja4AgreeRecorderB": true,
+        "corpusHit": null,
+        "h2AgreeLocal": null,
+        "h2AgreeDeclared": true
+      },
+      "verdict": "WITNESSED-EXTERNAL",
+      "witnessed": true
     },
     {
       "label": "witness-firefox",
       "engine": "firefox",
-      "token": "obs=firefox.202609210857018.lobt3l",
-      "at": "2026-09-21T09:02:50.133Z",
-      "readback": "readback-failed",
-      "error": "no webdriver session — status:200 {\"value\":{\"message\":\"\",\"ready\":true}}",
+      "token": "obs=firefox.202610051026407.yfiitt",
+      "at": "2026-10-05T10:30:39.697Z",
+      "readback": "webdriver-source",
+      "error": null,
       "pngEvidence": null,
       "readbackPreview": null,
-      "peet": null,
-      "recorderB": null,
+      "peet": {
+        "ok": true,
+        "ja4": "t13d1517h2_8daaf6152771_3cbfd9057e0d",
+        "ja4_r": null,
+        "ja3_hash": null,
+        "h2": null,
+        "h2PseudoOrder": null,
+        "userAgent": null,
+        "tokenEcho": true
+      },
+      "recorderB": {
+        "ok": false
+      },
       "local": {
         "refJa4": "t13d1517h2_8daaf6152771_3cbfd9057e0d",
         "refH2": null,
         "declaredH2": "mpas"
       },
-      "verdict": "CHANNEL-UNAVAILABLE",
-      "witnessed": false
+      "cross": {
+        "ja4AgreeLocal": true,
+        "ja4AgreeRecorderB": null,
+        "corpusHit": null,
+        "h2AgreeLocal": null,
+        "h2AgreeDeclared": null
+      },
+      "verdict": "WITNESSED-LOCAL",
+      "witnessed": true
     }
   ]
 }

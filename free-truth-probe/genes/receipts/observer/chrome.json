@@ -1,19 +1,40 @@
 {
   "label": "witness-chrome",
   "engine": "chrome",
-  "token": "obs=chrome.202609210857018.dz7cf2",
-  "at": "2026-09-21T09:00:23.363Z",
-  "readback": "readback-failed",
-  "error": "spawnSync /Applications/Google Chrome.app/Contents/MacOS/Google Chrome ETIMEDOUT",
+  "token": "obs=chrome.202610051026407.m1cg5h",
+  "at": "2026-10-05T10:29:32.401Z",
+  "readback": "chrome-dump-dom",
+  "error": null,
   "pngEvidence": null,
   "readbackPreview": null,
-  "peet": null,
-  "recorderB": null,
+  "peet": {
+    "ok": true,
+    "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
+    "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
+    "ja3_hash": "288c51bf0e20fc68f6350a60920fddc9",
+    "h2": true,
+    "h2PseudoOrder": "masp",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+    "tokenEcho": true
+  },
+  "recorderB": {
+    "ok": true,
+    "ja4": "t13d1517h2_8daaf6152771_cb7bf5808d99",
+    "ja4_r": "t13d1517h2_002f,0035,009c,009d,1301,1302,1303,c013,c014,c02b,c02c,c02f,c030,cca8,cca9_0005,000a,000b,000d,0012,0017,001b,0023,002b,002d,0033,44cd,ca34,fe0d,ff01_0904,0905,0906,0403,0804,0401,0503,0805,0501,0806,0601",
+    "tokenEcho": false
+  },
   "local": {
     "refJa4": "t13d1517h2_8daaf6152771_a323666e1952",
     "refH2": null,
     "declaredH2": "masp"
   },
-  "verdict": "CHANNEL-UNAVAILABLE",
-  "witnessed": false
+  "cross": {
+    "ja4AgreeLocal": false,
+    "ja4AgreeRecorderB": true,
+    "corpusHit": null,
+    "h2AgreeLocal": null,
+    "h2AgreeDeclared": true
+  },
+  "verdict": "WITNESSED-EXTERNAL",
+  "witnessed": true
 }
