@@ -1,37 +1,19 @@
 {
   "label": "witness-firefox",
   "engine": "firefox",
-  "token": "obs=firefox.202610051026407.yfiitt",
-  "at": "2026-10-05T10:30:39.697Z",
-  "readback": "webdriver-source",
-  "error": null,
+  "token": "obs=firefox.202610121049417.5m2x3k",
+  "at": "2026-10-12T10:55:25.773Z",
+  "readback": "readback-failed",
+  "error": "no webdriver session — *** You are running in headless mode.",
   "pngEvidence": null,
   "readbackPreview": null,
-  "peet": {
-    "ok": true,
-    "ja4": "t13d1517h2_8daaf6152771_3cbfd9057e0d",
-    "ja4_r": null,
-    "ja3_hash": null,
-    "h2": null,
-    "h2PseudoOrder": null,
-    "userAgent": null,
-    "tokenEcho": true
-  },
-  "recorderB": {
-    "ok": false
-  },
+  "peet": null,
+  "recorderB": null,
   "local": {
     "refJa4": "t13d1517h2_8daaf6152771_3cbfd9057e0d",
     "refH2": null,
     "declaredH2": "mpas"
   },
-  "cross": {
-    "ja4AgreeLocal": true,
-    "ja4AgreeRecorderB": null,
-    "corpusHit": null,
-    "h2AgreeLocal": null,
-    "h2AgreeDeclared": null
-  },
-  "verdict": "WITNESSED-LOCAL",
-  "witnessed": true
+  "verdict": "CHANNEL-UNAVAILABLE",
+  "witnessed": false
 }
